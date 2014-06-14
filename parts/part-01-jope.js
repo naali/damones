@@ -25,17 +25,17 @@
 				var geometry = new THREE.PlaneGeometry(imagenamesarr[i].width, imagenamesarr[i].height, 1, 1);
 				var material = new THREE.MeshLambertMaterial( {map: THREE.ImageUtils.loadTexture(imagenamesarr[i].name), transparent: true} );
 				var mesh = new THREE.Mesh(geometry, material);
+				mesh.position.x = 0;
+				mesh.position.y = 0;
+				mesh.position.z = 500;
 				obj.objects['images'].push(mesh);
 			}
 			
-			var scene = new THREE.Scene();
-					
-			var mesh = obj.objects['images'][0];
-			mesh.position.x = 0;
-			mesh.position.y = 0;
-			mesh.position.z = 500;
-			scene.add(mesh);
+			var scene = new THREE.Scene();			
+			var mesh = obj.objects['images'][1];
 			
+			scene.add(mesh);
+								
 			var light = new THREE.SpotLight(0xFFFFFF);
 			light.position.set(200, 200, 1500);
 			scene.add(light);
@@ -64,9 +64,8 @@
 		}(ro));
 
 		ro.player = function(partdata, parttick, tick) {
-			this.objects['logo'].position.z = -400 + Math.sin(tick/200) * 10;
-//			this.objects['logo'].position.z = Math.sin(tick/200) * 400 + 500 + 1;
-//			this.objects['logo'].rotation.z = Math.sin(tick/12300) * Math.PI * 2 * Math.cos(tick/9000) * Math.PI * 2;
+			this.objects['images'][1].position.z = -600 + Math.sin(tick/200) * 10;
+			this.objects['images'][1].rotation.z =  Math.sin(tick/11200) * Math.cos(tick/9000);
 			
 			global_engine.renderers['main'].render(this.scenes['logo'], this.cameras['logocam']);
 		}
