@@ -280,11 +280,11 @@
 				global_engine.setAudioLooping(true);
 
 <?php				
-	$parts = glob('parts/*.[jJ][sS]');
-				
-	for ($i=0; $i<count($parts); $i++) {
-		$partdata = file_get_contents($parts[$i]);
-					
+	$partdir = "parts/";
+	$partorder = ['part-00-start.js'];
+	
+	for ($i=0; $i<count($partorder); $i++) {
+		$partdata = file_get_contents($partdir.$partorder[$i]);
 		echo "    global_engine.addPart($partdata)\n";
 	}
 ?>			
