@@ -271,7 +271,21 @@
 <?php if ($framegrabber) { ?>
 				global_engine = new DemoEngine('#demo', frame_width, frame_height);
 <?php } else { ?>
-				global_engine = new DemoEngine('#demo');
+				var width = window.innerWidth;
+				var height = window.innerHeight;
+				
+				var w=0;
+				var h=0;
+				
+				if (width/height < 16/9) {
+					w = width;
+					h = Math.floor(width / (16/9));
+				} else {
+					w = Math.floor(height * (16/9));
+					h = height;
+				}
+				
+				global_engine = new DemoEngine('#demo', w, h);
 <?php } ?>
 				global_engine.addRenderTarget('secondary', global_engine.getWidth(), global_engine.getHeight());
 				global_engine.addRenderTarget('tertiary', global_engine.getWidth(), global_engine.getHeight());
@@ -281,7 +295,7 @@
 
 <?php				
 	$partdir = "parts/";
-	$partorder = ['part-00-start.js'];
+	$partorder = ['boozembly-start.js', 'part-00-start.js'];
 	
 	for ($i=0; $i<count($partorder); $i++) {
 		$partdata = file_get_contents($partdir.$partorder[$i]);
