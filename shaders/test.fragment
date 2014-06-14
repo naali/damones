@@ -1,0 +1,14 @@
+uniform float time;
+uniform vec2 resolution;
+uniform vec3 basecolor;
+uniform sampler2D tex0;
+
+void main(void) {
+	vec2 p = -1.0 + 2.0 * gl_FragCoord.xy / resolution.xy;
+	float a = atan(p.y,p.x);
+	float r = sqrt(dot(p,p));
+	a = a - cos(time) - time*1.5 + 1.0;
+	float c = r - 1.0 + 0.6*sin(3.0*a-8.0*r*r*cos(time/1.3)) + 0.5;
+	c = c + r+1.6 - 1.0 + 0.7*cos(7.0*a+13.0*sin(time/1.7)*r*r) + 0.5;
+	gl_FragColor = vec4(basecolor * (c/(3.0 + sin(time/7.0))) * (1.0/r),1.0);
+}

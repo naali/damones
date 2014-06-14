@@ -1,0 +1,100 @@
+/* Application specific Styles ================================= */
+
+* {
+	-webkit-user-select: none;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+body, body * { 
+    margin: 0; 
+    padding: 0; 
+}
+
+html {
+	background-color: #000000;
+}
+
+canvas {
+	float: left;
+}
+
+audio {
+	float: left;
+	clear: both;
+	width: 100%;
+}
+
+div.main {
+	float: left;
+}
+
+#demo:-webkit-full-screen { width: 100% }
+
+.demo audio {
+	position: absolute;
+	bottom: 0px;
+	left: 0;
+	width: 100%;
+}
+
+.setup {
+	font-family: Arial, sans-serif;
+	background-color: white;
+	width: 280px;
+	text-align: center;
+	margin: 0 auto;
+	font-size: 40px;
+	font-weight: bold;
+	box-shadow: -1px 0px 31px white;
+	margin-top: 200px;
+	padding: 20px;
+}
+
+.setup label {
+	clear: both;
+	float: left;
+	margin-bottom: 10px;
+}
+
+.setup button {
+	border-style: none;
+	font-size: 30px;
+	font-weight: bold;
+	cursor: pointer;
+	padding: 5px 18px 5px 18px;
+	border-radius: 10px;
+	text-shadow: 0px -1px 1px rgba(0, 0, 0, .75);
+	box-shadow: 0px 0px 5px black;
+}
+
+.setup button:hover {
+	box-shadow: 0px 0px 2px black;
+	color: white;
+}
+
+.setup button.yes {
+	background-color: green;
+}
+
+.setup button.no {
+	background-color: red;
+}
+
+.framecounter {
+	position: absolute;
+	top: 0;
+	left: 0;
+	color: #ffffff;
+	text-shadow: 0px 0px 3px #ffffff;
+}
+
+
+
+
+
+
