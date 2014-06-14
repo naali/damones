@@ -295,6 +295,10 @@
 					h = height;
 				}
 				
+				if (h < height) {
+					$("#demo").css({ 'margin-top': Math.floor((height-h)/2) + 'px' });
+				}
+				
 				global_engine = new DemoEngine('#demo', w, h);
 <?php } ?>
 				global_engine.addRenderTarget('secondary', global_engine.getWidth(), global_engine.getHeight());
@@ -307,8 +311,7 @@
 	$partdir = "parts/";
 	$partorder = [
 		'boozembly-start.js', 
-		'part-01-jope.js',
-		'boozembly-end.js' 
+		'part-01-jope.js'
 	];
 	
 	for ($i=0; $i<count($partorder); $i++) {
