@@ -20,7 +20,8 @@ html {
 }
 
 canvas {
-	float: left;
+	margin: 0 auto;
+	display: block;
 }
 
 audio {
@@ -31,6 +32,7 @@ audio {
 
 div.main {
 	float: left;
+	width: 100%;
 }
 
 #demo:-webkit-full-screen { width: 100% }
