@@ -23,22 +23,18 @@
 			
 			for (var i =0; i<imagenamesarr.length; i++) {
 				var geometry = new THREE.PlaneGeometry(imagenamesarr[i].width, imagenamesarr[i].height, 1, 1);
-				var material = new THREE.MeshLambertMaterial( {map: THREE.ImageUtils.loadTexture(image_dunkku_grillilla.src), transparent: true} );
+				var material = new THREE.MeshLambertMaterial( {map: THREE.ImageUtils.loadTexture(imagenamesarr[i].name), transparent: true} );
 				var mesh = new THREE.Mesh(geometry, material);
 				obj.objects['images'].push(mesh);
 			}
 			
 			var scene = new THREE.Scene();
-			
-			var geometry = new THREE.PlaneGeometry(1920, 1080, 1, 1);
-			var material = new THREE.MeshLambertMaterial( { map: THREE.ImageUtils.loadTexture( image_boozembly.src ), transparent: true } );
-			var mesh = new THREE.Mesh(geometry, material);		
+					
+			var mesh = obj.objects['images'][0];
 			mesh.position.x = 0;
 			mesh.position.y = 0;
 			mesh.position.z = 500;
 			scene.add(mesh);
-			
-			obj.objects['logo'] = mesh;
 			
 			var light = new THREE.SpotLight(0xFFFFFF);
 			light.position.set(200, 200, 1500);
