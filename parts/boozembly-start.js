@@ -61,8 +61,8 @@
 		}(ro));
 
 		ro.player = function(partdata, parttick, tick) {
-			this.objects['logo'].position.z = -400 + 500 * smoothstep(0, 10000, tick);
-			this.objects['disorg'].position.z = -400 + 500 * smoothstep(0, 10000, tick);
+			this.objects['logo'].position.z = -500 + 500 * smoothstep(0, 10000, tick);
+			this.objects['disorg'].position.z = -500 + 300 * smoothstep(0, 10000, tick);
 
 			this.lights['logospot1'].position.x = Math.sin(tick / 1000) * 200;
 			this.lights['logospot1'].position.y = Math.sin(tick / 1000) * 300;
