@@ -295,7 +295,7 @@
 
 <?php				
 	$partdir = "parts/";
-	$partorder = ['boozembly-start.js', 'part-00-start.js'];
+	$partorder = ['boozembly-start.js', 'part-01-jope.js'];
 	
 	for ($i=0; $i<count($partorder); $i++) {
 		$partdata = file_get_contents($partdir.$partorder[$i]);

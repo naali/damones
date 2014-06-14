@@ -2,7 +2,8 @@
 	data: (function() {
 		var ro = {};
 		ro.partname = 'end of the world 2014';
-		ro.partlength = (2 * 60 + 20) * 1000 * 100;
+		//ro.partlength = (2 * 60 + 20) * 1000 * 100;
+        ro.partlength = 0;
 		ro.cameras = {
 			'bottlecam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 10000),
 			'logocam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 10000),
