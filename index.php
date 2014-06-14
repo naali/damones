@@ -262,9 +262,19 @@
 			}
 <?php } ?>
 			
-			function smoothstep(min, max, t) {
+			function overshoot_smoothstep(min, max, t) {
 				var tmp = (t-min) / (max-min);
 				return tmp * tmp * tmp * (5.0 - 4.0 * tmp);
+			}
+			
+			function smoothstep(min, max, t) {
+				var tmp = (t-min) / (max-min);
+				return tmp * tmp * (3.0 - 2.0 * tmp);
+			}
+			
+			function smootherstep(min, max, t) {
+				var tmp = (t-min) / (max-min);
+				return tmp * tmp * tmp * (tmp * (tmp * 6.0 - 15.0) + 10.0);
 			}
 			
 			function init() {
@@ -291,7 +301,7 @@
 				global_engine.addRenderTarget('tertiary', global_engine.getWidth(), global_engine.getHeight());
 				
 				global_engine.setAudio(audio_FutureKitchen);
-				global_engine.setAudioLooping(true);
+				global_engine.setAudioLooping(false);
 
 <?php				
 	$partdir = "parts/";
