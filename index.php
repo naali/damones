@@ -305,7 +305,11 @@
 
 <?php				
 	$partdir = "parts/";
-	$partorder = ['boozembly-start.js', 'part-01-jope.js'];
+	$partorder = [
+		'boozembly-start.js', 
+		'part-01-jope.js',
+		'boozembly-end.js' 
+	];
 	
 	for ($i=0; $i<count($partorder); $i++) {
 		$partdata = file_get_contents($partdir.$partorder[$i]);
@@ -356,6 +360,14 @@
 					);
 				});
 				
+				$('#btn_fullscreen_maybe').off('click').on('click', function() {
+					if (Math.random() > 0.5) {
+						$('#btn_fullscreen_yes').click();
+					} else {
+						$('#btn_fullscreen_no').click();
+					}
+				});
+				
 				$('#setup').show();
 			});
 		</script>
@@ -366,6 +378,7 @@
 			<label>Run fullscreen?</label>
 			<button id="btn_fullscreen_yes" class="yes">Yes</button>
 			<button id="btn_fullscreen_no" class="no">No</button>
+			<button id="btn_fullscreen_maybe" class="maybe">Maybe</button>
 		</div>
 	<body>
 </html>
