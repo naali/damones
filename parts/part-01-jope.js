@@ -29,16 +29,23 @@
 				var geometry = new THREE.PlaneGeometry(imagenamesarr[i].width, imagenamesarr[i].height, 1, 1);
 				var material = new THREE.MeshLambertMaterial( {map: THREE.ImageUtils.loadTexture(imagenamesarr[i].name), transparent: true} );
 				var mesh = new THREE.Mesh(geometry, material);
-				mesh.position.x = 0;
-				mesh.position.y = 0;
-				mesh.position.z = -600;
+				mesh.start_x = -i * 150 + 1;
+				mesh.start_y = -i * 23 + 1;
+				mesh.start_z = -i * 100 + 1;
+				mesh.position.x = mesh.start_x;
+				mesh.position.y = mesh.start_y;
+				mesh.position.z = mesh.start_z;
 				obj.objects['images'].push(mesh);
 			}
 			
-			var scene = new THREE.Scene();			
-			var mesh = obj.objects['images'][0];
+			var scene = new THREE.Scene();		
+			for (var i=0; i<obj.objects['images'].length; i++) {
+			 var mesh = obj.objects['images'][i];
 			
-			scene.add(mesh);
+				scene.add(mesh);
+			
+			}
+			
 								
 			var light = new THREE.SpotLight(0xFFFFFF);
 			light.position.set(200, 200, 1500);
@@ -68,6 +75,14 @@
 		}(ro));
 
 		ro.player = function(partdata, parttick, tick) {
+		
+		for (var i=0; i<this.objects['images'].length; i++) {
+			i % 2 == 0 ? this.objects['images'][i].position.x = this.objects['images'][i].start_x * (parttick/1200) + (parttick/10) : this.objects['images'][i].position.x = this.objects['images'][i].start_x * (parttick/1000) + (parttick/50) ;
+
+			
+			
+			
+			}
 			//this.objects['images'][1].position.z = -600 + Math.sin(tick/200) * 10;
 			//this.objects['images'][1].rotation.z =  Math.sin(tick/11200) * Math.cos(tick/9000);
 			
