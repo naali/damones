@@ -90,11 +90,11 @@
 			}
 			
 			var imagenamesarr = [
-				{ name: image_boozembly.src, width: 1920, height: 1080 },
-				{ name: image_dunkku_grillilla.src, width: 1920, height: 1920 },
-				{ name: image_dunkku_warrella.src, width: 1920, height: 1440 }				
+				{ name: image_boozembly.src, width: image_boozembly.width, height: image_boozembly.height },
+				{ name: image_dunkku_grillilla.src, width: image_dunkku_grillilla.width, height: image_dunkku_grillilla.height },
+				{ name: image_dunkku_warrella.src, width: image_dunkku_warrella.width, height: image_dunkku_warrella.height }
 			];
-			
+
 			obj.objects['images'] = [];
 			
 			for (var i =0; i<imagenamesarr.length; i++) {
@@ -103,7 +103,7 @@
 				var mesh = new THREE.Mesh(geometry, material);
 				mesh.position.x = 0;
 				mesh.position.y = 0;
-				mesh.position.z = 500;
+				mesh.position.z = -600;
 				obj.objects['images'].push(mesh);
 			}
 			
@@ -118,13 +118,13 @@
 			
 			light = new THREE.SpotLight(0xFFFFFF);
 			light.position.set(-200, -200, 1500);
-			scene.add(light);
+		//	scene.add(light);
 			obj.lights['logospot2'] = light;
 
 			light = new THREE.SpotLight(0xFFFFFF);
 			light.intensity = 1.2;
 			light.position.set(10, 10, 1500);
-			scene.add(light);
+		//	scene.add(light);
 			obj.lights['logospot3'] = light;
 			
 			var directionallight = new THREE.DirectionalLight( 0xffffff, 0.5 );
@@ -139,8 +139,8 @@
 		}(ro));
 
 		ro.player = function(partdata, parttick, tick) {
-			this.objects['images'][1].position.z = -600 + Math.sin(tick/200) * 10;
-			this.objects['images'][1].rotation.z =  Math.sin(tick/11200) * Math.cos(tick/9000);
+			//this.objects['images'][1].position.z = -600 + Math.sin(tick/200) * 10;
+			//this.objects['images'][1].rotation.z =  Math.sin(tick/11200) * Math.cos(tick/9000);
 			
 			global_engine.renderers['main'].render(this.scenes['logo'], this.cameras['logocam']);
 		}
