@@ -10,96 +10,24 @@
 		ro.scenes = {};
 		ro.lights = {};
 		ro.objects = {};
-
+		
+		
 		ro.scenes['logo'] = (function(obj) {
 		
-			var scene = new THREE.Scene();			
-
-			var textarr = [
-				[
-					"Boozembly",
-					"Disorganizing",
-					"zzzzzzzzzzzzzzzz",
-					"aaaaaaaaaaaaaaaa",
-					"bbbbbbbbbbbbbbbb",
-				],
-			];
+		var imagenamesarr = [];
+		
+		for(var i=1; i<10; i++){
+			var name = eval('image_pic_' + i + '.src');
+			var width = eval('image_pic_' + i + '.width');
+			var height = eval('image_pic_' + i + '.height');
+			imagenamesarr.push({name: name, width: width, height: height });	
+		} 
 			
-			ro.objects['textarr'] = textarr;
-			
-			obj.objects['chargeoms'] = [];
-			
-			
-			
-			for (var i=0; i<textarr.length; i++) {
-				for (var j=0; j<textarr[i].length; j++) {
-					for (var k=0; k<textarr[i][j].length; k++) {
-						var c = textarr[i][j].charAt(k);
-
-						if (!obj.objects['chargeoms'][c]) {
-							var geometry = new THREE.TextGeometry(c, {
-								size: 40,
-								height: 20,
-								curveSegments: 8,
-								font: 'luckiest guy',
-								weight: 'normal',
-								style: 'normal',
-								bevelThickness: 1.4,
-								bevelSize: 0.5,
-								bevelSegments: 6, 
-								bevelEnabled: false,
-								bend: false
-							});
-							
-							geometry.computeBoundingBox();
-							geometry.width = geometry.boundingBox.min.x - geometry.boundingBox.max.x - 5;
-							
-							obj.objects['chargeoms'][c] = geometry;
-						}
-					}
-				}
-			}
-			
-			function calculateLineLength(line) {
-				var len = 0;
-				for (var i=0; i<line.length; i++) {
-					var c = line.charAt(i);
-					len += obj.objects['chargeoms'][c].width;
-				}
-				
-				return len;
-			}
-			
-			
-
-			for (var i=0; i<textarr.length; i++) {
-				for (var j=0; j<textarr[i].length; j++) {
-					var xpos = -calculateLineLength(textarr[i][j]) / 2;
-						
-					for (var k=0; k<textarr[i][j].length; k++) {
-						var c = textarr[i][j].charAt(k);
-						var material = new THREE.MeshLambertMaterial({ transparent: true, color: 0xFFFFFF });
-						var mesh = new THREE.Mesh(obj.objects['chargeoms'][c], material);
-						mesh.position.x = -xpos;
-						mesh.position.y = (textarr[i].length / 2) * 50 - j * 50;
-						xpos += obj.objects['chargeoms'][c].width;
-						mesh.position.z = 500;
-						scene.add(mesh);
-					}
-				}
-			}
-			
-			var imagenamesarr = [
-				{ name: image_boozembly.src, width: image_boozembly.width, height: image_boozembly.height },
-				{ name: image_dunkku_grillilla.src, width: image_dunkku_grillilla.width, height: image_dunkku_grillilla.height },
-				{ name: image_dunkku_warrella.src, width: image_dunkku_warrella.width, height: image_dunkku_warrella.height }
-			];
-
-			obj.objects['images'] = [];
+			obj.objects['images'] = []; 
 			
 			for (var i =0; i<imagenamesarr.length; i++) {
 				var geometry = new THREE.PlaneGeometry(imagenamesarr[i].width, imagenamesarr[i].height, 1, 1);
-				var material = new THREE.MeshLambertMaterial( {map: THREE.ImageUtils.loadTexture(imagenamesarr[i].name), transparent: false} );
+				var material = new THREE.MeshLambertMaterial( {map: THREE.ImageUtils.loadTexture(imagenamesarr[i].name), transparent: true} );
 				var mesh = new THREE.Mesh(geometry, material);
 				mesh.position.x = 0;
 				mesh.position.y = 0;
@@ -107,7 +35,8 @@
 				obj.objects['images'].push(mesh);
 			}
 			
-			var mesh = obj.objects['images'][1];
+			var scene = new THREE.Scene();			
+			var mesh = obj.objects['images'][0];
 			
 			scene.add(mesh);
 								
