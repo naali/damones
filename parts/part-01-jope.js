@@ -29,9 +29,9 @@
 				var geometry = new THREE.PlaneGeometry(imagenamesarr[i].width, imagenamesarr[i].height, 1, 1);
 				var material = new THREE.MeshLambertMaterial( {map: THREE.ImageUtils.loadTexture(imagenamesarr[i].name), transparent: true} );
 				var mesh = new THREE.Mesh(geometry, material);
-				mesh.start_x = -i * 150 + 1;
-				mesh.start_y = -i * 23 + 1;
-				mesh.start_z = -i * 100 + 1;
+				i == 0 ? mesh.start_x = -(imagenamesarr[i].width) : mesh.start_x = -(imagenamesarr[i-1].width + imagenamesarr[i].width);
+				mesh.start_y =  -i*20;
+				mesh.start_z = -(imagenamesarr[i].width/20) ;
 				mesh.position.x = mesh.start_x;
 				mesh.position.y = mesh.start_y;
 				mesh.position.z = mesh.start_z;
@@ -77,7 +77,8 @@
 		ro.player = function(partdata, parttick, tick) {
 		
 		for (var i=0; i<this.objects['images'].length; i++) {
-			i % 2 == 0 ? this.objects['images'][i].position.x = this.objects['images'][i].start_x * (parttick/1200) + (parttick/10) : this.objects['images'][i].position.x = this.objects['images'][i].start_x * (parttick/1000) + (parttick/50) ;
+			i % 2 == 0 ? this.objects['images'][i].position.x = this.objects['images'][i].start_x + (parttick/12) : this.objects['images'][i].position.x = this.objects['images'][i].start_x + (parttick/12) ;
+			//i % 2 == 0 ? this.objects['images'][i].position.z = this.objects['images'][i].start_z + (parttick/120) : this.objects['images'][i].position.z = this.objects['images'][i].start_z + (parttick/120) ;
 
 			
 			
