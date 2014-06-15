@@ -281,7 +281,7 @@
 			
 			if (img && !img.added) {
 				var geometry = new THREE.PlaneGeometry(img.width, img.height, 1, 1);
-				var material = new THREE.MeshBasicMaterial( {map: THREE.ImageUtils.loadTexture(img.name), transparent: false} );
+				var material = new THREE.MeshBasicMaterial( {map: THREE.ImageUtils.loadTexture(img.name), transparent: true} );
 				var mesh = new THREE.Mesh(geometry, material);
 				mesh.start_y =  Math.random() * 1000 - 500;
 				mesh.start_z = -600 + img_add_counter;
@@ -306,6 +306,13 @@
 				}
 				
 				this.objects['images'][i].rotation.z = Math.sin(t/(100 * this.objects['images'][i].sin_z_multiplier)+ this.objects['images'][i].sin_z_start) / 10;
+				
+				if (img_add_counter == i) {
+					log (img_add_counter);
+					this.objects['images'][i].material.opacity = (parttick - img_add_counter * 1000) / 1000;
+				} else {
+					this.objects['images'][i].material.opacity = 1;
+				}
 			}
 
 			var pagemaxtime = 8660;

@@ -1,5 +1,5 @@
 <?php
-	$debug = true;
+	$debug = false;
 	$framegrabber = false;
 	$frame = 0;
 	$fps = 60;
@@ -25,7 +25,7 @@
 			<?php echo file_get_contents('lib/three.min.js'); ?>
 			<?php echo file_get_contents('lib/OBJLoader.js'); ?>
 			
-			var debug = <?php echo ($debug?'true':'false')?>;
+			var debug = <?php echo (($debug == true)?'true':'false')?>;
 <?php if ($framegrabber) { ?> 
 			var framegrabber = <?php echo ($framegrabber?'true':'false')?>;
 			var frame = parseInt(<?php echo $frame ?>);
@@ -306,7 +306,6 @@
 				
 				global_engine.setAudio(audio_FutureKitchen);
 				global_engine.setAudioLooping(false);
-
 <?php				
 	$partdir = "parts/";
 	$partorder = [
@@ -335,6 +334,7 @@
 
 <?php if (!$framegrabber) { ?>
 					global_engine.play();
+					global_engine.showControls(false);
 <?php } else { ?>
 					$('#demo').append('<div id="framecounter" class="framecounter"></div>');
 <?php } ?>
@@ -353,6 +353,7 @@
 
 <?php if (!$framegrabber) { ?>
 							global_engine.play();
+							global_engine.showControls(false);				
 <?php } else { ?>
 							$('#demo').append('<div id="framecounter" class="framecounter"></div>');
 <?php } ?>
