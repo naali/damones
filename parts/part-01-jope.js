@@ -10,20 +10,96 @@
 		ro.scenes = {};
 		ro.lights = {};
 		ro.objects = {};
-		
-		
+
 		ro.scenes['logo'] = (function(obj) {
+		
+			var scene = new THREE.Scene();			
+
+			var textarr = [
+				[
+					"Boozembly",
+					"Disorganizing",
+					"zzzzzzzzzzzzzzzz",
+					"aaaaaaaaaaaaaaaa",
+					"bbbbbbbbbbbbbbbb",
+				],
+			];
+			
+			ro.objects['textarr'] = textarr;
+			
+			obj.objects['chargeoms'] = [];
+			
+			
+			
+			for (var i=0; i<textarr.length; i++) {
+				for (var j=0; j<textarr[i].length; j++) {
+					for (var k=0; k<textarr[i][j].length; k++) {
+						var c = textarr[i][j].charAt(k);
+
+						if (!obj.objects['chargeoms'][c]) {
+							var geometry = new THREE.TextGeometry(c, {
+								size: 40,
+								height: 20,
+								curveSegments: 8,
+								font: 'luckiest guy',
+								weight: 'normal',
+								style: 'normal',
+								bevelThickness: 1.4,
+								bevelSize: 0.5,
+								bevelSegments: 6, 
+								bevelEnabled: false,
+								bend: false
+							});
+							
+							geometry.computeBoundingBox();
+							geometry.width = geometry.boundingBox.min.x - geometry.boundingBox.max.x - 5;
+							
+							obj.objects['chargeoms'][c] = geometry;
+						}
+					}
+				}
+			}
+			
+			function calculateLineLength(line) {
+				var len = 0;
+				for (var i=0; i<line.length; i++) {
+					var c = line.charAt(i);
+					len += obj.objects['chargeoms'][c].width;
+				}
+				
+				return len;
+			}
+			
+			
+
+			for (var i=0; i<textarr.length; i++) {
+				for (var j=0; j<textarr[i].length; j++) {
+					var xpos = -calculateLineLength(textarr[i][j]) / 2;
+						
+					for (var k=0; k<textarr[i][j].length; k++) {
+						var c = textarr[i][j].charAt(k);
+						var material = new THREE.MeshLambertMaterial({ transparent: true, color: 0xFFFFFF });
+						var mesh = new THREE.Mesh(obj.objects['chargeoms'][c], material);
+						mesh.position.x = -xpos;
+						mesh.position.y = (textarr[i].length / 2) * 50 - j * 50;
+						xpos += obj.objects['chargeoms'][c].width;
+						mesh.position.z = 500;
+						scene.add(mesh);
+					}
+				}
+			}
+			
 			var imagenamesarr = [
 				{ name: image_boozembly.src, width: 1920, height: 1080 },
 				{ name: image_dunkku_grillilla.src, width: 1920, height: 1920 },
 				{ name: image_dunkku_warrella.src, width: 1920, height: 1440 }				
 			];
-
+			
 			obj.objects['images'] = [];
 			
 			for (var i =0; i<imagenamesarr.length; i++) {
 				var geometry = new THREE.PlaneGeometry(imagenamesarr[i].width, imagenamesarr[i].height, 1, 1);
-				var material = new THREE.MeshLambertMaterial( {map: THREE.ImageUtils.loadTexture(imagenamesarr[i].name), transparent: true} );
+				var material = new THREE.MeshLambertMaterial( {map: THREE.ImageUtils.loadTexture(imagenamesarr[i].name), transparent: false} );
 				var mesh = new THREE.Mesh(geometry, material);
 				mesh.position.x = 0;
 				mesh.position.y = 0;
@@ -31,7 +107,6 @@
 				obj.objects['images'].push(mesh);
 			}
 			
-			var scene = new THREE.Scene();			
 			var mesh = obj.objects['images'][1];
 			
 			scene.add(mesh);
