@@ -300,7 +300,7 @@
 				this.objects['images'][i].position.x = this.objects['images'][i].start_x + (parttick/this.objects['images'][i].speed_x_multiplier) ;
 				
 				if (this.objects['images'][i].position.x > 2000) {
-					this.objects['images'][i].position.x -= 4000;
+					this.objects['images'][i].start_x -= 5000;
 				}
 				
 				this.objects['images'][i].rotation.z = Math.sin(t/100 + this.objects['images'][i].sin_z_start) / 10;
