@@ -21,75 +21,75 @@
 					"to °5announce"
 				],
 				[
-					"°1Boozembly 2014",
-					"°2Jubileum",
-					"°3Jul 31 - Aug 3",
+					"°1boozembly °02014",
+					"°2jubileum",
+					"°3jul 31 - aug 3",
 				],
 				[
-					"°4Damones °7with",
-					"°1Boozembly",
-					"Disorganizing"
+					"°4damones °7with",
+					"°1boozembly",
+					"disorganizing"
 				],
 				[
-					"invites you to",
-					"the scene event",
-					"of the year",
-					"2014"
+					"°3invites you to",
+					"°1the scene event",
+					"°3of the year",
+					"°02014"
 				],
 				[
-					"celebrating",
-					"our 20th time",
-					"lost in the hills"
+					"°3celebrating",
+					"our °520th time",
+					"°3lost in the hills"
 				],
 				[
-					"Boozembly 2014",
+					"°1boozembly °02014",
 					"features",
 				],
 				[
-					"Nice people",
-					"Hot barbeque",
-					"Perfect weather",
-					"Great atmosphere"
+					"°0nice °1people",
+					"°2hot °3barbeque",
+					"°4perfect °5weather",
+					"°6great °7atmosphere"
 				],
 				[
-					"Location will",
+					"°3location will",
 					"be the same",
 					"as last year"
 				],
 				[
-					"if you don't know",
+					"°3if you don't know",
 					"where to come,",
 					"ask the nearest",
-					"pullomummo"
+					"°5pullomummo"
 				],
 				[
-					"if you have",
-					"extra beer",
-					"too many sausages",
-					"stiff blunts"
+					"°3if you have",
+					"°4extra °3beer",
+					"°3too °4many °3sausages",
+					"°3stiff °4blunts"
 				],
 				[
-					"feel free",
+					"°3feel free",
 					"to",
-					"share!"
+					"°4share!"
 				],
 				[
-					"Add",
-					"Jul 31 - Aug 3",
-					"to your",
+					"°3add",
+					"°4jul 31 - aug 3",
+					"°3to your",
 					"calendars",
 					"now"
 				],
 				[
-					"greetings fly to",
-					"komplex pyrotech",
-					"byterapers hirmu",
-					"accession kooma",
-					"kewlers scoopex flo",
-					"fairlight extend"
+					"°3greetings fly to",
+					"°0komplex °1pyrotech",
+					"°2byterapers °4hirmu",
+					"°5accession °6kooma",
+					"°7kewlers °0scoopex °1flo",
+					"°2fairlight °4extend"
 				],
 				[
-					"Boozembly 2014",
+					"°1boozembly °02014",
 					"..............",
 					"bring your",
 					"family"
@@ -100,30 +100,30 @@
 					"invitation"
 				],
 				[
-					"photos",
-					"h7 & norppa",
+					"°7photos",
+					"°6h7 & norppa",
 					" ",
-					"graphics",
-					"h7"
+					"°7graphics",
+					"°6h7"
 				],
 				[
-					"music",
-					"tempest",
-					" ",
-					"code",
-					"jawbreaker",
-					"kakka"
+					"°7music",
+					"°6tempest",
+					"    ",
+					"°7code",
+					"°6jawbreaker",
+					"°6kakka"
 				],
 				[
-					"released",
-					"at",
-					"graffathon",
-					"2014"
+					"°3released",
+					"°3at",
+					"°1graffathon",
+					"°02014"
 				],
 				[
 					"see you all",
 					"in",
-					"boozembly!"
+					"°1boozembly!"
 				],
 				[
 					"dunkku",
@@ -152,7 +152,8 @@
 						var c = textarr[i][j].charAt(k);
 						
 						if (c == '°') {
-							k += 2;
+							k += 1;
+							continue;
 						}
 
 						if (!obj.objects['chargeoms'][c]) {
@@ -187,15 +188,17 @@
 			
 			function calculateLineLength(line) {
 				var len = 0;
+
 				for (var i=0; i<line.length; i++) {
 					var c = line.charAt(i);
 					if (c == '°') {
-						i += 2;
-					}
-					
+						i += 1;
+						continue;
+					} 
+
 					len += obj.objects['chargeoms'][c].width;
 				}
-				
+			
 				return len;
 			}
 			
@@ -222,6 +225,7 @@
 						mesh.position.x = -xpos;
 						mesh.position.y = (textarr[i].length / 2) * 50 - j * 50 - 50;
 						xpos += obj.objects['chargeoms'][c].width;
+
 						mesh.position.z = 500;
 						scene.add(mesh);
 						obj.objects['pagemesharr'][i].push(mesh);
