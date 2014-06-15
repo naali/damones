@@ -4,14 +4,14 @@
 		ro.partname = 'Boozembly 2014 - writer';
 		ro.partlength = 1000 * 2000;
 		ro.cameras = {
-			'logocam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 10000)
+			'writercam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 10000)
 		};
 		
 		ro.scenes = {};
 		ro.lights = {};
 		ro.objects = {};
 
-		ro.scenes['logo'] = (function(obj) {
+		ro.scenes['writer'] = (function(obj) {
 		
 			var scene = new THREE.Scene();			
 
@@ -90,9 +90,9 @@
 				],
 				[
 					"°1boozembly °02014",
-					"..............",
-					"bring your",
-					"family"
+					"°0.°1.°2.°3.°4.°5.°6.°7.°0.°1.°2.°3.°4.°5.°6.°7.",
+					"°3bring your",
+					"°3family"
 				],
 				[
 					"credits for",
@@ -127,7 +127,7 @@
 				],
 				[
 					"dunkku",
-					"koitas",
+					"koita",
 					"keskittyä"
 				]
 			];
@@ -139,28 +139,12 @@
 				var name = eval('image_pic_' + i + '.src');
 				var width = eval('image_pic_' + i + '.width');
 				var height = eval('image_pic_' + i + '.height');
-				imagenamesarr.push({name: name, width: width, height: height });	
+				imagenamesarr.push({ name: name, width: width, height: height, added: false });	
 			}
+			
+			obj.objects['imagenamesarr'] = imagenamesarr;
 		
 			obj.objects['images'] = [];
-			
-			for (var i =0; i<imagenamesarr.length; i++) {
-				var geometry = new THREE.PlaneGeometry(imagenamesarr[i].width, imagenamesarr[i].height, 1, 1);
-				var material = new THREE.MeshBasicMaterial( {map: THREE.ImageUtils.loadTexture(imagenamesarr[i].name), transparent: false} );
-				var mesh = new THREE.Mesh(geometry, material);
-				i == 0 ? mesh.start_x = -(imagenamesarr[i].width) : mesh.start_x = -(imagenamesarr[i-1].width + imagenamesarr[i].width);
-				mesh.start_y =  Math.random() * 1000 - 500;
-				mesh.start_z = -600 + i;
-				mesh.speed_x_multiplier = 5 + Math.random() * 5;
-				mesh.start_x = Math.random() * 5000 - 2500;
-				mesh.position.x = mesh.start_x;
-				mesh.sin_z_start = Math.random();
-				mesh.sin_z_multiplier = Math.random() * 5 + 3;
-				mesh.position.y = mesh.start_y;
-				mesh.position.z = mesh.start_z;
-				obj.objects['images'].push(mesh);
-				scene.add(mesh);
-			}
 
 			obj.objects['textarr'] = textarr;
 			obj.objects['chargeoms'] = [];
@@ -174,7 +158,6 @@
 				'6': 0xe0271d,
 				'7': 0xffffff,
 			}
-			
 			
 			for (var i=0; i<textarr.length; i++) {
 				for (var j=0; j<textarr[i].length; j++) {
@@ -266,31 +249,55 @@
 			var light = new THREE.SpotLight(0xFFFFFF);
 			light.position.set(200, 200, 1500);
 			scene.add(light);
-			obj.lights['logospot1'] = light;
+			obj.lights['writerspot1'] = light;
 			
 			light = new THREE.SpotLight(0xFFFFFF);
 			light.position.set(-200, -200, 1500);
 			scene.add(light);
-			obj.lights['logospot2'] = light;
+			obj.lights['writerspot2'] = light;
 
 			light = new THREE.SpotLight(0xFFFFFF);
 			light.intensity = 1.2;
 			light.position.set(10, 10, 1500);
 			scene.add(light);
-			obj.lights['logospot3'] = light;
+			obj.lights['writerspot3'] = light;
 			
 			var directionallight = new THREE.DirectionalLight( 0xffffff, 0.5 );
 			directionallight.position.set( 0, 1, 0 );
 			scene.add( directionallight );
-			obj.lights['logodirectional'] = directionallight;
+			obj.lights['writerdirectional'] = directionallight;
 			
-			scene.add(obj.cameras['logocam']);
-			obj.cameras['logocam'].position.z = 1000;
+			scene.add(obj.cameras['writercam']);
+			obj.cameras['writercam'].position.z = 1000;
 			
 			return scene;
 		}(ro));
 
 		ro.player = function(partdata, parttick, t) {
+		
+			var img_add_counter = Math.floor(parttick/1000);
+			
+			var img = this.objects['imagenamesarr'][img_add_counter];
+			
+			if (img && !img.added) {
+				var geometry = new THREE.PlaneGeometry(img.width, img.height, 1, 1);
+				var material = new THREE.MeshBasicMaterial( {map: THREE.ImageUtils.loadTexture(img.name), transparent: false} );
+				var mesh = new THREE.Mesh(geometry, material);
+				mesh.start_y =  Math.random() * 1000 - 500;
+				mesh.start_z = -600 + img_add_counter;
+				mesh.speed_x_multiplier = 5 + Math.random() * 5;
+				mesh.start_x = Math.random() * 5000 - 2500;
+				mesh.position.x = mesh.start_x;
+				mesh.sin_z_start = Math.random();
+				mesh.sin_z_multiplier = Math.random() * 5 + 3;
+				mesh.position.y = mesh.start_y;
+				mesh.position.z = mesh.start_z;
+				
+				this.scenes['writer'].add(mesh);
+				this.objects['images'].push(mesh);
+				this.objects['imagenamesarr'][img_add_counter].added = true;
+			}
+			
 			for (var i=0; i<this.objects['images'].length; i++) {
 				this.objects['images'][i].position.x = this.objects['images'][i].start_x + (parttick/this.objects['images'][i].speed_x_multiplier) ;
 				
@@ -323,7 +330,7 @@
 				}
 			}
 			
-			global_engine.renderers['main'].render(this.scenes['logo'], this.cameras['logocam']);
+			global_engine.renderers['main'].render(this.scenes['writer'], this.cameras['writercam']);
 		}
 	
 		return ro;
