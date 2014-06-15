@@ -135,24 +135,26 @@
 			
 			var imagenamesarr = [];
 		
-			for(var i=1; i<10; i++){
+			for(var i=1; i<30; i++){
 				var name = eval('image_pic_' + i + '.src');
 				var width = eval('image_pic_' + i + '.width');
 				var height = eval('image_pic_' + i + '.height');
 				imagenamesarr.push({name: name, width: width, height: height });	
 			}
 			
-			obj.objects['images'] = []; 
-
+			obj.objects['images'] = [];
 			
 			for (var i =0; i<imagenamesarr.length; i++) {
 				var geometry = new THREE.PlaneGeometry(imagenamesarr[i].width, imagenamesarr[i].height, 1, 1);
-				var material = new THREE.MeshLambertMaterial( {map: THREE.ImageUtils.loadTexture(imagenamesarr[i].name), transparent: true} );
+				var material = new THREE.MeshBasicMaterial( {map: THREE.ImageUtils.loadTexture(imagenamesarr[i].name), transparent: true} );
 				var mesh = new THREE.Mesh(geometry, material);
 				i == 0 ? mesh.start_x = -(imagenamesarr[i].width) : mesh.start_x = -(imagenamesarr[i-1].width + imagenamesarr[i].width);
-				mesh.start_y =  -i*20;
-				mesh.start_z = -(imagenamesarr[i].width/20) ;
+				mesh.start_y =  Math.random() * 500 - 250;
+				mesh.start_z = -600;
+				mesh.speed_x_multiplier = 5 + Math.random()*5;
+				mesh.start_x = Math.random() * 5000 - 2500;
 				mesh.position.x = mesh.start_x;
+				mesh.sin_z_start = Math.random();
 				mesh.position.y = mesh.start_y;
 				mesh.position.z = mesh.start_z;
 				obj.objects['images'].push(mesh);
@@ -295,8 +297,13 @@
 
 		ro.player = function(partdata, parttick, t) {
 			for (var i=0; i<this.objects['images'].length; i++) {
-				i % 2 == 0 ? this.objects['images'][i].position.x = this.objects['images'][i].start_x + (parttick/12) : this.objects['images'][i].position.x = this.objects['images'][i].start_x + (parttick/12) ;
-				//i % 2 == 0 ? this.objects['images'][i].position.z = this.objects['images'][i].start_z + (parttick/120) : this.objects['images'][i].position.z = this.objects['images'][i].start_z + (parttick/120) ;
+				this.objects['images'][i].position.x = this.objects['images'][i].start_x + (parttick/this.objects['images'][i].speed_x_multiplier) ;
+				
+				if (this.objects['images'][i].position.x > 2000) {
+					this.objects['images'][i].position.x -= 4000;
+				}
+				
+				this.objects['images'][i].rotation.z = Math.sin(t/100 + this.objects['images'][i].sin_z_start) / 10;
 			}
 
 			var pagemaxtime = 8660;
