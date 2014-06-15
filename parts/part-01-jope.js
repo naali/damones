@@ -2,7 +2,7 @@
 	data: (function() {
 		var ro = {};
 		ro.partname = 'Boozembly 2014 - writer';
-		ro.partlength = 1000 * 2000;
+		ro.partlength = 1000 * 168;
 		ro.cameras = {
 			'writercam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 10000)
 		};
@@ -64,9 +64,9 @@
 				],
 				[
 					"°3if you have",
-					"°4extra °3beer",
-					"°3too °4many °3sausages",
-					"°3stiff °4blunts"
+					"°6extra °3beer",
+					"°3too °6many °3sausages",
+					"°3stiff °6blunts"
 				],
 				[
 					"°3feel free",
@@ -75,15 +75,15 @@
 				],
 				[
 					"°3add",
-					"°4jul 31 - aug 3",
+					"°6jul 31 - aug 3",
 					"°3to your",
-					"calendars",
-					"now"
+					"°3calendars",
+					"°3now"
 				],
 				[
 					"°3greetings fly to",
 					"°0komplex °1pyrotech",
-					"°2byterapers °4hirmu",
+					"°2byterapers °4darklite",
 					"°5accession °6kooma",
 					"°7kewlers °0scoopex °1flo",
 					"°2fairlight °4extend"
@@ -312,6 +312,10 @@
 					this.objects['images'][i].material.opacity = (parttick - img_add_counter * 1000) / 1000;
 				} else {
 					this.objects['images'][i].material.opacity = 1;
+				}
+				
+				if (parttick > 158000) {
+					this.objects['images'][i].material.opacity = 1 - ((parttick - 158000) / 10000);
 				}
 			}
 

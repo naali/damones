@@ -75,7 +75,7 @@ function DemoEngine(selector, width, height) {
 	
  	this.play = function() {
 		this.audio.play();
-		this.audio.controls = !debug;
+		this.audio.controls = true;
 	}
 	
 	this.showControls = function(show) {

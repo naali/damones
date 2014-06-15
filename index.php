@@ -353,7 +353,7 @@
 
 <?php if (!$framegrabber) { ?>
 							global_engine.play();
-							global_engine.showControls(false);				
+							global_engine.showControls(false);
 <?php } else { ?>
 							$('#demo').append('<div id="framecounter" class="framecounter"></div>');
 <?php } ?>
