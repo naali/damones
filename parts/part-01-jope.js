@@ -228,28 +228,6 @@
 					}
 				}
 			}
-			
-			var imagenamesarr = [
-				{ name: image_boozembly.src, width: image_boozembly.width, height: image_boozembly.height },
-				{ name: image_dunkku_grillilla.src, width: image_dunkku_grillilla.width, height: image_dunkku_grillilla.height },
-				{ name: image_dunkku_warrella.src, width: image_dunkku_warrella.width, height: image_dunkku_warrella.height }
-			];
-
-			obj.objects['images'] = [];
-			
-			for (var i =0; i<imagenamesarr.length; i++) {
-				var geometry = new THREE.PlaneGeometry(imagenamesarr[i].width, imagenamesarr[i].height, 1, 1);
-				var material = new THREE.MeshLambertMaterial( {map: THREE.ImageUtils.loadTexture(imagenamesarr[i].name), transparent: false} );
-				var mesh = new THREE.Mesh(geometry, material);
-				mesh.position.x = 0;
-				mesh.position.y = 0;
-				mesh.position.z = -600;
-				obj.objects['images'].push(mesh);
-			}
-			
-			var mesh = obj.objects['images'][1];
-			
-			scene.add(mesh);
 								
 			var light = new THREE.SpotLight(0xFFFFFF);
 			light.position.set(200, 200, 1500);
@@ -278,13 +256,15 @@
 			return scene;
 		}(ro));
 
-		ro.player = function(partdata, parttime, t) {
-			//this.objects['images'][1].position.z = -600 + Math.sin(tick/200) * 10;
-			//this.objects['images'][1].rotation.z =  Math.sin(tick/11200) * Math.cos(tick/9000);
-			
+		ro.player = function(partdata, parttick, t) {
+/*		
+			for (var i=0; i<this.objects['images'].length; i++) {
+				i % 2 == 0 ? this.objects['images'][i].position.x = this.objects['images'][i].start_x * (parttick/1200) + (parttick/10) : this.objects['images'][i].position.x = this.objects['images'][i].start_x * (parttick/1000) + (parttick/50) ;
+			}
+*/			
 			var pagemaxtime = 8660;
-			var page = Math.floor(parttime / pagemaxtime);
-			var pagetime = parttime - page * pagemaxtime;
+			var page = Math.floor(parttick / pagemaxtime);
+			var pagetime = parttick - page * pagemaxtime;
 			
 			for (var i=0; i<this.objects['pagemesharr'].length; i++) {
 				for (var j=0; j<this.objects['pagemesharr'][i].length; j++) {
