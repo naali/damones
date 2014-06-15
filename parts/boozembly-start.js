@@ -2,7 +2,7 @@
 	data: (function() {
 		var ro = {};
 		ro.partname = 'Boozembly 2014 - start';
-		ro.partlength = 1000 * 8;
+		ro.partlength = 1000 * 8.66;
 		ro.cameras = {
 			'logocam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 10000)
 		};
@@ -75,6 +75,16 @@
 			
 			if (tick < 1000) {
 				this.objects['logo'].material.opacity = (tick/1000);
+
+				if (tick > 200 && tick < 600) {
+					var blink = tick % 2;
+					
+					if (blink == 0) {
+						this.objects['logo'].material.opacity = (tick/1000);
+					} else {
+						this.objects['logo'].material.opacity = 0;
+					}
+				}
 				this.objects['disorg'].material.opacity = 0;
 			} else if (tick > 7000) {
 				this.objects['logo'].material.opacity = 1 - (tick-7000) / 1000;
@@ -84,7 +94,17 @@
 			}
 			
 			if (tick > 1000 && tick < 2000) {
-				this.objects['disorg'].material.opacity = ((tick-1000)/1000);
+				if (tick > 1000 && tick < 1400) {
+					var blink = tick % 2;
+					
+					if (blink == 0) {
+						this.objects['disorg'].material.opacity = ((tick-1000)/1000);
+					} else {
+						this.objects['disorg'].material.opacity = 0;
+					}
+				} else {
+					this.objects['disorg'].material.opacity = ((tick-1000)/1000);
+				}
 			}
 			
 			global_engine.renderers['main'].render(this.scenes['logo'], this.cameras['logocam']);

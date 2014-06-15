@@ -282,7 +282,7 @@
 			//this.objects['images'][1].position.z = -600 + Math.sin(tick/200) * 10;
 			//this.objects['images'][1].rotation.z =  Math.sin(tick/11200) * Math.cos(tick/9000);
 			
-			var pagemaxtime = 8000;
+			var pagemaxtime = 8660;
 			var page = Math.floor(parttime / pagemaxtime);
 			var pagetime = parttime - page * pagemaxtime;
 			
