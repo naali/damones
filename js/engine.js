@@ -11,6 +11,7 @@ function DemoEngine(selector, width, height) {
 	this.frequencyFloatData = null;
 	this.frequencyBinCount = 0;
 	this.selectorstr = selector;
+	this.fftsupport = true;
 
 	var tmpelement = $(selector);
 	if (tmpelement.length != 1) {
@@ -18,6 +19,10 @@ function DemoEngine(selector, width, height) {
 		return null;
 	}
 	this.element = tmpelement[0];
+	
+	if (navigator.userAgent.toLowerCase().indexOf('firefox') != -1) {
+		this.fftsupport = false;
+	}
 	
 	this.width = window.innerWidth;
 	this.height = window.innerHeight;
@@ -31,18 +36,27 @@ function DemoEngine(selector, width, height) {
 		this.audio.loop = loop;
 	}
 	
+	this.supportsFFT = function() {
+		return this.fftsupport;
+	}
+	
 	this.setAudio = function(a) {
 		this.audiocontext = new AudioContext();
 		this.audio = a;
 		$(this.selectorstr).append(this.audio);
-		this.audiosource = this.audiocontext.createMediaElementSource(this.audio);
-		this.analyzer = this.audiocontext.createAnalyser();
-		this.analyzer.fftSize = Math.pow(2,9);
-		this.audiosource.connect(this.analyzer);
-		this.analyzer.connect(this.audiocontext.destination);
-		this.frequencyByteData = new Uint8Array(this.analyzer.frequencyBinCount);
-		this.frequencyFloatData = new Float32Array(this.analyzer.frequencyBinCount);
-		this.frequencyBinCount = this.analyzer.frequencyBinCount;
+		
+		if (this.fftsupport) {
+			this.audiosource = this.audiocontext.createMediaElementSource(this.audio);
+			this.analyzer = this.audiocontext.createAnalyser();
+			this.analyzer.fftSize = Math.pow(2,9);
+			this.audiosource.connect(this.analyzer);
+			this.analyzer.connect(this.audiocontext.destination);
+			this.frequencyBinCount = this.analyzer.frequencyBinCount;
+			this.frequencyByteData = new Uint8Array(this.frequencyBinCount);
+			this.frequencyFloatData = new Float32Array(this.frequencyBinCount);
+		} else {
+			log("Using Firefox on windows, no FFT support");
+		}
 	}
 	
 	this.getFrequencyBinCount = function() {
