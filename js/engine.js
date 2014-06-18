@@ -32,7 +32,7 @@ function DemoEngine(selector, width, height) {
 	}
 	
 	this.setAudio = function(a) {
-		this.audiocontext = new webkitAudioContext();
+		this.audiocontext = new AudioContext();
 		this.audio = a;
 		$(this.selectorstr).append(this.audio);
 		this.audiosource = this.audiocontext.createMediaElementSource(this.audio);

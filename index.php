@@ -48,7 +48,7 @@
 				if (mimestr != 'raw') {
 					var tmpblob = new Blob([uint8arr], {type: mimestr});
 				
-					return window.webkitURL.createObjectURL(tmpblob);
+					return window.URL.createObjectURL(tmpblob);
 				} else {
 					return uint8arr;
 				}
@@ -308,10 +308,10 @@
 				global_engine.setAudioLooping(false);
 <?php				
 	$partdir = "parts/";
-	$partorder = [
+	$partorder = array(
 		'boozembly-start.js', 
 		'part-01-jope.js'
-	];
+	);
 	
 	for ($i=0; $i<count($partorder); $i++) {
 		$partdata = file_get_contents($partdir.$partorder[$i]);
