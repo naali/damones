@@ -308,7 +308,6 @@
 				this.objects['images'][i].rotation.z = Math.sin(t/(100 * this.objects['images'][i].sin_z_multiplier)+ this.objects['images'][i].sin_z_start) / 10;
 				
 				if (img_add_counter == i) {
-					log (img_add_counter);
 					this.objects['images'][i].material.opacity = (parttick - img_add_counter * 1000) / 1000;
 				} else {
 					this.objects['images'][i].material.opacity = 1;
