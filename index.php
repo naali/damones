@@ -4,10 +4,10 @@
 	$frame = 0;
 	$fps = 60;
 
-	$length_in_sec = 68;
+	$length_in_sec = 220;
 	$lastframe = $fps * $length_in_sec;
-	$frame_width = 1920;
-	$frame_height = 1080;
+	$frame_width = 1280;
+	$frame_height = 720;
 	
 	if (isset($_GET)) {
 		if (isset($_GET['framegrabber']) && $_GET['framegrabber']==='true') {
@@ -231,7 +231,7 @@
 <?php } else { ?>
 			function update(frame) {
 				var framenumber = parseInt(((frame)?frame:0));
-				var frame_to_ms = Math.floor(framenumber / fps * 1000);
+				var frame_to_ms = Math.floor( 1000/fps * frame );
 
 				global_engine.draw(frame_to_ms);
 				
