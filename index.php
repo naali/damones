@@ -1,5 +1,5 @@
 <?php
-	$debug = false;
+	$debug = true;
 	$framegrabber = false;
 	$frame = 0;
 	$fps = 60;
@@ -48,7 +48,7 @@
 				if (mimestr != 'raw') {
 					var tmpblob = new Blob([uint8arr], {type: mimestr});
 				
-					return window.webkitURL.createObjectURL(tmpblob);
+					return window.URL.createObjectURL(tmpblob);
 				} else {
 					return uint8arr;
 				}
@@ -153,7 +153,7 @@
 	
 	$files = array();
 	
-	$sounds = glob('audio/*.{mp3}', GLOB_BRACE);
+	$sounds = glob('audio/*.{mp3,ogg}', GLOB_BRACE);
 	$images = glob('img/*.{png,jpg}', GLOB_BRACE);
 	$objects = glob('objects/*.{obj}', GLOB_BRACE);
 	$rawdata = glob('rawdata/*.{raw}', GLOB_BRACE);
@@ -163,7 +163,7 @@
 	echo "    <script>\n";
 	echo "    var datatmp = '';\n";
 	echo "    var assetname = '';\n";
-
+	echo "    var data_array = [];\n";
 
 	for ($i=0; $i<count($files); $i++) {
 
@@ -173,34 +173,39 @@
 		
 		$data = base64_encode(file_get_contents($files[$i]));
 		
-		echo "    datatmp = '$data';\n";
+		echo "    data_array[$i] = '$data';";
 		echo "    url = '$files[$i]';\n";
 
 		switch ($extension) {
 			case ('obj'):
-				echo "    var objecturl_$filename = dataUrlToObjectUrl(datatmp, 'text/plain');\n";
+				echo "    var objecturl_$filename = dataUrlToObjectUrl(data_array[$i], 'text/plain');\n";
 				echo "    var tmploader_$filename = new THREE.OBJLoader();\n";
 				echo "    var object_$filename;\n";
 				echo "    tmploader_$filename.load(objecturl_$filename, function(obj) { console.log('Loaded 3D .obj - $filename'); object_$filename = obj; });\n";
 				echo "    assetname = 'object_$filename';\n";
 				break;
+			case ('ogg'):
+				echo "    var ogg_audio_$filename = new Audio();\n";
+				echo "    ogg_audio_$filename.src = dataUrlToObjectUrl(data_array[$i], 'audio/ogg');\n";
+				echo "    assetname = 'ogg_audio_$filename';\n";
+				break;
 			case ('mp3'):
-				echo "    var audio_$filename = new Audio();\n";
-				echo "    audio_$filename.src = dataUrlToObjectUrl(datatmp, 'audio/mp3');\n";
-				echo "    assetname = 'audio_$filename';\n";
+				echo "    var mp3_audio_$filename = new Audio();\n";
+				echo "    mp3_audio_$filename.src = dataUrlToObjectUrl(data_array[$i], 'audio/mp3');\n";
+				echo "    assetname = 'mp3_audio_$filename';\n";
 				break;
 			case ('jpg'):
 				echo "    var image_$filename = new Image();\n";
-				echo "    image_$filename.src = dataUrlToObjectUrl(datatmp, 'image/jpg');\n";
+				echo "    image_$filename.src = dataUrlToObjectUrl(data_array[$i], 'image/jpg');\n";
 				echo "    assetname = 'image_$filename';\n";
 				break;
 			case ('png'):
 				echo "    var image_$filename = new Image();\n";
-				echo "    image_$filename.src = dataUrlToObjectUrl(datatmp, 'image/png');\n";
+				echo "    image_$filename.src = dataUrlToObjectUrl(data_array[$i], 'image/png');\n";
 				echo "    assetname = 'image_$filename';\n";
 				break;
 			case ('raw'):
-				echo "    var raw_$filename = dataUrlToObjectUrl(datatmp, 'raw');\n";
+				echo "    var raw_$filename = dataUrlToObjectUrl(data_array[$i], 'raw');\n";
 				echo "    assetname = 'raw_$filename';\n";
 				break;
 			default:
@@ -209,8 +214,15 @@
 		
 		echo "    log('Preloaded ".$files[$i]." as '+assetname);\n";
 	}
+	
+	echo "    log(navigator.userAgent.toLowerCase());\n";
+	echo "    if (!navigator.userAgent.match(/Trident.*[ :]*11\./)) {\n";
+	echo "        log('Not using IE');\n";
+	echo "        data_array[$i] = assetname = undefined;\n";
+	echo "    } else {\n";
+	echo "        log('Using IE, not releasing assets...');\n";
+	echo "    }\n";
 
-	echo "    datatmp = assetname = undefined;\n";
 	echo "    </script>\n";
 	
 ?>
@@ -299,31 +311,38 @@
 					$("#demo").css({ 'margin-top': Math.floor((height-h)/2) + 'px' });
 				}
 				
+				log("Creating Damones demo engine");
 				global_engine = new DemoEngine('#demo', w, h);
 <?php } ?>
+				log("Adding render targets");
 				global_engine.addRenderTarget('secondary', global_engine.getWidth(), global_engine.getHeight());
 				global_engine.addRenderTarget('tertiary', global_engine.getWidth(), global_engine.getHeight());
 				
-				global_engine.setAudio(audio_FutureKitchen);
+				log("Adding audio");
+				if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
+				{
+					window.setTimeout(global_engine.setAudio(ogg_audio_FutureKitchen), 10000);
+				} else {
+					global_engine.setAudio(mp3_audio_FutureKitchen);
+				}
+				
 				global_engine.setAudioLooping(false);
+				
+				log("Adding demo parts:");
 <?php				
 	$partdir = "parts/";
-	$partorder = [
+	$partorder = array(
 		'boozembly-start.js', 
 		'part-01-jope.js'
-	];
+	);
 	
 	for ($i=0; $i<count($partorder); $i++) {
-		$partdata = file_get_contents($partdir.$partorder[$i]);
+		$partfilename = $partdir.$partorder[$i];
+		$partdata = file_get_contents($partfilename);
+		echo "    log(\"$partfilename\")\n";
 		echo "    global_engine.addPart($partdata)\n";
 	}
 ?>			
-
-				for (var i=0; i<tmppartarray.length; i++) {
-					global_engine.addPart(tmppartarray[i]);
-				}
-				
-				tmppartarray = undefined;
 			}
 
 			$(document).ready(function() {
@@ -333,6 +352,8 @@
 					init();
 
 <?php if (!$framegrabber) { ?>
+					log("playing");
+
 					global_engine.play();
 					global_engine.showControls(false);
 <?php } else { ?>
@@ -384,5 +405,5 @@
 			<button id="btn_fullscreen_no" class="no">No</button>
 			<button id="btn_fullscreen_maybe" class="maybe">Maybe</button>
 		</div>
-	<body>
+	</body>
 </html>
