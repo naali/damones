@@ -214,9 +214,13 @@
 		
 		echo "    log('Preloaded ".$files[$i]." as '+assetname);\n";
 	}
-
-	echo "    if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {\n";
+	
+	echo "    log(navigator.userAgent.toLowerCase());\n";
+	echo "    if (!navigator.userAgent.match(/Trident.*[ :]*11\./)) {\n";
+	echo "        log('Not using IE');\n";
 	echo "        data_array[$i] = assetname = undefined;\n";
+	echo "    } else {\n";
+	echo "        log('Using IE, not releasing assets...');\n";
 	echo "    }\n";
 
 	echo "    </script>\n";

@@ -20,7 +20,8 @@ function DemoEngine(selector, width, height) {
 	}
 	this.element = tmpelement[0];
 	
-	if (navigator.userAgent.toLowerCase().indexOf('firefox') != -1) {
+	if (navigator.userAgent.toLowerCase().indexOf('firefox') != -1 ||
+		!!navigator.userAgent.match(/Trident.*[ :]*11\./)) {
 		this.fftsupport = false;
 	}
 	
