@@ -1,10 +1,11 @@
 <?php
-	$debug = true;
+	global $debug;
+	
 	$framegrabber = false;
 	$frame = 0;
 	$fps = 60;
 
-	$length_in_sec = 220;
+	global $length_in_sec;
 	$lastframe = $fps * $length_in_sec;
 	$frame_width = 1280;
 	$frame_height = 720;
@@ -16,14 +17,22 @@
 			$fps = 60;
 		}
 	}
+	
+	global $demo_part_order;
+	global $demo_name;
+	global $demo_description;
+	
 ?><!DOCTYPE html>
 <html id="html">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title><?php echo "$demo_name"?></title>
+		<meta property="og:title" content="<?php echo "$demo_name"?>" />
+		<meta property="og:title" content="<?php echo "$demo_description"?>" />
 		<script>
-			<?php echo file_get_contents('lib/jquery-1.8.2.min.js'); ?>
-			<?php echo file_get_contents('lib/three.min.js'); ?>
-			<?php echo file_get_contents('lib/OBJLoader.js'); ?>
+			<?php echo file_get_contents('../../lib/jquery-1.8.2.min.js'); ?>
+			<?php echo file_get_contents('../../lib/three.min.js'); ?>
+			<?php echo file_get_contents('../../lib/OBJLoader.js'); ?>
 			
 			var debug = <?php echo (($debug == true)?'true':'false')?>;
 <?php if ($framegrabber) { ?> 
@@ -72,7 +81,7 @@
 		</script>
 
 <?php
-	$stylefiles = glob('css/*.[cC][sS][sS]');
+	$stylefiles = glob('../../css/*.[cC][sS][sS]');
 
 	for ( $sfptr = 0; $sfptr < count($stylefiles); $sfptr++ ) {
 		echo "    <style>\n";
@@ -84,6 +93,20 @@
 		echo $style;
 
 		echo "    </style>\n\n";
+	}
+	
+	$jsfiles = glob('../../js/*.[jJ][sS]');
+
+	for ($jsfptr=0; $jsfptr<count($jsfiles); $jsfptr++) {
+		echo "    <script>\n";
+		
+		ob_start();
+		include($jsfiles[$jsfptr]);
+		$jscontent = ob_get_clean();
+		
+		echo $jscontent;
+		
+		echo "    </script>\n\n";
 	}
 	
 	$fonts = glob('fonts/*.[jJ][sS]');
@@ -101,20 +124,6 @@
 		}
 		
 		echo "    </script>\n";
-	}
-	
-	$jsfiles = glob('js/*.[jJ][sS]');
-
-	for ($jsfptr=0; $jsfptr<count($jsfiles); $jsfptr++) {
-		echo "    <script>\n";
-		
-		ob_start();
-		include($jsfiles[$jsfptr]);
-		$jscontent = ob_get_clean();
-		
-		echo $jscontent;
-		
-		echo "    </script>\n\n";
 	}
 	
 	$shaders = array();
@@ -330,14 +339,8 @@
 				
 				log("Adding demo parts:");
 <?php				
-	$partdir = "parts/";
-	$partorder = array(
-		'boozembly-start.js', 
-		'part-01-jope.js'
-	);
-	
-	for ($i=0; $i<count($partorder); $i++) {
-		$partfilename = $partdir.$partorder[$i];
+	for ($i=0; $i<count($demo_part_order); $i++) {
+		$partfilename = getcwd().$partdir.$demo_part_order[$i];
 		$partdata = file_get_contents($partfilename);
 		echo "    log(\"$partfilename\")\n";
 		echo "    global_engine.addPart($partdata)\n";
