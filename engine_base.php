@@ -20,6 +20,7 @@
 	
 	global $demo_part_order;
 	global $demo_name;
+	global $demo_song;
 	global $demo_description;
 	
 ?><!DOCTYPE html>
@@ -330,9 +331,9 @@
 				log("Adding audio");
 				if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
 				{
-					window.setTimeout(global_engine.setAudio(ogg_audio_FutureKitchen), 10000);
+					window.setTimeout(global_engine.setAudio(ogg_audio_<?php echo "$demo_song"?>), 10000);
 				} else {
-					global_engine.setAudio(mp3_audio_FutureKitchen);
+					global_engine.setAudio(mp3_audio_<?php echo "$demo_song"?>);
 				}
 				
 				global_engine.setAudioLooping(false);
