@@ -258,7 +258,7 @@
 			var stop_rotm_x = 0;
 			var start_rotm_y = 0;
 			var stop_rotm_y = 0;
-			var ss = smoothstep(0, 2800, dt);
+			var ss = overshoot_smoothstep(0, 2800, dt);
 			
 			if (startframe < this.frame_arrays.length-1) {
 				for (var i=0; i<this.frame_arrays[startframe].length; i++) {
