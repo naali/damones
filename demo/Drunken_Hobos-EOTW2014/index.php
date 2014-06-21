@@ -1,6 +1,6 @@
 <?php
 	$debug = true;
-	$length_in_sec = 220;
+	$length_in_sec = 2 * 60 + 20;
 	$demo_song = "tune2";
 	
 	$demo_name = "Drunken Hobos by Damones";

@@ -171,6 +171,8 @@
 			mesh.position.x = 0;
 			mesh.position.y = 0;
 			mesh.position.z = 0;
+			mesh.scale.x = 1.5;
+			mesh.scale.y = 1.5;
 			scene.add(mesh);
 			obj.objects['bottlelogoplane'] = mesh;
 
