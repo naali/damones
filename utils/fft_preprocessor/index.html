@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../../lib/jquery-1.8.2.min.js"></script>
+		<script>
+			var global = {};		
+						
+			function log(o) {
+				if (typeof(console) == 'object' && typeof(console.log) == 'function') {
+					console.log(o);
+				}
+			}
+			
+			function update() {
+				if (!global.completed) {
+					window.requestAnimationFrame(update);
+					global.analyzer.getByteFrequencyData(global.frequencyByteData);
+					
+					var arr = [];
+					
+					for (var i=0; i<global.frequencyByteData.length; i++) {
+						arr.push(global.frequencyByteData[i]);
+					}
+					
+					global.FFTdata.push(arr);
+					
+					log(global.frequencyByteData);
+				} else {
+					var postdata = {};
+					
+					postdata['FFT_bincount'] = global.frequencyBinCount;
+					postdata['FFT_samplecount'] = global.FFTdata.length;
+					postdata['FFT_sampletype'] = 'byte';
+					var temparray = new Uint8Array(global.frequencyBinCount * global.FFTdata.length);
+					
+					log('bincount: ' + global.frequencyBinCount);
+					log('fftdata sample count: ' + global.FFTdata.length);
+					
+					var c = 0;
+					
+					for (var i=0; i<global.FFTdata.length; i++) {
+						for (var j=0; j<global.frequencyBinCount; j++) {
+							temparray[c++] = global.FFTdata[i][j];
+						}
+					}
+					
+					log(temparray);
+					
+					postdata['FFT_samples'] = btoa(String.fromCharCode.apply(null, temparray));
+					
+					$.ajax({
+						url: 'fft_saver.php',
+						type: 'POST',
+						data: { action: 'savefft', fftdata: postdata },
+						success: function(res) {
+							log(res);
+						},
+						error: function(a,b,c) {
+							log(a + ' ' + b + ' ' + c);
+						}
+					});
+				}
+			}
+			
+			function startFFT() {
+				global.tick = 0;
+				global.FFTdata = [];
+				global.audio.play();
+				global.completed = false;
+				update();
+			}
+			
+			function dataUrlToObjectUrl(d, mimestr) {
+				var tmparr = window.atob(d);
+				var uint8arr = new Uint8Array(tmparr.length);
+				
+				for (var i=0; i<uint8arr.length; i++) {
+					uint8arr[i] = tmparr.charCodeAt(i);
+				}
+				
+				var tmpblob = new Blob([uint8arr], {type: mimestr});
+				return window.URL.createObjectURL(tmpblob);
+			}
+			
+			$(document).ready(function(){
+				$('#btn_start').on('click', function() {
+					startFFT();
+				});
+				
+				$('#audiofile').on('change', function(event) {
+					var files = event.target.files;
+					if (files.length > 0) {
+						for (i=0; i<files.length; i++) {
+							log("Handling file of type: " + files[i].type);
+							if (!files[i].type.match('audio.*')) {
+								log("not audio :(");
+								continue;
+							} else {
+								log("yes please");
+								
+								var filereader = new FileReader();
+								
+								filereader.onload = function(file) {
+									var splitted = this.result.split(',');
+									var mimetype = splitted[0].split(';')[0].split(':')[1];
+									var audio_object_url = dataUrlToObjectUrl(splitted[1], mimetype);
+									
+									global.audio = new Audio();
+									global.audio.src = audio_object_url;
+									
+									global.audiocontext = new AudioContext();
+									global.audiosource = global.audiocontext.createMediaElementSource(global.audio);
+									global.analyzer = global.audiocontext.createAnalyser();
+									global.analyzer.fftSize = Math.pow(2,9);
+									global.audiosource.connect(global.analyzer);
+									global.analyzer.connect(global.audiocontext.destination);
+									global.frequencyBinCount = global.analyzer.frequencyBinCount;
+									global.frequencyByteData = new Uint8Array(global.frequencyBinCount);
+									global.frequencyFloatData = new Float32Array(global.frequencyBinCount);
+
+									global.audio.onended = function() {
+										global.completed = true;
+									};
+									
+									$('#container').append(global.audio);
+									$('#btn_start').show();
+								};
+								
+								filereader.readAsDataURL(files[i]);
+							}
+						}
+					} else {
+						log("Files missing?");
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<input id="audiofile" type="file">
+		<div id="filename"></div>
+		<div id="container"></div>
+		<button id="btn_start" style="display: none;">Start FFT</button>
+	</body>
+</html> 
