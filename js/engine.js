@@ -1,7 +1,7 @@
 function DemoEngine(selector, width, height) {
 
 	// hack for safari
-	if(!window.AudioContext) window.AudioContext = webkitAudioContext;
+	window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
 	this.partdata = [];
 	this.assets = { urls: {} };
