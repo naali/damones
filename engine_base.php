@@ -263,7 +263,7 @@
 				$('#framecounter').text('Saving frame: ' + framenumber +' ts: ' + frame_to_ms);
 				
 				$.ajax({
-					url: 'framesaver.php',
+					url: '../../framesaver.php',
 					type: 'POST',
 					data: { action: 'saveframe', framenumber: framenumber, framedata: framedata },
 					success: function(res) {
