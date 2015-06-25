@@ -3,7 +3,6 @@
 # Simple script to encode framegrabber output to mp4
 # by T-101 / Darklite
 #
-#
 #!/bin/sh
 
 # Change this to your liking. Smaller value, smaller file.
