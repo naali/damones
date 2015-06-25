@@ -1,5 +1,6 @@
 <?php
 	$debug = true;
+        $showcontrols = true;
 	$length_in_sec = 2 * 60 + 20;
 	$demo_song = "tune2";
 	
