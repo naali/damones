@@ -1,7 +1,9 @@
 <?php
 	global $debug;
+	global $showcontrols;
 	
 	$framegrabber = false;
+//	$showControls = false;
 	$frame = 0;
 	$fps = 60;
 
@@ -17,6 +19,14 @@
 			$fps = 60;
 		}
 	}
+	
+	if (isset($_GET)) {
+		if (isset($_GET['showcontrols']) && $_GET['showcontrols']==='true') {
+			$showcontrols = true;
+		} else {
+			$showcontrols = false;
+		}
+	}	
 	
 	global $demo_part_order;
 	global $demo_name;
@@ -245,6 +255,7 @@
 			var global_audioplayer = null;
 			var global_tick = 0;
 
+
 <?php if (!$framegrabber) { ?>
 			function update() {
 				window.requestAnimationFrame(update);
@@ -359,7 +370,7 @@
 					log("playing");
 
 					global_engine.play();
-					global_engine.showControls(false);
+					global_engine.showControls(<?php echo (($showcontrols == true)?'true':'false')?>);
 <?php } else { ?>
 					$('#demo').append('<div id="framecounter" class="framecounter"></div>');
 <?php } ?>
@@ -378,7 +389,7 @@
 
 <?php if (!$framegrabber) { ?>
 							global_engine.play();
-							global_engine.showControls(false);
+							global_engine.showControls(<?php echo (($showcontrols == true)?'true':'false')?>);
 <?php } else { ?>
 							$('#demo').append('<div id="framecounter" class="framecounter"></div>');
 <?php } ?>

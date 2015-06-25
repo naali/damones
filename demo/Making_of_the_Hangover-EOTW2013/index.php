@@ -1,5 +1,6 @@
 <?php
 	$debug = true;
+        $showcontrols = true;
 	$length_in_sec = 220;
 	$demo_song = "eotw2013";
 	
