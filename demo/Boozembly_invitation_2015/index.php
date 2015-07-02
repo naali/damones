@@ -2,15 +2,15 @@
 	$debug = true;
         $showcontrols = true;
 	$length_in_sec = 220;
-	$demo_song = "FutureKitchen";
+	$demo_song = "Kikka";
 	
-	$demo_name = "Boozembly invitation 2014 by Damones";
-	$demo_description = "Boozembly invitation 2014 by Damones – Released at Graffathon 2014 in Espoo, Finland. 20th Boozembly will be disorganized during 31th of July - 3rd of August.";
+	$demo_name = "Boozembly invitation 2015 by Damones";
+	$demo_description = "Boozembly invitation 2015 by Damones – Released at ??????????????. 21st Boozembly will be disorganized during 30th of July - 2nd of August 2015.";
 
 	$part_dir = '/parts/';
 
 	$demo_part_order = array(
-		$part_dir.'boozembly-start.js', 
+//		$part_dir.'boozembly-start.js', 
 		$part_dir.'part-01-jope.js'
 	);
 	

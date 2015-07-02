@@ -1,7 +1,7 @@
 {
 	data: (function() {
 		var ro = {};
-		ro.partname = 'Boozembly 2014 - writer';
+		ro.partname = 'Boozembly 2015';
 		ro.partlength = 1000 * 168;
 		ro.cameras = {
 			'writercam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 10000)
