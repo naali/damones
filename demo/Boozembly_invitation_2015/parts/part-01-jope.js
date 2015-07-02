@@ -4,13 +4,79 @@
 		ro.partname = 'Boozembly 2015';
 		ro.partlength = 1000 * 168;
 		ro.cameras = {
+			'photocam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 10000),
 			'writercam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 10000)
 		};
 		
 		ro.scenes = {};
 		ro.lights = {};
 		ro.objects = {};
+		
+		ro.scenes['photos'] = (function(obj) {
+			obj.objects['photomaterials'] = [];
+			
+			for (var i=1; i<58; i++) {
+				var name = eval('image_pic_' + i + '.src');
+				var width = eval('image_pic_' + i + '.width');
+				var height = eval('image_pic_' + i + '.height');
+			
+				var material = new THREE.MeshBasicMaterial( {map: THREE.ImageUtils.loadTexture(name), transparent: true} );
+				material.pixelwidth = width;
+				material.pixelheight = height;
+				
+				obj.objects['photomaterials'].push(material);
+			}
+			
+			var scene = new THREE.Scene();
+			
+			obj.objects['photopositions'] = [];
 
+			for (var i=0; i<5000; i++) {
+				var material = obj.objects['photomaterials'][i  % obj.objects['photomaterials'].length];
+				var geometry = new THREE.PlaneGeometry(material.pixelwidth,material.pixelheight, 2, 2);
+				
+				var mesh = new THREE.Mesh(geometry, material);
+				var mesh_scale = Math.random() + 0.8
+				mesh.scale.set(mesh_scale, mesh_scale, 1);
+				mesh.renderOrder = i;
+				var mesh_x_pos = Math.random() * 20000 - 10000;
+				var mesh_y_pos = Math.random() * 20000 - 10000;
+				var mesh_z_pos = 0;
+				var mesh_rotation = Math.random() * Math.PI * 2;
+				var photoposition = new THREE.Vector4(mesh_x_pos, mesh_y_pos, mesh_z_pos, mesh_rotation);
+				
+				mesh.position.set(mesh_x_pos, mesh_y_pos, mesh_z_pos);
+				mesh.rotation.set(0, 0, mesh_rotation);
+				scene.add(mesh);
+			}
+
+			var light = new THREE.SpotLight(0xFFFFFF);
+			light.position.set(200, 200, 1500);
+			scene.add(light);
+			obj.lights['photospot1'] = light;
+			
+			light = new THREE.SpotLight(0xFFFFFF);
+			light.position.set(-200, -200, 1500);
+			scene.add(light);
+			obj.lights['photospot2'] = light;
+
+			light = new THREE.SpotLight(0xFFFFFF);
+			light.intensity = 1.2;
+			light.position.set(10, 10, 1500);
+			scene.add(light);
+			obj.lights['photospot3'] = light;
+			
+			var directionallight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+			directionallight.position.set( 0, 1, 0 );
+			scene.add( directionallight );
+			obj.lights['photodirectional'] = directionallight;
+			
+			scene.add(obj.cameras['photocam']);
+			obj.cameras['photocam'].position.z = 1000;
+			
+			return scene;
+		}(ro));
+/*
 		ro.scenes['writer'] = (function(obj) {
 		
 			var scene = new THREE.Scene();			
@@ -133,19 +199,15 @@
 			];
 			
 			
-			var imagenamesarr = [];
+			obj.objects['imagenamesarr'] = [];
 			
 			for (var i=1; i<58; i++) {
 				var name = eval('image_pic_' + i + '.src');
 				var width = eval('image_pic_' + i + '.width');
 				var height = eval('image_pic_' + i + '.height');
-				imagenamesarr.push({ name: name, width: width, height: height, added: false });	
+				obj.objects['imagenamesarr'].push({ name: name, width: width, height: height, added: false });	
 			}
 			
-			obj.objects['imagenamesarr'] = imagenamesarr;
-		
-			obj.objects['images'] = [];
-
 			obj.objects['textarr'] = textarr;
 			obj.objects['chargeoms'] = [];
 			obj.objects['textcolors'] = {
@@ -272,9 +334,10 @@
 			
 			return scene;
 		}(ro));
-
+*/
 		ro.player = function(partdata, parttick, t) {
-		
+//			log("player: " + t);
+/*		
 			var img_add_counter = Math.floor(parttick/1000);
 			
 			var img = this.objects['imagenamesarr'][img_add_counter];
@@ -339,8 +402,11 @@
 					}
 				}
 			}
+*/
+
+			this.cameras['photocam'].position.z = t;
 			
-			global_engine.renderers['main'].render(this.scenes['writer'], this.cameras['writercam']);
+			global_engine.renderers['main'].render(this.scenes['photos'], this.cameras['photocam']);
 		}
 	
 		return ro;
