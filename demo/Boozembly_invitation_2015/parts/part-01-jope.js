@@ -33,16 +33,23 @@
 		ro.scenes['photos'] = (function(obj) {
 			obj.objects['photomaterials'] = [];
 			
-			for (var i=1; i<58; i++) {
-				var name = eval('image_pic_' + i + '.src');
-				var width = eval('image_pic_' + i + '.width');
-				var height = eval('image_pic_' + i + '.height');
+			var photoconf = [
+				{name: 'landscape', amount: 9, wmul: 1, hmul: 1.33333},
+				{name: 'portrait', amount: 10, wmul: 1.3333, hmul: 1}
+			];
 			
-				var material = new THREE.MeshPhongMaterial( {map: THREE.ImageUtils.loadTexture(name), transparent: false} );
-				material.pixelwidth = width;
-				material.pixelheight = height;
+			for (var j=0; j<photoconf.length; j++) {
+				for (var i=1; i<=photoconf[j].amount; i++) {
+					var name = eval('image_pic_' + photoconf[j].name + '_' + i + '.src');
+					var width = eval('image_pic_' + photoconf[j].name + '_' + i + '.width');
+					var height = eval('image_pic_' + photoconf[j].name + '_' + i + '.height');
+			
+					var material = new THREE.MeshPhongMaterial( {map: THREE.ImageUtils.loadTexture(name), transparent: false} );
+					material.pixelwidth = width * photoconf[j].wmul;
+					material.pixelheight = height * photoconf[j].hmul;
 				
-				obj.objects['photomaterials'].push(material);
+					obj.objects['photomaterials'].push(material);
+				}
 			}
 			
 			var scene = new THREE.Scene();
