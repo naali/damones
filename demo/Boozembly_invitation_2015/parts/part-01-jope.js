@@ -12,6 +12,24 @@
 		ro.lights = {};
 		ro.objects = {};
 		
+		ro.functions = {
+			CMR: function(p0, p1, p2, p3, t) {
+				return 0.5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t*t + (-p0 + 3*p1 - 3*p2 + p3) * t*t*t);
+			},
+			FYSuffle: function(arr) {
+				var c = arr.length;
+				
+				while (c) {
+					var idx = Math.floor(Math.random() * c--) | 0;
+					var tmp = arr[idx];
+					arr[c] = arr[idx];
+					arr[idx] = tmp;
+				}
+			
+				return arr;
+			}
+		}
+		
 		ro.scenes['photos'] = (function(obj) {
 			obj.objects['photomaterials'] = [];
 			
@@ -20,7 +38,7 @@
 				var width = eval('image_pic_' + i + '.width');
 				var height = eval('image_pic_' + i + '.height');
 			
-				var material = new THREE.MeshBasicMaterial( {map: THREE.ImageUtils.loadTexture(name), transparent: true} );
+				var material = new THREE.MeshPhongMaterial( {map: THREE.ImageUtils.loadTexture(name), transparent: false} );
 				material.pixelwidth = width;
 				material.pixelheight = height;
 				
@@ -29,26 +47,47 @@
 			
 			var scene = new THREE.Scene();
 			
-			obj.objects['photopositions'] = [];
+			var zi = 1;
 
 			for (var i=0; i<5000; i++) {
 				var material = obj.objects['photomaterials'][i  % obj.objects['photomaterials'].length];
-				var geometry = new THREE.PlaneGeometry(material.pixelwidth,material.pixelheight, 2, 2);
+				var geometry = new THREE.PlaneGeometry(material.pixelwidth,material.pixelheight, 1, 1);
 				
 				var mesh = new THREE.Mesh(geometry, material);
 				var mesh_scale = Math.random() + 0.8
 				mesh.scale.set(mesh_scale, mesh_scale, 1);
-				mesh.renderOrder = i;
-				var mesh_x_pos = Math.random() * 20000 - 10000;
-				var mesh_y_pos = Math.random() * 20000 - 10000;
-				var mesh_z_pos = 0;
-				var mesh_rotation = Math.random() * Math.PI * 2;
-				var photoposition = new THREE.Vector4(mesh_x_pos, mesh_y_pos, mesh_z_pos, mesh_rotation);
-				
+				var mesh_x_pos = Math.random() * 40000 - 20000;
+				var mesh_y_pos = Math.random() * 40000 - 20000;
+				var mesh_z_pos = Math.random()<0.5?0 + i/5:2300-i/5;
+				var mesh_rotation = Math.random() * Math.PI * 4 - Math.PI * 2;
+
 				mesh.position.set(mesh_x_pos, mesh_y_pos, mesh_z_pos);
 				mesh.rotation.set(0, 0, mesh_rotation);
 				scene.add(mesh);
 			}
+
+			var temparr = [new THREE.Vector4(0,0,0,0)];
+			
+			for (var i=0; i<obj.objects['photomaterials'].length; i++) {
+				var stride = 8;
+				var material = obj.objects['photomaterials'][i];
+				var geometry = new THREE.PlaneGeometry(material.pixelwidth,material.pixelheight, 1, 1);
+				var testmaterial = new THREE.MeshBasicMaterial({color: 0xff0000});
+				var mesh = new THREE.Mesh(geometry, testmaterial);
+
+				var mesh_x_pos = (i % stride) * 2000 - (stride * 2000 / 2);
+				var mesh_y_pos = Math.floor(i/stride) * 2000 - (stride * 2000 / 2);
+				var mesh_z_pos = 1100;
+				var mesh_rotation = Math.random() * Math.PI * 4 - Math.PI * 2;
+				var photoposition = new THREE.Vector4(mesh_x_pos, mesh_y_pos, 1100, mesh_rotation);
+				temparr.push(photoposition);
+				
+				mesh.position.set(mesh_x_pos, mesh_y_pos, 1100);
+				mesh.rotation.set(0, 0, mesh_rotation);
+				scene.add(mesh);
+			}
+
+			obj.objects['photopositions'] = obj.functions.FYSuffle(temparr);
 
 			var light = new THREE.SpotLight(0xFFFFFF);
 			light.position.set(200, 200, 1500);
@@ -66,8 +105,8 @@
 			scene.add(light);
 			obj.lights['photospot3'] = light;
 			
-			var directionallight = new THREE.DirectionalLight( 0xffffff, 0.5 );
-			directionallight.position.set( 0, 1, 0 );
+			var directionallight = new THREE.DirectionalLight( 0xffffff, 0.8 );
+			directionallight.position.set( 0, 0, 1 );
 			scene.add( directionallight );
 			obj.lights['photodirectional'] = directionallight;
 			
@@ -344,7 +383,7 @@
 			
 			if (img && !img.added) {
 				var geometry = new THREE.PlaneGeometry(img.width, img.height, 1, 1);
-				var material = new THREE.MeshBasicMaterial( {map: THREE.ImageUtils.loadTexture(img.name), transparent: true} );
+				var material = new THREE.MeshBasicMaterial( {map: THREE.ImageUtils.loadTexture(img.name), transparent: false} );
 				var mesh = new THREE.Mesh(geometry, material);
 				mesh.start_y =  Math.random() * 1000 - 500;
 				mesh.start_z = -600 + img_add_counter;
@@ -403,8 +442,23 @@
 				}
 			}
 */
+			phototimer = parttick / 4000;
+			var idx = Math.floor(phototimer);
+			var intrat = (phototimer) % 1;
+			
+			var v0 = this.objects['photopositions'][idx];
+			var v1 = this.objects['photopositions'][idx + 1];
+			var v2 = this.objects['photopositions'][idx + 2];
+			var v3 = this.objects['photopositions'][idx + 3];
+			
+//			var cpos_x = this.functions.CMR(v0.x, v1.x, v2.x, v3.x, intrat);
+//			var cpos_y = this.functions.CMR(v0.y, v1.y, v2.y, v3.y, intrat);
+			var cpos_z = Math.sin((Math.PI * 2) * (1-intrat)) * 1500 + 5000;
 
-			this.cameras['photocam'].position.z = t;
+			this.cameras['photocam'].position.x = this.functions.CMR(v0.x, v1.x, v2.x, v3.x, intrat);
+			this.cameras['photocam'].position.y = this.functions.CMR(v0.y, v1.y, v2.y, v3.y, intrat);
+			this.cameras['photocam'].position.z = cpos_z;
+			this.cameras['photocam'].rotation.z = this.functions.CMR(v0.w, v1.w, v2.w, v3.w, intrat);
 			
 			global_engine.renderers['main'].render(this.scenes['photos'], this.cameras['photocam']);
 		}
