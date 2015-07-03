@@ -335,6 +335,13 @@
 				log("Creating Damones demo engine");
 				global_engine = new DemoEngine('#demo', w, h);
 <?php } ?>
+
+				$('html').keyup(function(e) {
+					if (e.keyCode == 27) {
+						global_engine.stop();
+					}
+				});
+
 				log("Adding render targets");
 				global_engine.addRenderTarget('secondary', global_engine.getWidth(), global_engine.getHeight());
 				global_engine.addRenderTarget('tertiary', global_engine.getWidth(), global_engine.getHeight());
@@ -365,10 +372,12 @@
 					$('#setup').remove();
 
 					init();
-
+			
 <?php if (!$framegrabber) { ?>
+					log("prebaking");
+					global_engine.prebake();
+					
 					log("playing");
-
 					global_engine.play();
 					global_engine.showControls(<?php echo (($showcontrols == true)?'true':'false')?>);
 <?php } else { ?>
@@ -388,6 +397,10 @@
 							init();
 
 <?php if (!$framegrabber) { ?>
+							log("prebaking");
+							global_engine.prebake();
+
+							log("playing");
 							global_engine.play();
 							global_engine.showControls(<?php echo (($showcontrols == true)?'true':'false')?>);
 <?php } else { ?>

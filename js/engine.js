@@ -83,6 +83,11 @@ function DemoEngine(selector, width, height) {
 		return this.frequencyFloatData;
 	}
 	
+	this.stop = function() {
+		this.audio.pause();
+		this.audio.currentTime = 0;
+	}
+	
  	this.play = function() {
 		this.audio.play();
 		this.audio.controls = true;
@@ -110,6 +115,13 @@ function DemoEngine(selector, width, height) {
 	
 	this.addPart = function(data) {
 		this.partdata[this.partdata.length] = data;
+	}
+	
+	this.prebake = function() {
+		for (var i=0; i<this.partdata.length; i++) {
+			var foo = this.partdata[i];
+			log("prebaking: " + this.partdata[i].data.partname);
+		}
 	}
 	
 	this.draw = function(tick) {
@@ -154,6 +166,7 @@ function DemoEngine(selector, width, height) {
 		}
 
 		this.renderers[name].setClearColor(0x000000, 1.0);
+		this.renderers[name].autoClear = false;
 		this.renderers[name].clear();
 	}
 	
