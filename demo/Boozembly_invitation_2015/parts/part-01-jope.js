@@ -4,7 +4,7 @@
 		ro.partname = 'Boozembly 2015';
 		ro.partlength = 1000 * 168;
 		ro.cameras = {
-			'photocam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 10000),
+			'photocam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 100000),
 			'writercam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 10000)
 		};
 		
@@ -31,6 +31,7 @@
 		}
 		
 		ro.scenes['photos'] = (function(obj) {
+			global_engine.renderers['logarithmic'] = new THREE.WebGLRenderer({logarithmicDepthBuffer: true});
 			obj.objects['photomaterials'] = [];
 			
 			var photoconf = [
@@ -65,7 +66,7 @@
 				mesh.scale.set(mesh_scale, mesh_scale, 1);
 				var mesh_x_pos = Math.random() * 40000 - 20000;
 				var mesh_y_pos = Math.random() * 40000 - 20000;
-				var mesh_z_pos = Math.random()<0.5?0 + i/5:2300-i/5;
+				var mesh_z_pos = Math.random() * 20000 - 10000;
 				var mesh_rotation = Math.random() * Math.PI * 4 - Math.PI * 2;
 
 				mesh.position.set(mesh_x_pos, mesh_y_pos, mesh_z_pos);
@@ -96,29 +97,44 @@
 
 			obj.objects['photopositions'] = obj.functions.FYSuffle(temparr);
 
+			scene.add(obj.cameras['photocam']);
+
 			var light = new THREE.SpotLight(0xFFFFFF);
-			light.position.set(200, 200, 1500);
+			light.position.set(-20, -15, 1);
+			light.target = obj.cameras['photocam'];
 			scene.add(light);
 			obj.lights['photospot1'] = light;
 			
 			light = new THREE.SpotLight(0xFFFFFF);
-			light.position.set(-200, -200, 1500);
+			light.position.set(20, -15 , 1);
+			light.target = obj.cameras['photocam'];
 			scene.add(light);
 			obj.lights['photospot2'] = light;
 
 			light = new THREE.SpotLight(0xFFFFFF);
 			light.intensity = 1.2;
-			light.position.set(10, 10, 1500);
+			light.position.set(0, 15, 1);
+			light.target = obj.cameras['photocam'];
 			scene.add(light);
 			obj.lights['photospot3'] = light;
-			
-			var directionallight = new THREE.DirectionalLight( 0xffffff, 0.8 );
+/*			
+			var directionallight = new THREE.DirectionalLight( 0xffffff, 0.2 );
 			directionallight.position.set( 0, 0, 1 );
 			scene.add( directionallight );
-			obj.lights['photodirectional'] = directionallight;
 			
-			scene.add(obj.cameras['photocam']);
+			obj.lights['photodirectional'] = directionallight;
+*/			
 			obj.cameras['photocam'].position.z = 1000;
+			
+			var photocomposer = new THREE.EffectComposer(global_engine.renderers['main']);
+			photocomposer.addPass(new THREE.RenderPass(scene, obj.cameras['photocam']));
+			
+			var effect = new THREE.ShaderPass( THREE.RGBShiftShader );
+			effect.uniforms[ 'amount' ].value = 0.005;
+			effect.renderToScreen = true;
+			photocomposer.addPass(effect);
+			
+			obj.scenecomposer = photocomposer;
 			
 			return scene;
 		}(ro));
@@ -458,16 +474,20 @@
 			var v2 = this.objects['photopositions'][idx + 2];
 			var v3 = this.objects['photopositions'][idx + 3];
 			
-//			var cpos_x = this.functions.CMR(v0.x, v1.x, v2.x, v3.x, intrat);
-//			var cpos_y = this.functions.CMR(v0.y, v1.y, v2.y, v3.y, intrat);
-			var cpos_z = Math.sin((Math.PI * 2) * (1-intrat)) * 1500 + 5000;
+			var cpos_x = this.functions.CMR(v0.x, v1.x, v2.x, v3.x, intrat);
+			var cpos_y = this.functions.CMR(v0.y, v1.y, v2.y, v3.y, intrat);
+			var cpos_z_sin = Math.sin((Math.PI * 2) * (1-intrat)) * 1500;
+			var cpos_z = this.functions.CMR(v0.z, v1.z, v2.z, v3.z, intrat) + (cpos_z_sin + 1500) + 1000;
 
-			this.cameras['photocam'].position.x = this.functions.CMR(v0.x, v1.x, v2.x, v3.x, intrat);
-			this.cameras['photocam'].position.y = this.functions.CMR(v0.y, v1.y, v2.y, v3.y, intrat);
+			this.cameras['photocam'].position.x = cpos_x;
+			this.cameras['photocam'].position.y = cpos_y;
 			this.cameras['photocam'].position.z = cpos_z;
 			this.cameras['photocam'].rotation.z = this.functions.CMR(v0.w, v1.w, v2.w, v3.w, intrat);
 			
-			global_engine.renderers['main'].render(this.scenes['photos'], this.cameras['photocam']);
+			this.lights['photospot1'].position.set(cpos_x, cpos_y, cpos_z+10);
+			
+//			global_engine.renderers['main'].render(this.scenes['photos'], this.cameras['photocam']);
+			this.scenecomposer.render();
 		}
 	
 		return ro;
