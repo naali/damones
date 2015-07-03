@@ -11,6 +11,10 @@
 		ro.scenes = {};
 		ro.lights = {};
 		ro.objects = {};
+		ro.effects = {};
+		ro.composers = {};
+		ro.rendertargets = {};
+		ro.renderpasses = {};
 		
 		ro.functions = {
 			CMR: function(p0, p1, p2, p3, t) {
@@ -67,10 +71,12 @@
 				var mesh_x_pos = Math.random() * 40000 - 20000;
 				var mesh_y_pos = Math.random() * 40000 - 20000;
 				var mesh_z_pos = Math.random() * 20000 - 10000;
-				var mesh_rotation = Math.random() * Math.PI * 4 - Math.PI * 2;
+				var mesh_rot_y = Math.random() * Math.PI * 4 - Math.PI * 2;
+				var mesh_rot_x = Math.random() * Math.PI * 4 - Math.PI * 2;
+				var mesh_rot_z = Math.random() * Math.PI * 4 - Math.PI * 2;
 
 				mesh.position.set(mesh_x_pos, mesh_y_pos, mesh_z_pos);
-				mesh.rotation.set(0, 0, mesh_rotation);
+				mesh.rotation.set(mesh_rot_y, mesh_rot_x, mesh_rot_z);
 				scene.add(mesh);
 			}
 
@@ -79,19 +85,22 @@
 			for (var i=0; i<obj.objects['photomaterials'].length; i++) {
 				var stride = 8;
 				var material = obj.objects['photomaterials'][i];
-				var geometry = new THREE.PlaneGeometry(material.pixelwidth,material.pixelheight, 1, 1);
+				var geometry = new THREE.PlaneBufferGeometry(material.pixelwidth,material.pixelheight, 1, 1);
 				var testmaterial = new THREE.MeshBasicMaterial({color: 0xff0000});
 				var mesh = new THREE.Mesh(geometry, testmaterial);
 
 				var mesh_x_pos = (i % stride) * 2000 - (stride * 2000 / 2);
 				var mesh_y_pos = Math.floor(i/stride) * 2000 - (stride * 2000 / 2);
 				var mesh_z_pos = 1100;
-				var mesh_rotation = Math.random() * Math.PI * 4 - Math.PI * 2;
-				var photoposition = new THREE.Vector4(mesh_x_pos, mesh_y_pos, 1100, mesh_rotation);
+				var mesh_rot_y = Math.random() * Math.PI * 4 - Math.PI * 2;
+				var mesh_rot_x = Math.random() * Math.PI * 4 - Math.PI * 2;
+				var mesh_rot_z = Math.random() * Math.PI * 4 - Math.PI * 2;
+				
+				var photoposition = new THREE.Vector4(mesh_x_pos, mesh_y_pos, 1100, mesh_rot_z);
 				temparr.push(photoposition);
 				
 				mesh.position.set(mesh_x_pos, mesh_y_pos, 1100);
-				mesh.rotation.set(0, 0, mesh_rotation);
+				mesh.rotation.set(mesh_rot_y, mesh_rot_x, mesh_rot_z);
 				scene.add(mesh);
 			}
 
@@ -117,28 +126,14 @@
 			light.target = obj.cameras['photocam'];
 			scene.add(light);
 			obj.lights['photospot3'] = light;
-/*			
-			var directionallight = new THREE.DirectionalLight( 0xffffff, 0.2 );
-			directionallight.position.set( 0, 0, 1 );
-			scene.add( directionallight );
-			
-			obj.lights['photodirectional'] = directionallight;
-*/			
-			obj.cameras['photocam'].position.z = 1000;
-			
-			var photocomposer = new THREE.EffectComposer(global_engine.renderers['main']);
-			photocomposer.addPass(new THREE.RenderPass(scene, obj.cameras['photocam']));
-			
-			var effect = new THREE.ShaderPass( THREE.RGBShiftShader );
-			effect.uniforms[ 'amount' ].value = 0.005;
-			effect.renderToScreen = true;
-			photocomposer.addPass(effect);
-			
-			obj.scenecomposer = photocomposer;
+
+			var photopass = new THREE.RenderPass(scene, obj.cameras['photocam']);
+			photopass.renderToScreen = false;
+			obj.renderpasses['photopass'] = photopass;
 			
 			return scene;
 		}(ro));
-/*
+
 		ro.scenes['writer'] = (function(obj) {
 		
 			var scene = new THREE.Scene();			
@@ -259,16 +254,6 @@
 					"keskittyä"
 				]
 			];
-			
-			
-			obj.objects['imagenamesarr'] = [];
-			
-			for (var i=1; i<58; i++) {
-				var name = eval('image_pic_' + i + '.src');
-				var width = eval('image_pic_' + i + '.width');
-				var height = eval('image_pic_' + i + '.height');
-				obj.objects['imagenamesarr'].push({ name: name, width: width, height: height, added: false });	
-			}
 			
 			obj.objects['textarr'] = textarr;
 			obj.objects['chargeoms'] = [];
@@ -393,55 +378,30 @@
 			
 			scene.add(obj.cameras['writercam']);
 			obj.cameras['writercam'].position.z = 1000;
+
+			var effect = new THREE.ShaderPass( THREE.RGBShiftShader );
+			effect.uniforms[ 'amount' ].value = 0.005;
+			effect.renderToScreen = true;
+			obj.effects['RGBShiftShader'] = effect;
 			
+			
+			var parameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, stencilBuffer: false };
+			var renderTarget = new THREE.WebGLRenderTarget(global_engine.getWidth(), global_engine.getHeight(), parameters);
+			var writercomposer = new THREE.EffectComposer(global_engine.renderers['main'], renderTarget);
+			
+			writercomposer.addPass(obj.renderpasses['photopass']);
+			var writerpass = new THREE.RenderPass(scene, obj.cameras['writercam'])
+			writerpass.clearAlpha = false;
+			writerpass.clear = false;
+			writercomposer.addPass(writerpass);
+			writercomposer.addPass(effect);
+			
+			obj.composers['writercomposer'] = writercomposer;
+
 			return scene;
 		}(ro));
-*/
+
 		ro.player = function(partdata, parttick, t) {
-//			log("player: " + t);
-/*		
-			var img_add_counter = Math.floor(parttick/1000);
-			
-			var img = this.objects['imagenamesarr'][img_add_counter];
-			
-			if (img && !img.added) {
-				var geometry = new THREE.PlaneGeometry(img.width, img.height, 1, 1);
-				var material = new THREE.MeshBasicMaterial( {map: THREE.ImageUtils.loadTexture(img.name), transparent: false} );
-				var mesh = new THREE.Mesh(geometry, material);
-				mesh.start_y =  Math.random() * 1000 - 500;
-				mesh.start_z = -600 + img_add_counter;
-				mesh.speed_x_multiplier = 5 + Math.random() * 5;
-				mesh.start_x = Math.random() * 5000 - 2500;
-				mesh.position.x = mesh.start_x;
-				mesh.sin_z_start = Math.random();
-				mesh.sin_z_multiplier = Math.random() * 5 + 3;
-				mesh.position.y = mesh.start_y;
-				mesh.position.z = mesh.start_z;
-				
-				this.scenes['writer'].add(mesh);
-				this.objects['images'].push(mesh);
-				this.objects['imagenamesarr'][img_add_counter].added = true;
-			}
-			
-			for (var i=0; i<this.objects['images'].length; i++) {
-				this.objects['images'][i].position.x = this.objects['images'][i].start_x + (parttick/this.objects['images'][i].speed_x_multiplier) ;
-				
-				if (this.objects['images'][i].position.x > 2000) {
-					this.objects['images'][i].start_x -= 5000;
-				}
-				
-				this.objects['images'][i].rotation.z = Math.sin(t/(100 * this.objects['images'][i].sin_z_multiplier)+ this.objects['images'][i].sin_z_start) / 10;
-				
-				if (img_add_counter == i) {
-					this.objects['images'][i].material.opacity = (parttick - img_add_counter * 1000) / 1000;
-				} else {
-					this.objects['images'][i].material.opacity = 1;
-				}
-				
-				if (parttick > 158000) {
-					this.objects['images'][i].material.opacity = 1 - ((parttick - 158000) / 10000);
-				}
-			}
 
 			var pagemaxtime = 8660;
 			var page = Math.floor(parttick / pagemaxtime);
@@ -464,7 +424,7 @@
 					}
 				}
 			}
-*/
+
 			phototimer = parttick / 4000;
 			var idx = Math.floor(phototimer);
 			var intrat = (phototimer) % 1;
@@ -486,8 +446,11 @@
 			
 			this.lights['photospot1'].position.set(cpos_x, cpos_y, cpos_z+10);
 			
-//			global_engine.renderers['main'].render(this.scenes['photos'], this.cameras['photocam']);
-			this.scenecomposer.render();
+			this.effects['RGBShiftShader'].uniforms['amount'].value = Math.sin(parttick / 1000) / 1000 * 5;
+			this.effects['RGBShiftShader'].uniforms['angle'].value = Math.sin(parttick / 487) * Math.PI * 2;
+			
+			global_engine.renderers['main'].clear(false, true, false);
+			this.composers['writercomposer'].render();
 		}
 	
 		return ro;
