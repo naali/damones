@@ -16,6 +16,7 @@ function DemoEngine(selector, width, height) {
 	this.frequencyBinCount = 0;
 	this.selectorstr = selector;
 	this.fftsupport = true;
+	this.clock = new THREE.Clock();
 
 	var tmpelement = $(selector);
 	if (tmpelement.length != 1) {
@@ -69,24 +70,14 @@ function DemoEngine(selector, width, height) {
 	}
 	
 	this.getByteFFTData = function(smoothing) {
-		var tmpsmoothing = smoothing;
-		if (!smoothing) {
-			tmpsmoothing = 0.5;
-		}
-		
-		this.analyzer.smoothingTimeConstant = tmpsmoothing;
+		this.analyzer.smoothingTimeConstant = smoothing || 0.5;
 		this.analyzer.getByteFrequencyData(this.frequencyByteData);
 		
 		return this.frequencyByteData;
 	}
 	
 	this.getFloatFFTData = function(smoothing) {
-		var tmpsmoothing = smoothing;
-		if (!smoothing) {
-			tmpsmoothing = 0.5;
-		}
-
-		this.analyzer.smoothingTimeConstant = tmpsmoothing;
+		this.analyzer.smoothingTimeConstant = smoothing || 0.5;
 		this.analyzer.getFloatFrequencyData(this.frequencyFloatData);
 		
 		return this.frequencyFloatData;
