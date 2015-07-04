@@ -52,18 +52,17 @@
 					var material = new THREE.MeshPhongMaterial( {map: THREE.ImageUtils.loadTexture(name), transparent: false} );
 					material.pixelwidth = width * photoconf[j].wmul;
 					material.pixelheight = height * photoconf[j].hmul;
+					material.side = THREE.DoubleSide;
 				
 					obj.objects['photomaterials'].push(material);
 				}
 			}
 			
 			var scene = new THREE.Scene();
-			
-			var zi = 1;
 
 			for (var i=0; i<5000; i++) {
 				var material = obj.objects['photomaterials'][i  % obj.objects['photomaterials'].length];
-				var geometry = new THREE.PlaneGeometry(material.pixelwidth,material.pixelheight, 1, 1);
+				var geometry = new THREE.PlaneBufferGeometry(material.pixelwidth,material.pixelheight, 1, 1);
 				
 				var mesh = new THREE.Mesh(geometry, material);
 				var mesh_scale = Math.random() + 0.8
@@ -71,6 +70,7 @@
 				var mesh_x_pos = Math.random() * 40000 - 20000;
 				var mesh_y_pos = Math.random() * 40000 - 20000;
 				var mesh_z_pos = Math.random() * 20000 - 10000;
+				
 				var mesh_rot_y = Math.random() * Math.PI * 4 - Math.PI * 2;
 				var mesh_rot_x = Math.random() * Math.PI * 4 - Math.PI * 2;
 				var mesh_rot_z = Math.random() * Math.PI * 4 - Math.PI * 2;
@@ -80,31 +80,50 @@
 				scene.add(mesh);
 			}
 
-			var temparr = [new THREE.Vector4(0,0,0,0)];
+			var temparr = [];
 			
 			for (var i=0; i<obj.objects['photomaterials'].length; i++) {
 				var stride = 8;
 				var material = obj.objects['photomaterials'][i];
-				var geometry = new THREE.PlaneBufferGeometry(material.pixelwidth,material.pixelheight, 1, 1);
-				var testmaterial = new THREE.MeshBasicMaterial({color: 0xff0000});
-				var mesh = new THREE.Mesh(geometry, testmaterial);
+				var geometry = new THREE.PlaneGeometry(material.pixelwidth,material.pixelheight, 1, 1);
+//				var testmaterial = new THREE.MeshBasicMaterial({color: 0xff0000});
+				var mesh = new THREE.Mesh(geometry, material);
 
 				var mesh_x_pos = (i % stride) * 2000 - (stride * 2000 / 2);
 				var mesh_y_pos = Math.floor(i/stride) * 2000 - (stride * 2000 / 2);
-				var mesh_z_pos = 1100;
-				var mesh_rot_y = Math.random() * Math.PI * 4 - Math.PI * 2;
-				var mesh_rot_x = Math.random() * Math.PI * 4 - Math.PI * 2;
-				var mesh_rot_z = Math.random() * Math.PI * 4 - Math.PI * 2;
+				var mesh_z_pos = Math.random() * 5000 - 2500;
+
+				var quaternion = new THREE.Quaternion();
+				var euler = new THREE.Euler(
+//				0, 0, Math.random() * Math.PI,
+0, 0, 
+/*					Math.random() * Math.PI * 2 - Math.PI * 1, 
+					Math.random() * Math.PI * 2 - Math.PI * 1,
+*/					Math.random() * Math.PI * 2 - Math.PI * 1, 
+				'XYZ');
+
+				quaternion.setFromEuler(euler);
+
+				mesh.position.set(mesh_x_pos, mesh_y_pos, mesh_z_pos);
+//				debugger;
+//				mesh.quaternion.setFromEuler(euler);
+				mesh.rotation.setFromQuaternion(quaternion);
 				
-				var photoposition = new THREE.Vector4(mesh_x_pos, mesh_y_pos, 1100, mesh_rot_z);
+				var direction = new THREE.Vector3();
+				direction = mesh.position;
+//				direction.addVectors(mesh.position, mesh.rotation.toVector3());
+//				direction.normalize();
+//				direction.multiplyScalar(1000);
+//				direction.add(mesh.position);
+				var foo = direction.negate();
+
+				var photoposition = {position: foo, rotation: quaternion};
 				temparr.push(photoposition);
 				
-				mesh.position.set(mesh_x_pos, mesh_y_pos, 1100);
-				mesh.rotation.set(mesh_rot_y, mesh_rot_x, mesh_rot_z);
 				scene.add(mesh);
 			}
 
-			obj.objects['photopositions'] = obj.functions.FYSuffle(temparr);
+			obj.objects['photopositions'] = temparr; //obj.functions.FYSuffle(temparr);
 
 			scene.add(obj.cameras['photocam']);
 
@@ -432,20 +451,31 @@
 			var idx = Math.floor(phototimer);
 			var intrat = (phototimer) % 1;
 			
-			var v0 = this.objects['photopositions'][idx];
-			var v1 = this.objects['photopositions'][idx + 1];
-			var v2 = this.objects['photopositions'][idx + 2];
-			var v3 = this.objects['photopositions'][idx + 3];
+			var v0 = this.objects['photopositions'][idx].position;
+			var v1 = this.objects['photopositions'][idx + 1].position;
+			var v2 = this.objects['photopositions'][idx + 2].position;
+			var v3 = this.objects['photopositions'][idx + 3].position;
 			
+
 			var cpos_x = this.functions.CMR(v0.x, v1.x, v2.x, v3.x, intrat);
 			var cpos_y = this.functions.CMR(v0.y, v1.y, v2.y, v3.y, intrat);
 			var cpos_z_sin = Math.sin((Math.PI * 2) * (1-intrat)) * 1500;
-			var cpos_z = this.functions.CMR(v0.z, v1.z, v2.z, v3.z, intrat) + (cpos_z_sin + 1500) + 1000;
-
-			this.cameras['photocam'].position.x = cpos_x;
-			this.cameras['photocam'].position.y = cpos_y;
-			this.cameras['photocam'].position.z = cpos_z;
-			this.cameras['photocam'].rotation.z = this.functions.CMR(v0.w, v1.w, v2.w, v3.w, intrat);
+			var cpos_z = this.functions.CMR(v0.z, v1.z, v2.z, v3.z, intrat) + 1000; // + (cpos_z_sin + 1500) + 1000;
+			
+			var r0 = this.objects['photopositions'][idx].rotation;
+			var r1 = this.objects['photopositions'][idx+1].rotation;
+			var r2 = this.objects['photopositions'][idx+2].rotation;
+			var r3 = this.objects['photopositions'][idx+3].rotation;
+			
+			var crot_x = this.functions.CMR(r0.x, r1.x, r2.x, r3.x, intrat);
+			var crot_y = this.functions.CMR(r0.y, r1.y, r2.y, r3.y, intrat);
+			var crot_z = this.functions.CMR(r0.z, r1.z, r2.z, r3.z, intrat);
+			var crot_w = this.functions.CMR(r0.w, r1.w, r2.w, r3.w, intrat);
+			
+			var q = new THREE.Quaternion(crot_x, crot_y, crot_z, crot_w);
+			
+			this.cameras['photocam'].position.set(cpos_x, cpos_y, cpos_z);
+			this.cameras['photocam'].setRotationFromQuaternion(q);
 			
 			this.lights['photospot1'].position.set(cpos_x, cpos_y, cpos_z+10);
 			
