@@ -379,20 +379,24 @@
 			scene.add(obj.cameras['writercam']);
 			obj.cameras['writercam'].position.z = 1000;
 
+
+
+
 			var effect = new THREE.ShaderPass( THREE.RGBShiftShader );
 			effect.uniforms[ 'amount' ].value = 0.005;
 			effect.renderToScreen = true;
 			obj.effects['RGBShiftShader'] = effect;
-			
 			
 			var parameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, stencilBuffer: false };
 			var renderTarget = new THREE.WebGLRenderTarget(global_engine.getWidth(), global_engine.getHeight(), parameters);
 			var writercomposer = new THREE.EffectComposer(global_engine.renderers['main'], renderTarget);
 			
 			writercomposer.addPass(obj.renderpasses['photopass']);
+
 			var writerpass = new THREE.RenderPass(scene, obj.cameras['writercam'])
 			writerpass.clearAlpha = false;
 			writerpass.clear = false;
+			writerpass.clearDepth = true;
 			writercomposer.addPass(writerpass);
 			writercomposer.addPass(effect);
 			
