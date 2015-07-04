@@ -285,7 +285,7 @@
 									size: 40,
 									height: 20,
 									curveSegments: 8,
-									font: 'luckiest guy',
+									font: 'a cuchillada',
 									weight: 'normal',
 									style: 'normal',
 									bevelThickness: 1.4,
@@ -383,7 +383,6 @@
 
 
 			var effect = new THREE.ShaderPass( THREE.RGBShiftShader );
-			effect.uniforms[ 'amount' ].value = 0.005;
 			effect.renderToScreen = true;
 			obj.effects['RGBShiftShader'] = effect;
 			
@@ -450,8 +449,8 @@
 			
 			this.lights['photospot1'].position.set(cpos_x, cpos_y, cpos_z+10);
 			
-			this.effects['RGBShiftShader'].uniforms['amount'].value = Math.sin(parttick / 1000) / 1000 * 5;
-			this.effects['RGBShiftShader'].uniforms['angle'].value = Math.sin(parttick / 487) * Math.PI * 2;
+			this.effects['RGBShiftShader'].uniforms['amount'].value = 0; //Math.sin(parttick / 1000) / 1000 * 5;
+			this.effects['RGBShiftShader'].uniforms['angle'].value = 0; //Math.sin(parttick / 487) * Math.PI * 2;
 			
 			global_engine.renderers['main'].clear(false, true, false);
 			this.composers['writercomposer'].render();
