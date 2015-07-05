@@ -10,7 +10,7 @@
 
 
 
-THREE.BokehShader = {
+THREE.BokehShader2 = {
 
 	uniforms: {
 
