@@ -126,36 +126,35 @@
 
 				var photoobj = {photoposition: photoposition, cameraposition: cameraposition, camerarotation: quaternion};
 				temparr.push(photoobj);
+				temparr.push(photoobj);
 				
 				scene.add(mesh);
 			}
 
 			obj.objects['photopositions'] = temparr;
 
+			var light1 = new THREE.SpotLight(0xFFCCCC, 1, 8000, Math.PI/3);
+			var light2 = new THREE.SpotLight(0xCCFFCC, 1, 8000, Math.PI/3);
+			var light3 = new THREE.SpotLight(0xCCCCFF, 1, 8000, Math.PI/3);
+			
+			obj.cameras['photocam'].add(light1);
+			obj.cameras['photocam'].add(light2);
+			obj.cameras['photocam'].add(light3);
 
-			var light = new THREE.SpotLight(0xFFFFFF);
-			obj.cameras['photocam'].add(light);
-			light.position.set(0,0,1);
-			light.target = obj.cameras['photocam'];
-			obj.lights['photospot1'] = light;
+			light1.position.set(-1,0,1);
+			light2.position.set(1,0,1);
+			light3.position.set(0,0,1);
+			
+			light1.target = obj.cameras['photocam'];
+			light2.target = obj.cameras['photocam'];
+			light3.target = obj.cameras['photocam'];
+
+			obj.lights['photospot1'] = light1;
+			obj.lights['photospot2'] = light2;
+			obj.lights['photospot3'] = light3;
 			
 			scene.add(obj.cameras['photocam']);
 			
-			
-/*			
-			light = new THREE.SpotLight(0xFFFFFF);
-			light.position.set(20, -15 , 1);
-			light.target = obj.cameras['photocam'];
-			scene.add(light);
-			obj.lights['photospot2'] = light;
-
-			light = new THREE.SpotLight(0xFFFFFF);
-			light.intensity = 1.2;
-			light.position.set(0, 15, 1);
-			light.target = obj.cameras['photocam'];
-			scene.add(light);
-			obj.lights['photospot3'] = light;
-*/
 			var photopass = new THREE.RenderPass(scene, obj.cameras['photocam']);
 			photopass.renderToScreen = false;
 			obj.renderpasses['photopass'] = photopass;
@@ -492,13 +491,13 @@
 			this.cameras['photocam'].position.set(cpos_x, cpos_y, cpos_z);
 			this.cameras['photocam'].setRotationFromQuaternion(q);
 			
-//			this.lights['photospot1'].position.set(cpos_x, cpos_y, cpos_z);
-//			this.lights['photospot1'].target.position = new THREE.Object3D(ppos_x, ppos_y, ppos_z);
+			var fftdata = global_engine.getFloatFFTData(0);
 			
+//			log(fftdata[0]);
 			
-			this.effects['RGBShiftShader'].uniforms['amount'].value = 0; //Math.sin(parttick / 1000) / 1000 * 5;
+			this.effects['RGBShiftShader'].uniforms['amount'].value = fftdata[0] / 256 / 10; //Math.sin(parttick / 1000) / 1000 * 5;
 			this.effects['RGBShiftShader'].uniforms['angle'].value = 0; //Math.sin(parttick / 487) * Math.PI * 2;
-			
+
 			global_engine.renderers['main'].clear(false, true, false);
 			this.composers['writercomposer'].render();
 		}
