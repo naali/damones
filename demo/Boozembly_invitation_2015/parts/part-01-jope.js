@@ -81,80 +81,68 @@
 
 				mesh.position.set(mesh_x_pos, mesh_y_pos, mesh_z_pos);
 				mesh.rotation.set(mesh_rot_y, mesh_rot_x, mesh_rot_z);
-/*				
-				var meshbox = new THREE.Box3(mesh.geometry.boundingBox);
-				
-				bbcheckarr.push(meshbox);
-				
-				for (var j=0; j<bbcheckarr.length; j++) {
-				
-					if (!meshbox.isIntersectionBox(bbcheckarr[j])) {
-						log("adding");
-						scene.add(mesh);
-					
-					} else {
-						log("not adding");
-						bbcheckarr.pop();
-					}
-				}
-*/				
-				scene.add(mesh);
 
+				scene.add(mesh);
 			}
-			
-			
 
 			var temparr = [];
 			
 			for (var i=0; i<obj.objects['photomaterials'].length; i++) {
 				var stride = 8;
 				var material = obj.objects['photomaterials'][i];
-				var geometry = new THREE.PlaneGeometry(material.pixelwidth,material.pixelheight, 1, 1);
-//				var testmaterial = new THREE.MeshBasicMaterial({color: 0xff0000});
+				var geometry = new THREE.PlaneBufferGeometry(material.pixelwidth,material.pixelheight, 1, 1);
+//				var testmaterial = new THREE.MeshLambertMaterial({color: 0x00ff00});
 				var mesh = new THREE.Mesh(geometry, material);
 
-				var mesh_x_pos = (i % stride) * 2000 - (stride * 2000 / 2);
-				var mesh_y_pos = Math.floor(i/stride) * 2000 - (stride * 2000 / 2);
-				var mesh_z_pos = Math.random() * 5000 - 2500;
+				var mesh_x_pos = Math.random() * 10000 - 5000;
+				var mesh_y_pos = Math.random() * 10000 - 5000;
+				var mesh_z_pos = Math.random() * 10000 - 5000;
 
-				var quaternion = new THREE.Quaternion();
 				var euler = new THREE.Euler(
-					0, 0, 
-					Math.random() * Math.PI * 2 - Math.PI * 1, 
+					Math.random() * Math.PI * 4 - Math.PI * 2, 
+					Math.random() * Math.PI * 4 - Math.PI * 2,
+					Math.random() * Math.PI * 4 - Math.PI * 2, 
 				'XYZ');
 
-				quaternion.setFromEuler(euler);
-
 				mesh.position.set(mesh_x_pos, mesh_y_pos, mesh_z_pos);
-//				debugger;
-//				mesh.quaternion.setFromEuler(euler);
-				mesh.rotation.setFromQuaternion(quaternion);
-				
-				var direction = new THREE.Vector3();
-				direction = mesh.position;
-//				direction.addVectors(mesh.position, mesh.rotation.toVector3());
-//				direction.normalize();
-//				direction.multiplyScalar(1000);
-//				direction.add(mesh.position);
-				var foo = direction.negate();
+				mesh.quaternion.setFromEuler(euler);
+				var quaternion = mesh.quaternion;
 
-				var photoposition = {position: foo, rotation: quaternion};
-				temparr.push(photoposition);
-				temparr.push(photoposition);
+				var photoposition = new THREE.Vector3(mesh.position.x, mesh.position.y, mesh.position.z);
+				
+				var tmpgeom = new THREE.SphereGeometry(10,10,10);
+				var tmpmat = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+				var tmpmesh = new THREE.Mesh(tmpgeom, tmpmat);
+				
+				var cameraposition = new THREE.Vector3(0,0,-1);
+				cameraposition = cameraposition.applyQuaternion(mesh.quaternion);
+
+				cameraposition.multiplyScalar(1000);
+				cameraposition.negate();
+				cameraposition.add(new THREE.Vector3(mesh_x_pos, mesh_y_pos, mesh_z_pos));
+				
+				tmpmesh.position.set(cameraposition.x, cameraposition.y, cameraposition.z);
+				scene.add(tmpmesh);
+
+				var photoobj = {photoposition: photoposition, cameraposition: cameraposition, camerarotation: quaternion};
+				temparr.push(photoobj);
 				
 				scene.add(mesh);
 			}
 
-			obj.objects['photopositions'] = temparr; //obj.functions.FYSuffle(temparr);
+			obj.objects['photopositions'] = temparr;
 
-			scene.add(obj.cameras['photocam']);
 
 			var light = new THREE.SpotLight(0xFFFFFF);
-			light.position.set(-20, -15, 1);
+			obj.cameras['photocam'].add(light);
+			light.position.set(0,0,1);
 			light.target = obj.cameras['photocam'];
-			scene.add(light);
 			obj.lights['photospot1'] = light;
 			
+			scene.add(obj.cameras['photocam']);
+			
+			
+/*			
 			light = new THREE.SpotLight(0xFFFFFF);
 			light.position.set(20, -15 , 1);
 			light.target = obj.cameras['photocam'];
@@ -167,7 +155,7 @@
 			light.target = obj.cameras['photocam'];
 			scene.add(light);
 			obj.lights['photospot3'] = light;
-
+*/
 			var photopass = new THREE.RenderPass(scene, obj.cameras['photocam']);
 			photopass.renderToScreen = false;
 			obj.renderpasses['photopass'] = photopass;
@@ -473,33 +461,40 @@
 			var idx = Math.floor(phototimer);
 			var intrat = (phototimer) % 1;
 			
-			var v0 = this.objects['photopositions'][idx].position;
-			var v1 = this.objects['photopositions'][idx + 1].position;
-			var v2 = this.objects['photopositions'][idx + 2].position;
-			var v3 = this.objects['photopositions'][idx + 3].position;
-			
-
+			var v0 = this.objects['photopositions'][idx].cameraposition;
+			var v1 = this.objects['photopositions'][idx + 1].cameraposition;
+			var v2 = this.objects['photopositions'][idx + 2].cameraposition;
+			var v3 = this.objects['photopositions'][idx + 3].cameraposition;
 			var cpos_x = this.functions.CMR(v0.x, v1.x, v2.x, v3.x, intrat);
 			var cpos_y = this.functions.CMR(v0.y, v1.y, v2.y, v3.y, intrat);
-			var cpos_z_sin = Math.sin((Math.PI * 2) * (1-intrat)) * 1500;
-			var cpos_z = this.functions.CMR(v0.z, v1.z, v2.z, v3.z, intrat) + 1000; // + (cpos_z_sin + 1500) + 1000;
+			var cpos_z = this.functions.CMR(v0.z, v1.z, v2.z, v3.z, intrat);
 			
-			var r0 = this.objects['photopositions'][idx].rotation;
-			var r1 = this.objects['photopositions'][idx+1].rotation;
-			var r2 = this.objects['photopositions'][idx+2].rotation;
-			var r3 = this.objects['photopositions'][idx+3].rotation;
-			
+			var r0 = this.objects['photopositions'][idx].camerarotation;
+			var r1 = this.objects['photopositions'][idx+1].camerarotation;
+			var r2 = this.objects['photopositions'][idx+2].camerarotation;
+			var r3 = this.objects['photopositions'][idx+3].camerarotation;
 			var crot_x = this.functions.CMR(r0.x, r1.x, r2.x, r3.x, intrat);
 			var crot_y = this.functions.CMR(r0.y, r1.y, r2.y, r3.y, intrat);
 			var crot_z = this.functions.CMR(r0.z, r1.z, r2.z, r3.z, intrat);
 			var crot_w = this.functions.CMR(r0.w, r1.w, r2.w, r3.w, intrat);
-			
 			var q = new THREE.Quaternion(crot_x, crot_y, crot_z, crot_w);
+			q.normalize();
+			
+			var p0 = this.objects['photopositions'][idx].photoposition;
+			var p1 = this.objects['photopositions'][idx+1].photoposition;
+			var p2 = this.objects['photopositions'][idx+2].photoposition;
+			var p3 = this.objects['photopositions'][idx+3].photoposition;
+			
+			var ppos_x = this.functions.CMR(p0.x, p1.x, p2.x, p3.x, intrat);
+			var ppos_y = this.functions.CMR(p0.y, p1.y, p2.y, p3.y, intrat);
+			var ppos_z = this.functions.CMR(p0.z, p1.z, p2.z, p3.z, intrat);
 			
 			this.cameras['photocam'].position.set(cpos_x, cpos_y, cpos_z);
 			this.cameras['photocam'].setRotationFromQuaternion(q);
 			
-			this.lights['photospot1'].position.set(cpos_x, cpos_y, cpos_z+10);
+//			this.lights['photospot1'].position.set(cpos_x, cpos_y, cpos_z);
+//			this.lights['photospot1'].target.position = new THREE.Object3D(ppos_x, ppos_y, ppos_z);
+			
 			
 			this.effects['RGBShiftShader'].uniforms['amount'].value = 0; //Math.sin(parttick / 1000) / 1000 * 5;
 			this.effects['RGBShiftShader'].uniforms['angle'].value = 0; //Math.sin(parttick / 487) * Math.PI * 2;
