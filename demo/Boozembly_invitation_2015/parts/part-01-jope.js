@@ -59,10 +59,14 @@
 			}
 			
 			var scene = new THREE.Scene();
+			
+			var bbcheckarr = [];
 
 			for (var i=0; i<5000; i++) {
 				var material = obj.objects['photomaterials'][i  % obj.objects['photomaterials'].length];
 				var geometry = new THREE.PlaneBufferGeometry(material.pixelwidth,material.pixelheight, 1, 1);
+				geometry.computeBoundingBox();
+				geometry.computeBoundingSphere();
 				
 				var mesh = new THREE.Mesh(geometry, material);
 				var mesh_scale = Math.random() + 0.8
@@ -77,8 +81,28 @@
 
 				mesh.position.set(mesh_x_pos, mesh_y_pos, mesh_z_pos);
 				mesh.rotation.set(mesh_rot_y, mesh_rot_x, mesh_rot_z);
+/*				
+				var meshbox = new THREE.Box3(mesh.geometry.boundingBox);
+				
+				bbcheckarr.push(meshbox);
+				
+				for (var j=0; j<bbcheckarr.length; j++) {
+				
+					if (!meshbox.isIntersectionBox(bbcheckarr[j])) {
+						log("adding");
+						scene.add(mesh);
+					
+					} else {
+						log("not adding");
+						bbcheckarr.pop();
+					}
+				}
+*/				
 				scene.add(mesh);
+
 			}
+			
+			
 
 			var temparr = [];
 			
@@ -95,11 +119,8 @@
 
 				var quaternion = new THREE.Quaternion();
 				var euler = new THREE.Euler(
-//				0, 0, Math.random() * Math.PI,
-0, 0, 
-/*					Math.random() * Math.PI * 2 - Math.PI * 1, 
-					Math.random() * Math.PI * 2 - Math.PI * 1,
-*/					Math.random() * Math.PI * 2 - Math.PI * 1, 
+					0, 0, 
+					Math.random() * Math.PI * 2 - Math.PI * 1, 
 				'XYZ');
 
 				quaternion.setFromEuler(euler);
@@ -118,6 +139,7 @@
 				var foo = direction.negate();
 
 				var photoposition = {position: foo, rotation: quaternion};
+				temparr.push(photoposition);
 				temparr.push(photoposition);
 				
 				scene.add(mesh);
@@ -447,7 +469,7 @@
 				}
 			}
 
-			phototimer = parttick / 4000;
+			phototimer = parttick / 3000;
 			var idx = Math.floor(phototimer);
 			var intrat = (phototimer) % 1;
 			
