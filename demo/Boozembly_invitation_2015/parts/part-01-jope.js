@@ -65,8 +65,6 @@
 			for (var i=0; i<5000; i++) {
 				var material = obj.objects['photomaterials'][i  % obj.objects['photomaterials'].length];
 				var geometry = new THREE.PlaneBufferGeometry(material.pixelwidth,material.pixelheight, 1, 1);
-				geometry.computeBoundingBox();
-				geometry.computeBoundingSphere();
 				
 				var mesh = new THREE.Mesh(geometry, material);
 				var mesh_scale = Math.random() + 0.8
@@ -81,9 +79,47 @@
 
 				mesh.position.set(mesh_x_pos, mesh_y_pos, mesh_z_pos);
 				mesh.rotation.set(mesh_rot_y, mesh_rot_x, mesh_rot_z);
+				mesh.updateMatrixWorld();
+				
+				var index = mesh.geometry.attributes.index.array;
+				var position = mesh.geometry.attributes.position.array;
 
-				scene.add(mesh);
+				var gpos = [];
+				var testvectors = [];
+
+				for (var j=0; j<index.length; j++) {
+					gpos.push(mesh.localToWorld(new THREE.Vector3(position[i * 3], position[i * 3 + 1], position[i * 3 + 2])));
+				}
+
+				for (var k=0; k<2; k++) {
+					for (var j=0; j<3; j++) {
+						var origin = gpos[(k * 3 + j)].clone();
+						var direction = gpos[(k * 3 + j)].clone();
+						direction.add(gpos[(k * 3 + ((j+1) % 3))]);
+						direction.normalize();
+						testvectors.push({ 'o': origin, 'd': direction });
+					}
+				}
+				
+				var intersects = false;
+				
+				for (var j=0; j<testvectors.length && bbcheckarr.length > 0; j++) {
+					var ray = new THREE.Raycaster(testvectors[j].o, testvectors[j].d);
+					var result = ray.intersectObjects(bbcheckarr, false);
+					if (result.length > 0) {
+//						log("sektaa saatanas");
+						intersects = true;
+						break;
+					}
+				}
+
+				if (!intersects) {
+					scene.add(mesh);
+					bbcheckarr.push(mesh);
+				}
 			}
+			
+			log(bbcheckarr);
 
 			var temparr = [];
 			
@@ -157,6 +193,7 @@
 			
 			var photopass = new THREE.RenderPass(scene, obj.cameras['photocam']);
 			photopass.renderToScreen = false;
+
 			obj.renderpasses['photopass'] = photopass;
 			
 			return scene;
@@ -491,15 +528,15 @@
 			this.cameras['photocam'].position.set(cpos_x, cpos_y, cpos_z);
 			this.cameras['photocam'].setRotationFromQuaternion(q);
 			
-			var fftdata = global_engine.getFloatFFTData(0);
+//			var fftdata = global_engine.getFloatFFTData(0);
 			
 //			log(fftdata[0]);
 			
-			this.effects['RGBShiftShader'].uniforms['amount'].value = fftdata[0] / 256 / 10; //Math.sin(parttick / 1000) / 1000 * 5;
+			this.effects['RGBShiftShader'].uniforms['amount'].value = 0; //fftdata[0] / 256 / 10; //Math.sin(parttick / 1000) / 1000 * 5;
 			this.effects['RGBShiftShader'].uniforms['angle'].value = 0; //Math.sin(parttick / 487) * Math.PI * 2;
 
 			global_engine.renderers['main'].clear(false, true, false);
-			this.composers['writercomposer'].render();
+			this.composers['writercomposer'].render(0.1);
 		}
 	
 		return ro;
