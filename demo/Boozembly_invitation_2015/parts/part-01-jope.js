@@ -37,6 +37,7 @@
 		ro.scenes['photos'] = (function(obj) {
 			global_engine.renderers['logarithmic'] = new THREE.WebGLRenderer({logarithmicDepthBuffer: true});
 			obj.objects['photomaterials'] = [];
+			obj.objects['photogeometries'] = {};
 			
 			var photoconf = [
 				{name: 'landscape', amount: 9, wmul: 1, hmul: 1.33333},
@@ -55,6 +56,11 @@
 					material.side = THREE.DoubleSide;
 				
 					obj.objects['photomaterials'].push(material);
+					
+					if (!obj.objects['photogeometries'].hasOwnProperty('' + material.pixelwidth + "x" + material.pixelheight)) {
+						var geometry = new THREE.PlaneBufferGeometry(material.pixelwidth, material.pixelheight, 1, 1);
+						obj.objects['photogeometries']['' + material.pixelwidth + "x" + material.pixelheight] = geometry;
+					}
 				}
 			}
 			
@@ -64,7 +70,7 @@
 
 			for (var i=0; i<5000; i++) {
 				var material = obj.objects['photomaterials'][i  % obj.objects['photomaterials'].length];
-				var geometry = new THREE.PlaneBufferGeometry(material.pixelwidth,material.pixelheight, 1, 1);
+				var geometry = obj.objects['photogeometries']['' + material.pixelwidth + "x" + material.pixelheight] ;
 				
 				var mesh = new THREE.Mesh(geometry, material);
 				var mesh_scale = Math.random() + 0.8
@@ -107,7 +113,6 @@
 					var ray = new THREE.Raycaster(testvectors[j].o, testvectors[j].d);
 					var result = ray.intersectObjects(bbcheckarr, false);
 					if (result.length > 0) {
-//						log("sektaa saatanas");
 						intersects = true;
 						break;
 					}
@@ -124,10 +129,8 @@
 			var temparr = [];
 			
 			for (var i=0; i<obj.objects['photomaterials'].length; i++) {
-				var stride = 8;
 				var material = obj.objects['photomaterials'][i];
-				var geometry = new THREE.PlaneBufferGeometry(material.pixelwidth,material.pixelheight, 1, 1);
-//				var testmaterial = new THREE.MeshLambertMaterial({color: 0x00ff00});
+				var geometry = obj.objects['photogeometries']['' + material.pixelwidth + "x" + material.pixelheight] ;
 				var mesh = new THREE.Mesh(geometry, material);
 
 				var mesh_x_pos = Math.random() * 10000 - 5000;
@@ -146,23 +149,27 @@
 
 				var photoposition = new THREE.Vector3(mesh.position.x, mesh.position.y, mesh.position.z);
 				
-				var tmpgeom = new THREE.SphereGeometry(10,10,10);
-				var tmpmat = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-				var tmpmesh = new THREE.Mesh(tmpgeom, tmpmat);
-				
 				var cameraposition = new THREE.Vector3(0,0,-1);
-				cameraposition = cameraposition.applyQuaternion(mesh.quaternion);
-
-				cameraposition.multiplyScalar(1000);
-				cameraposition.negate();
-				cameraposition.add(new THREE.Vector3(mesh_x_pos, mesh_y_pos, mesh_z_pos));
+				var cameraposition2 = new THREE.Vector3(0,0,-1);
 				
-				tmpmesh.position.set(cameraposition.x, cameraposition.y, cameraposition.z);
+				cameraposition.applyQuaternion(mesh.quaternion);
+				cameraposition2.applyQuaternion(mesh.quaternion);
+
+				cameraposition.multiplyScalar(2000);
+				cameraposition2.multiplyScalar(500);
+				
+				cameraposition.negate();
+				cameraposition2.negate();
+
+				cameraposition.add(new THREE.Vector3(mesh_x_pos, mesh_y_pos, mesh_z_pos));
+				cameraposition2.add(new THREE.Vector3(mesh_x_pos, mesh_y_pos, mesh_z_pos));
+				
 				scene.add(tmpmesh);
 
 				var photoobj = {photoposition: photoposition, cameraposition: cameraposition, camerarotation: quaternion};
+				var photoobj2 = {photoposition: photoposition, cameraposition: cameraposition2, camerarotation: quaternion};
 				temparr.push(photoobj);
-				temparr.push(photoobj);
+				temparr.push(photoobj2);
 				
 				scene.add(mesh);
 			}
@@ -350,10 +357,10 @@
 									size: 40,
 									height: 20,
 									curveSegments: 8,
-									font: 'a cuchillada',
+									font: 'magnum',
 									weight: 'normal',
 									style: 'normal',
-									bevelThickness: 1.4,
+									bevelThickness: 1.5,
 									bevelSize: 0.5,
 									bevelSegments: 6, 
 									bevelEnabled: false,
@@ -471,7 +478,7 @@
 
 		ro.player = function(partdata, parttick, t) {
 
-			var pagemaxtime = 8660;
+			var pagemaxtime = 8000;
 			var page = Math.floor(parttick / pagemaxtime);
 			var pagetime = parttick - page * pagemaxtime;
 			
@@ -493,7 +500,7 @@
 				}
 			}
 
-			phototimer = parttick / 3000;
+			phototimer = parttick / 2000;
 			var idx = Math.floor(phototimer);
 			var intrat = (phototimer) % 1;
 			
