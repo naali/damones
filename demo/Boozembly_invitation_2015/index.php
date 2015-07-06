@@ -10,7 +10,7 @@
 	$part_dir = '/parts/';
 
 	$demo_part_order = array(
-//		$part_dir.'boozembly-start.js', 
+		$part_dir.'boozembly-start.js', 
 		$part_dir.'part-01-jope.js'
 	);
 	
