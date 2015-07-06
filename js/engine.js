@@ -55,6 +55,8 @@ function DemoEngine(selector, width, height) {
 			this.audiosource = this.audiocontext.createMediaElementSource(this.audio);
 			this.analyzer = this.audiocontext.createAnalyser();
 			this.analyzer.fftSize = Math.pow(2,9);
+			this.analyzer.minDecibels = -50;
+			this.analyzer.maxDecibels = -30;
 			this.audiosource.connect(this.analyzer);
 			this.analyzer.connect(this.audiocontext.destination);
 			this.frequencyBinCount = this.analyzer.frequencyBinCount;
@@ -117,11 +119,33 @@ function DemoEngine(selector, width, height) {
 		this.partdata[this.partdata.length] = data;
 	}
 	
-	this.prebake = function() {
+	this.prewarm = function() {
+		this.renderers['main'].domElement.opacity = 0;
+
+		var parttick = 0;
+		var globaltick = 0;
+		log("len: " + this.partdata.length);
+
 		for (var i=0; i<this.partdata.length; i++) {
-			var foo = this.partdata[i];
-			log("prebaking: " + this.partdata[i].data.partname);
+			var partdata = this.partdata[i].data;
+			log("Prewarming scene: " + partdata.partname);
+			
+			parttick = 0;
+			
+			for (var j=0; j<10; j++) {
+				parttick += partdata.partlength / 10 * j;
+				try {				
+					partdata.player(this.partdata[i], parttick, globaltick + parttick);
+				} catch (e) {
+					log("Oopsie (" + e.message + ") while prewarming, maybe too long song?");
+					break;
+				}				
+			}
+			
+			globaltick += partdata.partlength;
 		}
+
+		this.renderers['main'].domElement.opacity = 1;
 	}
 	
 	this.draw = function(tick) {
