@@ -1,8 +1,8 @@
 {
 	data: (function() {
 		var ro = {};
-		ro.partname = 'Boozembly 2014 - start';
-		ro.partlength = 1000 * 8.66;
+		ro.partname = 'Boozembly 2015 - intro';
+		ro.partlength = Math.floor(1000 * 15.24);
 		ro.cameras = {
 			'logocam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 10000)
 		};
@@ -14,8 +14,10 @@
 		ro.scenes['logo'] = (function(obj) {
 			var scene = new THREE.Scene();
 			
-			var geometry = new THREE.PlaneGeometry(1920, 1080, 1, 1);
-			var material = new THREE.MeshLambertMaterial( { map: THREE.ImageUtils.loadTexture( image_boozembly.src ), transparent: true } );
+			var geometry = new THREE.PlaneBufferGeometry(1920, 1080, 1, 1);
+			var texture = THREE.ImageUtils.loadTexture( image_boozembly.src );
+			texture.minFilter = THREE.LinearFilter;
+			var material = new THREE.MeshLambertMaterial( { map: texture, transparent: true } );
 			var mesh = new THREE.Mesh(geometry, material);
 			mesh.position.x = 0;
 			mesh.position.y = 0;
@@ -23,8 +25,10 @@
 			scene.add(mesh);
 			obj.objects['logo'] = mesh;
 
-			var geometry = new THREE.PlaneGeometry(1920, 1080, 1, 1);
-			var material = new THREE.MeshLambertMaterial( { map: THREE.ImageUtils.loadTexture( image_disorganizing.src ), transparent: true } );
+//			var geometry = new THREE.PlaneBufferGeometry(1920, 1080, 1, 1);
+			var texture = THREE.ImageUtils.loadTexture( image_disorganizing.src );
+			texture.minFilter = THREE.LinearFilter;
+			var material = new THREE.MeshLambertMaterial( { map: texture, transparent: true } );
 			var mesh = new THREE.Mesh(geometry, material);
 			mesh.position.x = 0;
 			mesh.position.y = 0;
