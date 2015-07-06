@@ -17,6 +17,7 @@ function DemoEngine(selector, width, height) {
 	this.selectorstr = selector;
 	this.fftsupport = true;
 	this.clock = new THREE.Clock();
+	this.debuggerpending = false;
 
 	var tmpelement = $(selector);
 	if (tmpelement.length != 1) {
@@ -40,6 +41,14 @@ function DemoEngine(selector, width, height) {
 	
 	this.setAudioLooping = function(loop) {
 		this.audio.loop = loop;
+	}
+	
+	this.startDebugger = function() {
+		this.debuggerpending = true;
+	}
+	
+	this.stopDebugger = function() {
+		this.debuggerpending = false;
 	}
 	
 	this.supportsFFT = function() {
@@ -124,11 +133,10 @@ function DemoEngine(selector, width, height) {
 
 		var parttick = 0;
 		var globaltick = 0;
-		log("len: " + this.partdata.length);
 
 		for (var i=0; i<this.partdata.length; i++) {
 			var partdata = this.partdata[i].data;
-			log("Prewarming scene: " + partdata.partname);
+			log("Prewarming scene: " + partdata.partname + " (" + (i+1) + "/" + this.partdata.length + ")");
 			
 			parttick = 0;
 			
@@ -145,6 +153,7 @@ function DemoEngine(selector, width, height) {
 			globaltick += partdata.partlength;
 		}
 
+		this.renderers['main'].clear(true, true, true);
 		this.renderers['main'].domElement.opacity = 1;
 	}
 	
@@ -159,6 +168,9 @@ function DemoEngine(selector, width, height) {
 			}
 
 			if (tick<this.partdata[i].data.partlength + prevpartlengths) {
+				if (this.debuggerpending) {
+					debugger;
+				}
 				this.partdata[i].data.player(this.partdata[i], parttick, tick);
 				break;
 			}

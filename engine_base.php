@@ -338,7 +338,11 @@
 
 				$('html').keyup(function(e) {
 					if (e.keyCode == 27) {
+						// esc
 						global_engine.stop();
+					} else if (e.keyCode == 68) {
+						// d
+						global_engine.startDebugger();
 					}
 				});
 
