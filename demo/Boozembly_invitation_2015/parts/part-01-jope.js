@@ -65,117 +65,155 @@
 			}
 			
 			var scene = new THREE.Scene();
+			var inter = 0;
 			
-			var bbcheckarr = [];
-
-			for (var i=0; i<5000; i++) {
-				var material = obj.objects['photomaterials'][i  % obj.objects['photomaterials'].length];
-				var geometry = obj.objects['photogeometries']['' + material.pixelwidth + "x" + material.pixelheight] ;
+			var intersectiontest = function(testarray, mesh) {
+				var index;// = mesh.geometry.attributes.index.array;
+				var position;// = mesh.geometry.attributes.position.array;
 				
-				var mesh = new THREE.Mesh(geometry, material);
-				var mesh_scale = Math.random() + 0.8
-				mesh.scale.set(mesh_scale, mesh_scale, 1);
-				var mesh_x_pos = Math.random() * 40000 - 20000;
-				var mesh_y_pos = Math.random() * 40000 - 20000;
-				var mesh_z_pos = Math.random() * 20000 - 10000;
+				if (mesh.geometry.hasOwnProperty('faces')) {
+					index = [];
+					for (var i=0; i<mesh.geometry.faces.length; i++) {
+						index.push(mesh.geometry.faces[i].a);
+						index.push(mesh.geometry.faces[i].b);
+						index.push(mesh.geometry.faces[i].c);
+					}
+					
+					position = mesh.geometry.vertices;
+				} else {
+					index = mesh.geometry.attributes.index.array;
+					position = mesh.geometry.attributes.position.array;
+				}
 				
-				var mesh_rot_y = Math.random() * Math.PI * 4 - Math.PI * 2;
-				var mesh_rot_x = Math.random() * Math.PI * 4 - Math.PI * 2;
-				var mesh_rot_z = Math.random() * Math.PI * 4 - Math.PI * 2;
-
-				mesh.position.set(mesh_x_pos, mesh_y_pos, mesh_z_pos);
-				mesh.rotation.set(mesh_rot_y, mesh_rot_x, mesh_rot_z);
-				mesh.updateMatrixWorld();
-				
-				var index = mesh.geometry.attributes.index.array;
-				var position = mesh.geometry.attributes.position.array;
 
 				var gpos = [];
-				var testvectors = [];
 
 				for (var j=0; j<index.length; j++) {
-					gpos.push(mesh.localToWorld(new THREE.Vector3(position[i * 3], position[i * 3 + 1], position[i * 3 + 2])));
-				}
-
-				for (var k=0; k<2; k++) {
-					for (var j=0; j<3; j++) {
-						var origin = gpos[(k * 3 + j)].clone();
-						var direction = gpos[(k * 3 + j)].clone();
-						direction.add(gpos[(k * 3 + ((j+1) % 3))]);
-						direction.normalize();
-						testvectors.push({ 'o': origin, 'd': direction });
-					}
+					gpos.push(
+						mesh.localToWorld(
+							new THREE.Vector3(
+								position[index[j] * 3], 
+								position[index[j] * 3 + 1], 
+								position[index[j] * 3 + 2]
+							)
+						)
+					);
 				}
 				
 				var intersects = false;
-				
-				for (var j=0; j<testvectors.length && bbcheckarr.length > 0; j++) {
-					var ray = new THREE.Raycaster(testvectors[j].o, testvectors[j].d);
-					var result = ray.intersectObjects(bbcheckarr, false);
-					if (result.length > 0) {
-						intersects = true;
-						break;
+
+				for (var k=0; k<2 && !intersects; k++) {
+					for (var j=0; j<3 && !intersects; j++) {
+						
+						var origin = gpos[index[(k * 3 + j)]].clone();
+						var direction = gpos[index[(k * 3 + ((j+1) % 3))]].clone();
+						direction.sub(gpos[index[(k * 3 + j)]]);
+						direction.normalize();
+
+						var ray = new THREE.Raycaster(origin, direction);
+						var result = ray.intersectObjects(testarray, false);
+						if (result.length > 0) {
+							inter++;
+							intersects = true;
+							break;
+						}
 					}
 				}
-
-				if (!intersects) {
-					scene.add(mesh);
-					bbcheckarr.push(mesh);
-				}
+				
+				return intersects;
 			}
 			
-			log(bbcheckarr);
+			obj.objects['photopositions'] = [];
+						
+			var cameraviewports = [];
+			var bbcheckarr = [];
 
-			var temparr = [];
-			
+			var photoboxgeom = new THREE.BoxGeometry(1000,1000,2000);
+			photoboxgeom.applyMatrix(new THREE.Matrix4().makeTranslation(0, 0, 950));
+			var photoboxmaterial = new THREE.MeshBasicMaterial({ color: 0xFF0000 });
+
 			for (var i=0; i<obj.objects['photomaterials'].length; i++) {
-				var material = obj.objects['photomaterials'][i];
-				var geometry = obj.objects['photogeometries']['' + material.pixelwidth + "x" + material.pixelheight] ;
-				var mesh = new THREE.Mesh(geometry, material);
+				do {
+					var material = obj.objects['photomaterials'][i];
+					var geometry = obj.objects['photogeometries']['' + material.pixelwidth + "x" + material.pixelheight] ;
+					var mesh = new THREE.Mesh(geometry, material);
 
-				var mesh_x_pos = Math.random() * 10000 - 5000;
-				var mesh_y_pos = Math.random() * 10000 - 5000;
-				var mesh_z_pos = Math.random() * 10000 - 5000;
-
-				var euler = new THREE.Euler(
-					Math.random() * Math.PI * 4 - Math.PI * 2, 
-					Math.random() * Math.PI * 4 - Math.PI * 2,
-					Math.random() * Math.PI * 4 - Math.PI * 2, 
-				'XYZ');
-
-				mesh.position.set(mesh_x_pos, mesh_y_pos, mesh_z_pos);
-				mesh.quaternion.setFromEuler(euler);
-				var quaternion = mesh.quaternion;
-
-				var photoposition = new THREE.Vector3(mesh.position.x, mesh.position.y, mesh.position.z);
+					var mesh_x_pos = Math.random() * 10000 - 5000;
+					var mesh_y_pos = Math.random() * 10000 - 5000;
+					var mesh_z_pos = Math.random() * 10000 - 5000;
 				
-				var cameraposition = new THREE.Vector3(0,0,-1);
-				var cameraposition2 = new THREE.Vector3(0,0,-1);
-				
-				cameraposition.applyQuaternion(mesh.quaternion);
-				cameraposition2.applyQuaternion(mesh.quaternion);
+					var mesh_rot_y = Math.random() * Math.PI * 4 - Math.PI * 2;
+					var mesh_rot_x = Math.random() * Math.PI * 4 - Math.PI * 2;
+					var mesh_rot_z = Math.random() * Math.PI * 4 - Math.PI * 2;
 
-				cameraposition.multiplyScalar(2000);
-				cameraposition2.multiplyScalar(500);
-				
-				cameraposition.negate();
-				cameraposition2.negate();
+					mesh.position.set(mesh_x_pos, mesh_y_pos, mesh_z_pos);
+					mesh.rotation.set(mesh_rot_y, mesh_rot_x, mesh_rot_z);
+					mesh.updateMatrixWorld();
 
-				cameraposition.add(new THREE.Vector3(mesh_x_pos, mesh_y_pos, mesh_z_pos));
-				cameraposition2.add(new THREE.Vector3(mesh_x_pos, mesh_y_pos, mesh_z_pos));
-				
-				scene.add(tmpmesh);
+					var quaternion = mesh.quaternion;
+					var photoposition = new THREE.Vector3(mesh.position.x, mesh.position.y, mesh.position.z);
+			
+					var cameraposition = new THREE.Vector3(0,0,-1);
+					var cameraposition2 = new THREE.Vector3(0,0,-1);
+			
+					cameraposition.applyQuaternion(mesh.quaternion);
+					cameraposition2.applyQuaternion(mesh.quaternion);
 
-				var photoobj = {photoposition: photoposition, cameraposition: cameraposition, camerarotation: quaternion};
-				var photoobj2 = {photoposition: photoposition, cameraposition: cameraposition2, camerarotation: quaternion};
-				temparr.push(photoobj);
-				temparr.push(photoobj2);
+					cameraposition.multiplyScalar(2000);
+					cameraposition2.multiplyScalar(500);
+			
+					cameraposition.negate();
+					cameraposition2.negate();
+
+					cameraposition.add(new THREE.Vector3(mesh_x_pos, mesh_y_pos, mesh_z_pos));
+					cameraposition2.add(new THREE.Vector3(mesh_x_pos, mesh_y_pos, mesh_z_pos));
+					
+					photoboxmesh = new THREE.Mesh(photoboxgeom, photoboxmaterial);
+					photoboxmesh.position.set(mesh_x_pos, mesh_y_pos, mesh_z_pos);
+					photoboxmesh.rotation.set(mesh_rot_y, mesh_rot_x, mesh_rot_z);
+					photoboxmesh.updateMatrixWorld();
+
+				} while (intersectiontest(bbcheckarr, photoboxmesh));
 				
 				scene.add(mesh);
+				bbcheckarr.push(mesh);
+				bbcheckarr.push(photoboxmesh);
+			
+				var photoobj = {photoposition: photoposition, cameraposition: cameraposition, camerarotation: quaternion};
+				var photoobj2 = {photoposition: photoposition, cameraposition: cameraposition2, camerarotation: quaternion};
+				obj.objects['photopositions'].push(photoobj);
+				obj.objects['photopositions'].push(photoobj2);
 			}
 
-			obj.objects['photopositions'] = temparr;
+			for (var i=0; i<5000; i++) {
+				do {
+					var material = obj.objects['photomaterials'][i  % obj.objects['photomaterials'].length];
+					var geometry = obj.objects['photogeometries']['' + material.pixelwidth + "x" + material.pixelheight] ;
+				
+					var mesh = new THREE.Mesh(geometry, material);
+					var mesh_x_pos = Math.random() * 40000 - 20000;
+					var mesh_y_pos = Math.random() * 40000 - 20000;
+					var mesh_z_pos = Math.random() * 20000 - 10000;
+				
+					var mesh_rot_y = Math.random() * Math.PI * 4 - Math.PI * 2;
+					var mesh_rot_x = Math.random() * Math.PI * 4 - Math.PI * 2;
+					var mesh_rot_z = Math.random() * Math.PI * 4 - Math.PI * 2;
 
+					mesh.position.set(mesh_x_pos, mesh_y_pos, mesh_z_pos);
+					mesh.rotation.set(mesh_rot_y, mesh_rot_x, mesh_rot_z);
+					mesh.updateMatrixWorld();
+
+					if (inter % 100 == 0) {
+						$('#setup').text("inter: " + inter);
+						log("inter: " + inter);
+					}
+
+				} while (intersectiontest(bbcheckarr, mesh));
+				
+				scene.add(mesh);
+				bbcheckarr.push(mesh);
+			}
+			
 			var light1 = new THREE.SpotLight(0xFFCCCC, 1, 8000, Math.PI/3);
 			var light2 = new THREE.SpotLight(0xCCFFCC, 1, 8000, Math.PI/3);
 			var light3 = new THREE.SpotLight(0xCCCCFF, 1, 8000, Math.PI/3);
