@@ -18,6 +18,9 @@ function DemoEngine(selector, width, height) {
 	this.fftsupport = true;
 	this.clock = new THREE.Clock(false);
 	this.debuggerpending = false;
+	this.loop = false;
+	this.loopBegin = 0;
+	this.loopEnd = 0;
 
 	var tmpelement = $(selector);
 	if (tmpelement.length != 1) {
@@ -41,6 +44,12 @@ function DemoEngine(selector, width, height) {
 	
 	this.setAudioLooping = function(loop) {
 		this.audio.loop = loop;
+	}
+	
+	this.setLooping = function(begin, end) {
+		this.loop = true;
+		this.loopBegin = begin;
+		this.loopEnd = end;
 	}
 	
 	this.startDebugger = function() {
@@ -176,6 +185,11 @@ function DemoEngine(selector, width, height) {
 				this.partdata[i].data.player(this.partdata[i], parttick, tick);
 				break;
 			}
+		}
+		
+		if (this.loop && tick >= this.loopEnd) {
+			this.audio.currentTime = this.loopBegin / 1000; // logically it needs to have the time in seconds...
+			log("Looping...");
 		}
 	}
 	
