@@ -15,9 +15,7 @@
 			var scene = new THREE.Scene();
 			
 			var geometry = new THREE.PlaneBufferGeometry(1920, 1080, 1, 1);
-			var texture = THREE.ImageUtils.loadTexture( image_boozembly.src );
-			texture.minFilter = THREE.LinearFilter;
-			var material = new THREE.MeshLambertMaterial( { map: texture, transparent: true } );
+			var material = new THREE.MeshLambertMaterial( { map: THREE.ImageUtils.loadTexture( image_boozembly.src ), transparent: true } );
 			var mesh = new THREE.Mesh(geometry, material);
 			mesh.position.x = 0;
 			mesh.position.y = 0;
@@ -25,10 +23,7 @@
 			scene.add(mesh);
 			obj.objects['logo'] = mesh;
 
-//			var geometry = new THREE.PlaneBufferGeometry(1920, 1080, 1, 1);
-			var texture = THREE.ImageUtils.loadTexture( image_disorganizing.src );
-			texture.minFilter = THREE.LinearFilter;
-			var material = new THREE.MeshLambertMaterial( { map: texture, transparent: true } );
+			var material = new THREE.MeshLambertMaterial( { map: THREE.ImageUtils.loadTexture( image_disorganizing.src ), transparent: true } );
 			var mesh = new THREE.Mesh(geometry, material);
 			mesh.position.x = 0;
 			mesh.position.y = 0;
