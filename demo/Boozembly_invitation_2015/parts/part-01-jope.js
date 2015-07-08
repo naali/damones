@@ -13,6 +13,7 @@
 		ro.objects = {};
 		ro.effects = {};
 		ro.composers = {};
+		ro.passes = {};
 		ro.rendertargets = {};
 		ro.renderpasses = {};
 		
@@ -44,13 +45,16 @@
 				{name: 'portrait', amount: 10, wmul: 1.3333, hmul: 1}
 			];
 			
+			var photobumptexture = THREE.ImageUtils.loadTexture(image_concretebump.src);
+			photobumptexture.wrapS = photobumptexture.wrapS = THREE.RepeatWrapping;
+			
 			for (var j=0; j<photoconf.length; j++) {
 				for (var i=1; i<=photoconf[j].amount; i++) {
 					var name = eval('image_pic_' + photoconf[j].name + '_' + i + '.src');
 					var width = eval('image_pic_' + photoconf[j].name + '_' + i + '.width');
 					var height = eval('image_pic_' + photoconf[j].name + '_' + i + '.height');
 			
-					var material = new THREE.MeshPhongMaterial( {map: THREE.ImageUtils.loadTexture(name), transparent: false} );
+					var material = new THREE.MeshPhongMaterial( {map: THREE.ImageUtils.loadTexture(name), bumpMap: photobumptexture, transparent: false} );
 					material.pixelwidth = width * photoconf[j].wmul;
 					material.pixelheight = height * photoconf[j].hmul;
 					material.side = THREE.DoubleSide;
@@ -59,6 +63,7 @@
 					
 					if (!obj.objects['photogeometries'].hasOwnProperty('' + material.pixelwidth + "x" + material.pixelheight)) {
 						var geometry = new THREE.PlaneBufferGeometry(material.pixelwidth, material.pixelheight, 1, 1);
+						geometry.computeBoundingBox();
 						obj.objects['photogeometries']['' + material.pixelwidth + "x" + material.pixelheight] = geometry;
 					}
 				}
@@ -68,8 +73,8 @@
 			var inter = 0;
 			
 			var intersectiontest = function(testarray, mesh) {
-				var index;// = mesh.geometry.attributes.index.array;
-				var position;// = mesh.geometry.attributes.position.array;
+				var index;
+				var position;
 				
 				if (mesh.geometry.hasOwnProperty('faces')) {
 					index = [];
@@ -104,15 +109,28 @@
 
 				for (var k=0; k<2 && !intersects; k++) {
 					for (var j=0; j<3 && !intersects; j++) {
-						
 						var origin = gpos[index[(k * 3 + j)]].clone();
 						var direction = gpos[index[(k * 3 + ((j+1) % 3))]].clone();
-						direction.sub(gpos[index[(k * 3 + j)]]);
+
+						direction.sub(gpos[index[(k * 3 + j)]].clone());
 						direction.normalize();
 
 						var ray = new THREE.Raycaster(origin, direction);
-						var result = ray.intersectObjects(testarray, false);
-						if (result.length > 0) {
+						
+						if (ray.intersectObjects(testarray, true).length > 0) {
+							inter++;
+							intersects = true;
+							break;
+						}
+						
+						// other direction
+						
+						origin = gpos[index[(k * 3 + ((j+1) % 3))]].clone();
+						direction.negate();
+
+						ray = new THREE.Raycaster(origin, direction);
+						
+						if (ray.intersectObjects(testarray, true).length > 0) {
 							inter++;
 							intersects = true;
 							break;
@@ -128,9 +146,10 @@
 			var cameraviewports = [];
 			var bbcheckarr = [];
 
-			var photoboxgeom = new THREE.BoxGeometry(1000,1000,2000);
+			var photoboxgeom = new THREE.BoxGeometry(1500,1500,3500);
 			photoboxgeom.applyMatrix(new THREE.Matrix4().makeTranslation(0, 0, 950));
 			var photoboxmaterial = new THREE.MeshBasicMaterial({ color: 0xFF0000 });
+			photoboxmaterial.side = THREE.DoubleSide;
 
 			for (var i=0; i<obj.objects['photomaterials'].length; i++) {
 				do {
@@ -159,8 +178,8 @@
 					cameraposition.applyQuaternion(mesh.quaternion);
 					cameraposition2.applyQuaternion(mesh.quaternion);
 
-					cameraposition.multiplyScalar(2000);
-					cameraposition2.multiplyScalar(500);
+					cameraposition.multiplyScalar(2500);
+					cameraposition2.multiplyScalar(700);
 			
 					cameraposition.negate();
 					cameraposition2.negate();
@@ -185,15 +204,15 @@
 				obj.objects['photopositions'].push(photoobj2);
 			}
 
-			for (var i=0; i<5000; i++) {
+			for (var i=0; i<500; i++) {
 				do {
 					var material = obj.objects['photomaterials'][i  % obj.objects['photomaterials'].length];
 					var geometry = obj.objects['photogeometries']['' + material.pixelwidth + "x" + material.pixelheight] ;
 				
 					var mesh = new THREE.Mesh(geometry, material);
-					var mesh_x_pos = Math.random() * 40000 - 20000;
-					var mesh_y_pos = Math.random() * 40000 - 20000;
-					var mesh_z_pos = Math.random() * 20000 - 10000;
+					var mesh_x_pos = Math.random() * 10000 - 5000;
+					var mesh_y_pos = Math.random() * 10000 - 5000;
+					var mesh_z_pos = Math.random() * 10000 - 5000;
 				
 					var mesh_rot_y = Math.random() * Math.PI * 4 - Math.PI * 2;
 					var mesh_rot_x = Math.random() * Math.PI * 4 - Math.PI * 2;
@@ -235,12 +254,21 @@
 			obj.lights['photospot3'] = light3;
 			
 			scene.add(obj.cameras['photocam']);
-			
-			var photopass = new THREE.RenderPass(scene, obj.cameras['photocam']);
-			photopass.renderToScreen = false;
 
-			obj.renderpasses['photopass'] = photopass;
+			var photocomposer = new THREE.EffectComposer(global_engine.renderers['main'], 
+				new THREE.WebGLRenderTarget( global_engine.getWidth(), global_engine.getHeight(),  
+				{ minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, alpha: true}
+			));
+
+			var photopass = new THREE.RenderPass(scene, obj.cameras['photocam']);
+			photocomposer.addPass(photopass);
+
+			var glitchpass = new THREE.GlitchPass();
 			
+			photocomposer.addPass(glitchpass);
+
+			obj.composers['photocomposer'] = photocomposer;
+
 			return scene;
 		}(ro));
 
@@ -489,29 +517,42 @@
 			scene.add(obj.cameras['writercam']);
 			obj.cameras['writercam'].position.z = 1000;
 
+			var writercomposer = new THREE.EffectComposer(global_engine.renderers['main'],
+				new THREE.WebGLRenderTarget( global_engine.getWidth(), global_engine.getHeight(),
+				{ minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, alpha: true }
+			));
 
-
-
-			var effect = new THREE.ShaderPass( THREE.RGBShiftShader );
-			effect.renderToScreen = true;
-			obj.effects['RGBShiftShader'] = effect;
-			
-			var parameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, stencilBuffer: false };
-			var renderTarget = new THREE.WebGLRenderTarget(global_engine.getWidth(), global_engine.getHeight(), parameters);
-			var writercomposer = new THREE.EffectComposer(global_engine.renderers['main'], renderTarget);
-			
-			writercomposer.addPass(obj.renderpasses['photopass']);
-
-			var writerpass = new THREE.RenderPass(scene, obj.cameras['writercam'])
-			writerpass.clearAlpha = false;
-			writerpass.clear = false;
-			writerpass.clearDepth = true;
+			var writerpass = new THREE.RenderPass(scene, obj.cameras['writercam']);
 			writercomposer.addPass(writerpass);
-			writercomposer.addPass(effect);
+			writercomposer.clearAlpha = 0;
 			
+			obj.renderpasses['writerpass'] = writerpass;
 			obj.composers['writercomposer'] = writercomposer;
-
+			
 			return scene;
+		}(ro));
+		
+		ro.scenes['composer'] = (function(obj) {
+			var scene = new THREE.Scene();
+			
+			var composerrt = new THREE.WebGLRenderTarget(
+				global_engine.getWidth(), 
+				global_engine.getHeight(), 
+				{ minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, stencilBuffer: true, alpha: true }
+			);
+			
+			var maincomposer = new THREE.EffectComposer(global_engine.renderers['main'], composerrt);
+
+			var combinerpass = new THREE.ShaderPass(THREE.CopyAlphaTexture);
+			combinerpass.uniforms['tDiffuse1'].value = obj.composers['photocomposer'].renderTarget1;
+			combinerpass.uniforms['tDiffuse2'].value = obj.composers['writercomposer'].renderTarget2;
+			combinerpass.renderToScreen = true;
+			
+			maincomposer.addPass(combinerpass);
+
+			obj.composers['maincomposer'] = maincomposer;
+			
+ 			return scene;
 		}(ro));
 
 		ro.player = function(partdata, parttick, t) {
@@ -576,12 +617,18 @@
 //			var fftdata = global_engine.getFloatFFTData(0);
 			
 //			log(fftdata[0]);
-			
+/*			
 			this.effects['RGBShiftShader'].uniforms['amount'].value = 0; //fftdata[0] / 256 / 10; //Math.sin(parttick / 1000) / 1000 * 5;
 			this.effects['RGBShiftShader'].uniforms['angle'].value = 0; //Math.sin(parttick / 487) * Math.PI * 2;
+*/
 
-			global_engine.renderers['main'].clear(false, true, false);
-			this.composers['writercomposer'].render(0.1);
+			global_engine.renderers['main'].clear();
+			
+			var dt = global_engine.clock.getDelta();
+			
+			this.composers['photocomposer'].render(dt);
+			this.composers['writercomposer'].render(dt);
+			this.composers['maincomposer'].render(dt);
 		}
 	
 		return ro;
