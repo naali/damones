@@ -16,7 +16,7 @@ function DemoEngine(selector, width, height) {
 	this.frequencyBinCount = 0;
 	this.selectorstr = selector;
 	this.fftsupport = true;
-	this.clock = new THREE.Clock();
+	this.clock = new THREE.Clock(false);
 	this.debuggerpending = false;
 
 	var tmpelement = $(selector);
@@ -95,12 +95,14 @@ function DemoEngine(selector, width, height) {
 	}
 	
 	this.stop = function() {
+		this.clock.stop();
 		this.audio.pause();
 		this.audio.currentTime = 0;
 	}
 	
  	this.play = function() {
 		this.audio.play();
+		this.clock.start();
 		this.audio.controls = true;
 	}
 	
@@ -192,7 +194,7 @@ function DemoEngine(selector, width, height) {
 	}
 	
 	this.addRenderer = function(name, antialias, shadowmap, width, height) {
-		this.renderers[name] = new THREE.WebGLRenderer( { antialias: antialias } );
+		this.renderers[name] = new THREE.WebGLRenderer( { antialias: antialias, alpha: true, autoClear: false } );
 		this.renderers[name].shadowMapEnabled = shadowmap;
 		
 		if (width && height) {
@@ -201,7 +203,7 @@ function DemoEngine(selector, width, height) {
 			this.renderers[name].setSize(this.getWidth(), this.getHeight());
 		}
 
-		this.renderers[name].setClearColor(0x000000, 1.0);
+		this.renderers[name].setClearColor(0x000000, 0.0);
 		this.renderers[name].autoClear = false;
 		this.renderers[name].clear();
 	}
