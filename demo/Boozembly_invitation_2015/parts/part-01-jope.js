@@ -41,8 +41,9 @@
 			obj.objects['photogeometries'] = {};
 			
 			var photoconf = [
-				{name: 'landscape', amount: 9, wmul: 1, hmul: 1.33333},
-				{name: 'portrait', amount: 10, wmul: 1.3333, hmul: 1}
+				{name: '_picb_landscape', amount: 39, wmul: 1, hmul: 720 / 512},
+				{name: '_pic_landscape', amount: 9, wmul: 1, hmul: 1.33333},
+				{name: '_pic_portrait', amount: 10, wmul: 1.3333, hmul: 1}
 			];
 			
 			var photobumptexture = THREE.ImageUtils.loadTexture(image_concretebump.src);
@@ -50,11 +51,11 @@
 			
 			for (var j=0; j<photoconf.length; j++) {
 				for (var i=1; i<=photoconf[j].amount; i++) {
-					var name = eval('image_pic_' + photoconf[j].name + '_' + i + '.src');
-					var width = eval('image_pic_' + photoconf[j].name + '_' + i + '.width');
-					var height = eval('image_pic_' + photoconf[j].name + '_' + i + '.height');
+					var name = eval('image' + photoconf[j].name + '_' + i + '.src');
+					var width = eval('image' + photoconf[j].name + '_' + i + '.width');
+					var height = eval('image' + photoconf[j].name + '_' + i + '.height');
 			
-					var material = new THREE.MeshPhongMaterial( {map: THREE.ImageUtils.loadTexture(name), bumpMap: photobumptexture, transparent: false} );
+					var material = new THREE.MeshPhongMaterial( {map: THREE.ImageUtils.loadTexture(name), bumpMap: photobumptexture, transparent: false, color: 0xFFFFFF, specular: 0x030303 } );
 					material.pixelwidth = width * photoconf[j].wmul;
 					material.pixelheight = height * photoconf[j].hmul;
 					material.side = THREE.DoubleSide;
@@ -73,6 +74,8 @@
 			var inter = 0;
 			
 			var intersectiontest = function(testarray, mesh) {
+				return false; // ASDQWE
+				
 				var index;
 				var position;
 				
@@ -203,7 +206,7 @@
 				obj.objects['photopositions'].push(photoobj);
 				obj.objects['photopositions'].push(photoobj2);
 			}
-
+/*
 			for (var i=0; i<500; i++) {
 				do {
 					var material = obj.objects['photomaterials'][i  % obj.objects['photomaterials'].length];
@@ -232,7 +235,7 @@
 				scene.add(mesh);
 				bbcheckarr.push(mesh);
 			}
-			
+*/			
 			var light1 = new THREE.SpotLight(0xFFCCCC, 1, 8000, Math.PI/3);
 			var light2 = new THREE.SpotLight(0xCCFFCC, 1, 8000, Math.PI/3);
 			var light3 = new THREE.SpotLight(0xCCCCFF, 1, 8000, Math.PI/3);
@@ -463,6 +466,7 @@
 			}
 			
 			obj.objects['pagemesharr'] = [];
+			var pagetextmaterials = {};
 
 			for (var i=0; i<textarr.length; i++) {
 				obj.objects['pagemesharr'][i] = [];
@@ -480,7 +484,11 @@
 							c = textarr[i][j].charAt(k);
 						}
 						
-						var material = new THREE.MeshLambertMaterial({ transparent: true, color: color });
+						if (!pagetextmaterials.hasOwnProperty(i + ':' + color)) {
+							pagetextmaterials[i + ':' + color] = new THREE.MeshLambertMaterial({ transparent: true, color: color });
+						}
+						
+						var material = pagetextmaterials[i + ':' + color];
 						var mesh = new THREE.Mesh(obj.objects['chargeoms'][c], material);
 						mesh.position.x = -xpos;
 						mesh.position.y = (textarr[i].length / 2) * 50 - j * 50 - 50;
@@ -556,8 +564,7 @@
 		}(ro));
 
 		ro.player = function(partdata, parttick, t) {
-
-			var pagemaxtime = 8000;
+			var pagemaxtime = 4000;
 			var page = Math.floor(parttick / pagemaxtime);
 			var pagetime = parttick - page * pagemaxtime;
 			
@@ -579,10 +586,29 @@
 				}
 			}
 
+			var fftdata = global_engine.getByteFFTData(0);
+/*			
+			log(fftdata[0]);
+*/
+
 			phototimer = parttick / 2000;
-			var idx = Math.floor(phototimer);
-			var intrat = (phototimer) % 1;
-			
+				var idx = Math.floor(phototimer);
+				var intrat = (phototimer) % 1;
+//				var foo = (Math.cos(Math.PI * intrat * 10) + 1) * 0.5;
+				var foo = 0.1 + ((fftdata[0] / 256) * 0.2);
+				var specular_color = new THREE.Color(foo, foo, foo);
+				log(foo);
+
+				var one_minus_specular = new THREE.Color(1 - intrat, 1 - intrat, 1 - intrat);
+				var rnd_color = new THREE.Color(Math.random(), Math.random(), Math.random());
+
+			if (idx > 2) {
+				this.objects['photomaterials'][Math.floor(idx/2) - 1].specular = 0.1;
+				this.objects['photomaterials'][Math.floor(idx/2) + 0].specular = specular_color;
+				this.objects['photomaterials'][Math.floor(idx/2) + 1].specular = specular_color;
+//				this.objects['photomaterials'][Math.floor(idx/2) + 1].emissive = rnd_color;
+			}
+
 			var v0 = this.objects['photopositions'][idx].cameraposition;
 			var v1 = this.objects['photopositions'][idx + 1].cameraposition;
 			var v2 = this.objects['photopositions'][idx + 2].cameraposition;
