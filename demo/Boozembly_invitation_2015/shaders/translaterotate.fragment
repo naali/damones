@@ -1,0 +1,17 @@
+uniform float opacity;
+uniform float x;
+uniform float y;
+uniform float angle;
+uniform sampler2D tDiffuse;
+
+varying vec2 vUv;
+
+void main(void) {
+	float center = 0.5;
+	vec2 tran_uv = vec2(vUv.x + x, vUv.y + y);
+	vec2 rot_uv = vec2(cos(angle)*(tran_uv.x-center)+sin(angle)*(tran_uv.y-center)+center, 
+		cos(angle)*(tran_uv.y-center)-sin(angle)*(tran_uv.x-center)+ center);
+
+	vec4 texel = texture2D( tDiffuse, rot_uv );
+	gl_FragColor = opacity * texel;
+}

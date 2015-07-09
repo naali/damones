@@ -2,8 +2,9 @@
 	data: (function() {
 		var ro = {};
 		ro.partname = 'Boozembly 2015';
-		ro.partlength = 1000 * 168;
+		ro.partlength = 1000 * 313;
 		ro.cameras = {
+			'kaljacam':  new THREE.OrthographicCamera( global_engine.getWidth() / - 2, global_engine.getWidth() / 2, global_engine.getHeight() / 2, global_engine.getHeight() / - 2, 1, 10000 ), //new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 10000),
 			'photocam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 100000),
 			'writercam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 10000)
 		};
@@ -16,6 +17,7 @@
 		ro.passes = {};
 		ro.rendertargets = {};
 		ro.renderpasses = {};
+		ro.materials = {};
 		
 		ro.functions = {
 			CMR: function(p0, p1, p2, p3, t) {
@@ -35,8 +37,57 @@
 			}
 		}
 		
+		ro.scenes['kaljat'] = (function(obj){
+			var scene = new THREE.Scene();
+			
+			var geometry = new THREE.PlaneBufferGeometry(2048, 2048, 1, 1);
+			var kaljatexture = THREE.ImageUtils.loadTexture( image_kaljat.src );
+			kaljatexture.wrapS = kaljatexture.wrapT = THREE.RepeatWrapping;
+			
+			var material = new THREE.ShaderMaterial({
+				uniforms: {
+					opacity: 	{ type: "f", value: 1.0 },
+					x: 			{ type: "f", value: 0.0 },
+					y: 			{ type: "f", value: 0.0 },
+					angle: 		{ type: "f", value: 30.0 },
+					tDiffuse:	{ type: "t", value: kaljatexture }
+				},
+				
+				vertexShader: $('#vertex_plain').text(),
+				fragmentShader: $('#fragment_translaterotate').text()
+			});
+			obj.materials['beermaterial'] = material;
+			var mesh = new THREE.Mesh(geometry, material);
+			mesh.position.x = 0;
+			mesh.position.y = 0;
+			mesh.position.z = 0;
+			scene.add(mesh);
+			obj.objects['kaljat'] = mesh;
+
+			var directionallight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+			directionallight.position.set( 0, 0, 1 );
+			scene.add( directionallight );
+			obj.lights['kaljadirectional'] = directionallight;
+			
+			scene.add(obj.cameras['kaljacam']);
+			obj.cameras['kaljacam'].position.z = 1000;
+
+			var beercomposer = new THREE.EffectComposer(global_engine.renderers['main'],
+				new THREE.WebGLRenderTarget( global_engine.getWidth(), global_engine.getHeight(),
+				{ minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, alpha: true }
+			));
+
+			var beerpass = new THREE.RenderPass(scene, obj.cameras['kaljacam']);
+			beercomposer.addPass(beerpass);
+			beercomposer.clear = false;
+
+			obj.composers['beercomposer'] = beercomposer;
+
+			return scene;
+			
+		}(ro));
+		
 		ro.scenes['photos'] = (function(obj) {
-			global_engine.renderers['logarithmic'] = new THREE.WebGLRenderer({logarithmicDepthBuffer: true});
 			obj.objects['photomaterials'] = [];
 			obj.objects['photogeometries'] = {};
 			
@@ -255,6 +306,10 @@
 			obj.lights['photospot1'] = light1;
 			obj.lights['photospot2'] = light2;
 			obj.lights['photospot3'] = light3;
+
+			var directionallight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+			directionallight.position.set( 0, 0, 1 );
+			scene.add( directionallight );
 			
 			scene.add(obj.cameras['photocam']);
 
@@ -527,12 +582,18 @@
 
 			var writercomposer = new THREE.EffectComposer(global_engine.renderers['main'],
 				new THREE.WebGLRenderTarget( global_engine.getWidth(), global_engine.getHeight(),
-				{ minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, alpha: true }
+				{ minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, alpha: true, autoClear: false }
 			));
 
 			var writerpass = new THREE.RenderPass(scene, obj.cameras['writercam']);
 			writercomposer.addPass(writerpass);
-			writercomposer.clearAlpha = 0;
+			writercomposer.clear = false;
+//			writercomposer.needsSwap = true;
+//			writercomposer.clearAlpha = 0;
+
+			var writershader = new THREE.ShaderPass( THREE.PerseilyFade );
+			writershader.needsSwap = true;
+			writercomposer.addPass(writershader);
 			
 			obj.renderpasses['writerpass'] = writerpass;
 			obj.composers['writercomposer'] = writercomposer;
@@ -552,8 +613,10 @@
 			var maincomposer = new THREE.EffectComposer(global_engine.renderers['main'], composerrt);
 
 			var combinerpass = new THREE.ShaderPass(THREE.CopyAlphaTexture);
-			combinerpass.uniforms['tDiffuse1'].value = obj.composers['photocomposer'].renderTarget1;
-			combinerpass.uniforms['tDiffuse2'].value = obj.composers['writercomposer'].renderTarget2;
+			combinerpass.uniforms['tDiffuse1'].value = obj.composers['beercomposer'].renderTarget2;
+			combinerpass.uniforms['tDiffuse2'].value = obj.composers['photocomposer'].renderTarget1;
+			
+//			combinerpass.uniforms['tDiffuse2'].value = obj.composers['writercomposer'].renderTarget1;
 			combinerpass.renderToScreen = true;
 			
 			maincomposer.addPass(combinerpass);
@@ -587,26 +650,19 @@
 			}
 
 			var fftdata = global_engine.getByteFFTData(0);
-/*			
-			log(fftdata[0]);
-*/
 
 			phototimer = parttick / 2000;
 				var idx = Math.floor(phototimer);
 				var intrat = (phototimer) % 1;
-//				var foo = (Math.cos(Math.PI * intrat * 10) + 1) * 0.5;
-				var foo = 0.1 + ((fftdata[0] / 256) * 0.2);
-				var specular_color = new THREE.Color(foo, foo, foo);
-				log(foo);
 
-				var one_minus_specular = new THREE.Color(1 - intrat, 1 - intrat, 1 - intrat);
+				var fft = 0.1 + ((fftdata[0] / 256) * 0.2);
+				var specular_color = new THREE.Color(fft, fft, fft);
 				var rnd_color = new THREE.Color(Math.random(), Math.random(), Math.random());
 
 			if (idx > 2) {
 				this.objects['photomaterials'][Math.floor(idx/2) - 1].specular = 0.1;
 				this.objects['photomaterials'][Math.floor(idx/2) + 0].specular = specular_color;
 				this.objects['photomaterials'][Math.floor(idx/2) + 1].specular = specular_color;
-//				this.objects['photomaterials'][Math.floor(idx/2) + 1].emissive = rnd_color;
 			}
 
 			var v0 = this.objects['photopositions'][idx].cameraposition;
@@ -651,10 +707,20 @@
 			global_engine.renderers['main'].clear();
 			
 			var dt = global_engine.clock.getDelta();
+
+//			this.cameras['kaljacam'].position.set(Math.sin(t / 100) * 100, 0, 2000);
+			this.materials['beermaterial'].uniforms.angle.value = Math.sin(t / 1000);
+			this.materials['beermaterial'].uniforms.x.value = Math.cos(t / 1000);
+			this.materials['beermaterial'].uniforms.y.value = Math.cos(t / 1000);
 			
+			this.composers['beercomposer'].render(dt);
 			this.composers['photocomposer'].render(dt);
 			this.composers['writercomposer'].render(dt);
 			this.composers['maincomposer'].render(dt);
+
+/*
+			global_engine.renderers['main'].render(this.scenes['kaljat'], this.cameras['kaljacam']);
+*/			
 		}
 	
 		return ro;
