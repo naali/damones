@@ -310,7 +310,9 @@
 
 			var directionallight = new THREE.DirectionalLight( 0xffffff, 0.5 );
 			directionallight.position.set( 0, 0, 1 );
+			obj.cameras['photocam'].add(directionallight);
 			scene.add( directionallight );
+			obj.lights['photodirectional'] = directionallight;
 			
 			scene.add(obj.cameras['photocam']);
 
@@ -717,9 +719,6 @@
 			var origin = new THREE.Vector3(0, 0, 0);
 			var camera_distance_from_origin = origin.distanceTo(this.cameras['photocam'].position);
 			var beerzoom = 2-camera_distance_from_origin / 9000;
-			
-			log("" + camera_distance_from_origin + ", " + beerzoom);
-
 //			this.materials['beermaterial'].uniforms.angle.value = Math.sin(t / 1000);
 			this.materials['beermaterial'].uniforms.zoom.value = beerzoom;
 			this.materials['beermaterial'].uniforms.x.value = cpos_x / 10000;
