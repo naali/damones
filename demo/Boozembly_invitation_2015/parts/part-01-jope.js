@@ -50,6 +50,7 @@
 					x: 			{ type: "f", value: 0.0 },
 					y: 			{ type: "f", value: 0.0 },
 					angle: 		{ type: "f", value: 30.0 },
+					zoom:		{ type: "f", value: 2 },
 					tDiffuse:	{ type: "t", value: kaljatexture }
 				},
 				
@@ -71,7 +72,7 @@
 			
 			scene.add(obj.cameras['kaljacam']);
 			obj.cameras['kaljacam'].position.z = 1000;
-
+			
 			var beercomposer = new THREE.EffectComposer(global_engine.renderers['main'],
 				new THREE.WebGLRenderTarget( global_engine.getWidth(), global_engine.getHeight(),
 				{ minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, alpha: true }
@@ -617,9 +618,14 @@
 			combinerpass.uniforms['tDiffuse2'].value = obj.composers['photocomposer'].renderTarget1;
 			
 //			combinerpass.uniforms['tDiffuse2'].value = obj.composers['writercomposer'].renderTarget1;
-			combinerpass.renderToScreen = true;
-			
+			combinerpass.renderToScreen = false;
 			maincomposer.addPass(combinerpass);
+			
+			var combinerpass2 = new THREE.ShaderPass(THREE.CopyAlphaTexture);
+			combinerpass2.uniforms['tDiffuse1'].value = maincomposer.renderTarget1;
+			combinerpass2.uniforms['tDiffuse2'].value = obj.composers['writercomposer'].renderTarget1;
+			combinerpass2.renderToScreen = true;
+			maincomposer.addPass(combinerpass2);
 
 			obj.composers['maincomposer'] = maincomposer;
 			
@@ -659,7 +665,7 @@
 				var specular_color = new THREE.Color(fft, fft, fft);
 				var rnd_color = new THREE.Color(Math.random(), Math.random(), Math.random());
 
-			if (idx > 2) {
+			if (idx > 4) {
 				this.objects['photomaterials'][Math.floor(idx/2) - 1].specular = 0.1;
 				this.objects['photomaterials'][Math.floor(idx/2) + 0].specular = specular_color;
 				this.objects['photomaterials'][Math.floor(idx/2) + 1].specular = specular_color;
@@ -707,11 +713,17 @@
 			global_engine.renderers['main'].clear();
 			
 			var dt = global_engine.clock.getDelta();
+			
+			var origin = new THREE.Vector3(0, 0, 0);
+			var camera_distance_from_origin = origin.distanceTo(this.cameras['photocam'].position);
+			var beerzoom = 2-camera_distance_from_origin / 9000;
+			
+			log("" + camera_distance_from_origin + ", " + beerzoom);
 
-//			this.cameras['kaljacam'].position.set(Math.sin(t / 100) * 100, 0, 2000);
-			this.materials['beermaterial'].uniforms.angle.value = Math.sin(t / 1000);
-			this.materials['beermaterial'].uniforms.x.value = Math.cos(t / 1000);
-			this.materials['beermaterial'].uniforms.y.value = Math.cos(t / 1000);
+//			this.materials['beermaterial'].uniforms.angle.value = Math.sin(t / 1000);
+			this.materials['beermaterial'].uniforms.zoom.value = beerzoom;
+			this.materials['beermaterial'].uniforms.x.value = cpos_x / 10000;
+			this.materials['beermaterial'].uniforms.y.value = -cpos_y / 10000;
 			
 			this.composers['beercomposer'].render(dt);
 			this.composers['photocomposer'].render(dt);
