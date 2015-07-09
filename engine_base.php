@@ -378,7 +378,7 @@
 					init();
 			
 <?php if (!$framegrabber) { ?>
-					log("prebaking");
+					log("prewarming");
 					global_engine.prewarm();
 					
 					log("playing");
@@ -401,7 +401,7 @@
 							init();
 
 <?php if (!$framegrabber) { ?>
-							log("prebaking");
+							log("prewarming");
 							global_engine.prewarm();
 
 							log("playing");
