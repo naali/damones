@@ -59,7 +59,7 @@ THREE.GlitchPass.prototype = {
 			this.curF = 0;
 			this.generateTrigger();
 		}
-		else if (this.curF % this.randX < this.randX / 5)
+		else if (this.curF % this.randX < this.randX / 4)
 		{
 			this.uniforms[ 'amount' ].value = Math.random() / 90;
 			this.uniforms[ 'angle' ].value = THREE.Math.randFloat(-Math.PI, Math.PI);
@@ -86,7 +86,7 @@ THREE.GlitchPass.prototype = {
 	},
 	generateTrigger:function()
 	{
-		this.randX = THREE.Math.randInt(120, 240);
+		this.randX = THREE.Math.randInt(1,6) * 60;
 	},
 	generateHeightmap:function(dt_size)
 	{

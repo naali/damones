@@ -34,6 +34,11 @@ THREE.EffectComposer = function ( renderer, renderTarget ) {
 };
 
 THREE.EffectComposer.prototype = {
+	swapTargets: function() {
+		var tmp = this.renderTarget2;
+		this.renderTarget2 = this.renderTarget1;
+		this.renderTarget1 = tmp;
+	},
 
 	swapBuffers: function() {
 

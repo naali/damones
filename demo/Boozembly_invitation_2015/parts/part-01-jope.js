@@ -2,7 +2,7 @@
 	data: (function() {
 		var ro = {};
 		ro.partname = 'Boozembly 2015';
-		ro.partlength = 1000 * 313;
+		ro.partlength = 1000 * 312;
 		ro.cameras = {
 			'kaljacam':  new THREE.OrthographicCamera( global_engine.getWidth() / - 2, global_engine.getWidth() / 2, global_engine.getHeight() / 2, global_engine.getHeight() / - 2, 1, 10000 ), //new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 10000),
 			'photocam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 100000),
@@ -93,7 +93,8 @@
 			obj.objects['photogeometries'] = {};
 			
 			var photoconf = [
-				{name: '_picb_landscape', amount: 39, wmul: 1, hmul: 720 / 512},
+				{name: '_picb_landscape', amount: 39, wmul: 1080/1024, hmul: 720 / 512},
+				{name: '_picb_portrait', amount: 17, wmul: 720 / 512, hmul: 1080/1024},
 				{name: '_pic_landscape', amount: 9, wmul: 1, hmul: 1.33333},
 				{name: '_pic_portrait', amount: 10, wmul: 1.3333, hmul: 1}
 			];
@@ -107,7 +108,7 @@
 					var width = eval('image' + photoconf[j].name + '_' + i + '.width');
 					var height = eval('image' + photoconf[j].name + '_' + i + '.height');
 			
-					var material = new THREE.MeshPhongMaterial( {map: THREE.ImageUtils.loadTexture(name), bumpMap: photobumptexture, transparent: false, color: 0xFFFFFF, specular: 0x030303 } );
+					var material = new THREE.MeshPhongMaterial( {map: THREE.ImageUtils.loadTexture(name), bumpMap: photobumptexture, transparent: false, color: 0xFFFFFF, specular: new THREE.Color(0.2, 0.2, 0.2) } );
 					material.pixelwidth = width * photoconf[j].wmul;
 					material.pixelheight = height * photoconf[j].hmul;
 					material.side = THREE.DoubleSide;
@@ -123,10 +124,9 @@
 			}
 			
 			var scene = new THREE.Scene();
-			var inter = 0;
 			
 			var intersectiontest = function(testarray, mesh) {
-				return false; // ASDQWE
+//				return false; // ASDQWE
 				
 				var index;
 				var position;
@@ -173,7 +173,6 @@
 						var ray = new THREE.Raycaster(origin, direction);
 						
 						if (ray.intersectObjects(testarray, true).length > 0) {
-							inter++;
 							intersects = true;
 							break;
 						}
@@ -186,7 +185,6 @@
 						ray = new THREE.Raycaster(origin, direction);
 						
 						if (ray.intersectObjects(testarray, true).length > 0) {
-							inter++;
 							intersects = true;
 							break;
 						}
@@ -258,15 +256,15 @@
 				obj.objects['photopositions'].push(photoobj);
 				obj.objects['photopositions'].push(photoobj2);
 			}
-/*
+
 			for (var i=0; i<500; i++) {
 				do {
 					var material = obj.objects['photomaterials'][i  % obj.objects['photomaterials'].length];
 					var geometry = obj.objects['photogeometries']['' + material.pixelwidth + "x" + material.pixelheight] ;
 				
 					var mesh = new THREE.Mesh(geometry, material);
-					var mesh_x_pos = Math.random() * 10000 - 5000;
-					var mesh_y_pos = Math.random() * 10000 - 5000;
+					var mesh_x_pos = Math.random() * 20000 - 10000;
+					var mesh_y_pos = Math.random() * 20000 - 10000;
 					var mesh_z_pos = Math.random() * 10000 - 5000;
 				
 					var mesh_rot_y = Math.random() * Math.PI * 4 - Math.PI * 2;
@@ -277,17 +275,12 @@
 					mesh.rotation.set(mesh_rot_y, mesh_rot_x, mesh_rot_z);
 					mesh.updateMatrixWorld();
 
-					if (inter % 100 == 0) {
-						$('#setup').text("inter: " + inter);
-						log("inter: " + inter);
-					}
-
 				} while (intersectiontest(bbcheckarr, mesh));
 				
 				scene.add(mesh);
 				bbcheckarr.push(mesh);
 			}
-*/			
+			
 			var light1 = new THREE.SpotLight(0xFFCCCC, 1, 8000, Math.PI/3);
 			var light2 = new THREE.SpotLight(0xCCFFCC, 1, 8000, Math.PI/3);
 			var light3 = new THREE.SpotLight(0xCCCCFF, 1, 8000, Math.PI/3);
@@ -582,7 +575,7 @@
 			
 			scene.add(obj.cameras['writercam']);
 			obj.cameras['writercam'].position.z = 1000;
-
+			
 			var writercomposer = new THREE.EffectComposer(global_engine.renderers['main'],
 				new THREE.WebGLRenderTarget( global_engine.getWidth(), global_engine.getHeight(),
 				{ minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, alpha: true, autoClear: false }
@@ -591,13 +584,12 @@
 			var writerpass = new THREE.RenderPass(scene, obj.cameras['writercam']);
 			writercomposer.addPass(writerpass);
 			writercomposer.clear = false;
-//			writercomposer.needsSwap = true;
-//			writercomposer.clearAlpha = 0;
 
-			var writershader = new THREE.ShaderPass( THREE.PerseilyFade );
-			writershader.needsSwap = true;
+			var writershader = new THREE.ShaderPass( THREE.Perseily );
+			writershader.uniforms['tDiffuse'].value = writercomposer.renderTarget1;
 			writercomposer.addPass(writershader);
 			
+			obj.effects['perseily'] = writershader;
 			obj.renderpasses['writerpass'] = writerpass;
 			obj.composers['writercomposer'] = writercomposer;
 			
@@ -618,8 +610,6 @@
 			var combinerpass = new THREE.ShaderPass(THREE.CopyAlphaTexture);
 			combinerpass.uniforms['tDiffuse1'].value = obj.composers['beercomposer'].renderTarget2;
 			combinerpass.uniforms['tDiffuse2'].value = obj.composers['photocomposer'].renderTarget1;
-			
-//			combinerpass.uniforms['tDiffuse2'].value = obj.composers['writercomposer'].renderTarget1;
 			combinerpass.renderToScreen = false;
 			maincomposer.addPass(combinerpass);
 			
@@ -635,19 +625,19 @@
 		}(ro));
 
 		ro.player = function(partdata, parttick, t) {
-			var pagemaxtime = 4000;
-			var page = Math.floor(parttick / pagemaxtime);
-			var pagetime = parttick - page * pagemaxtime;
+			var pagemaxtime = 8000;
+			var page = Math.floor((parttick) / pagemaxtime);
+			var pagetime = (parttick) - page * pagemaxtime;
 			
 			for (var i=0; i<this.objects['pagemesharr'].length; i++) {
 				for (var j=0; j<this.objects['pagemesharr'][i].length; j++) {
 					if (i == page) {
-						this.objects['pagemesharr'][i][j].position.z = Math.sin(t/200 + j/20) * 500;
+						this.objects['pagemesharr'][i][j].position.z = Math.sin(t/200 + j/20) * 500 + 300;
 						
-						if (pagetime < 1000) {
-							this.objects['pagemesharr'][i][j].material.opacity = pagetime/1000;
-						} else if (pagetime > (pagemaxtime-1000)) {
-							this.objects['pagemesharr'][i][j].material.opacity = (pagemaxtime - pagetime) / 1000;
+						if (pagetime < 500) {
+							this.objects['pagemesharr'][i][j].material.opacity = pagetime/500;
+						} else if (pagetime > (pagemaxtime-500)) {
+							this.objects['pagemesharr'][i][j].material.opacity = (pagemaxtime - pagetime) / 500;
 						} else {
 							this.objects['pagemesharr'][i][j].material.opacity = 1;
 						}
@@ -660,15 +650,17 @@
 			var fftdata = global_engine.getByteFFTData(0);
 
 			phototimer = parttick / 2000;
-				var idx = Math.floor(phototimer);
-				var intrat = (phototimer) % 1;
-
-				var fft = 0.1 + ((fftdata[0] / 256) * 0.2);
-				var specular_color = new THREE.Color(fft, fft, fft);
-				var rnd_color = new THREE.Color(Math.random(), Math.random(), Math.random());
+			var idx = Math.floor(phototimer);
+			var intrat = (phototimer) % 1;
+//			log("" + page + ", " + idx);
+			var fft = 0.1 + ((fftdata[0] / 256) * 0.2);
+			var specular_color = new THREE.Color(fft, fft, fft);
+			var default_specular = new THREE.Color(0.2, 0.2, 0.2);
+			
+//				var rnd_color = new THREE.Color(Math.random(), Math.random(), Math.random());
 
 			if (idx > 4) {
-				this.objects['photomaterials'][Math.floor(idx/2) - 1].specular = 0.1;
+				this.objects['photomaterials'][Math.floor(idx/2) - 1].specular = default_specular;
 				this.objects['photomaterials'][Math.floor(idx/2) + 0].specular = specular_color;
 				this.objects['photomaterials'][Math.floor(idx/2) + 1].specular = specular_color;
 			}
@@ -726,7 +718,24 @@
 			
 			this.composers['beercomposer'].render(dt);
 			this.composers['photocomposer'].render(dt);
+
+/*			
+		"time": { type: "f", value: 1.0 },
+		"intensity": { type: "f", value: 0.005 },
+		"scale": { type: "f", value: 1.4 },
+		"speed": { type: "f", value: 0.4 },
+		"x": { type: "f", value: 0.0 },
+		"y": { type: "f", value: 0.0 }
+*/		
+			var perseily_fft = fftdata[10] / 256.0;
+
+			this.effects['perseily'].uniforms.time.value =  t / 1000;
+			this.effects['perseily'].uniforms.intensity.value =  0.004;
+			this.effects['perseily'].uniforms.scale.value = 1.5;
+			this.effects['perseily'].uniforms.x.value = Math.sin(t / 1000) / 10.0 + 0.1;
+			this.effects['perseily'].uniforms.y.value = Math.cos(t / 345) / 10.0;
 			this.composers['writercomposer'].render(dt);
+			
 			this.composers['maincomposer'].render(dt);
 
 /*

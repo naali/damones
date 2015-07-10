@@ -198,13 +198,21 @@ function DemoEngine(selector, width, height) {
 		var h = height || this.getHeight();
 		
 		this.rendertargets[name] = {};
-		this.rendertargets[name].target = new THREE.WebGLRenderTarget( Math.floor(width), Math.floor(height), { minFilter: THREE.LinearFilter, magFilter: THREE.NearestFilter, format: THREE.RGBAFormat } );
+		this.rendertargets[name].target = new THREE.WebGLRenderTarget( Math.floor(width), Math.floor(height), { minFilter: THREE.LinearFilter, magFilter: THREE.NearestFilter, format: THREE.RGBAFormat, alpha: true, autoClear: false } );
 		this.rendertargets[name].width = Math.floor(width);
 		this.rendertargets[name].height = Math.floor(height);
 		
 		this.rendertargets[name].getAspectRatio = function(){
 			return this.width/this.height;
 		}
+		
+		return this.rendertargets[name].target;
+	}
+	
+	this.swapRenderTargets = function(name1, name2) {
+		var tmp = this.rendertargets[name1];
+		this.rendertargets[name1] = this.rendertargets[name2];
+		this.rendertargets[name2] = tmp;
 	}
 	
 	this.addRenderer = function(name, antialias, shadowmap, width, height) {
