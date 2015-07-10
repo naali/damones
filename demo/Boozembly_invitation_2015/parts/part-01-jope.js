@@ -19,22 +19,436 @@
 		ro.rendertargets = {};
 		ro.renderpasses = {};
 		ro.materials = {};
+		ro.contentarr = [
+				{ 
+					photos: [
+						"pic_placeholder_1",	// tyhjä
+						"pic_placeholder_1"		// tyhjä
+					],
+					texts: [
+						"" // intentionally left blank
+					]
+				},
+				{ 
+					photos: [
+						"pic_placeholder_1",	// tyhjä
+						"picb_landscape_36"		// sasku pyllistää
+					],
+					texts: [
+						"Damones",
+						"with",
+						"Boozembly",
+						"disorganizing"
+					]
+				},
+				{ 
+					photos: [
+						"pic_landscape_5", 		// Lennu tuolissa
+						"picb_landscape_3"		// damones
+					],
+					texts: [
+						"Invites",
+						"you to the",
+						"21st annual",
+						"summer camp"
+					]
+				},
+				{ 
+					photos: [
+						"picb_landscape_7",		// Pablo ja muita
+						"picb_landscape_12"		// Adam ja muita
+					],
+					texts: [
+						""
+					]
+				},
+				{ 
+					photos: [
+						"picb_landscape_13",	// Kurkku
+						"picb_landscape_22"		// Ade ja jotain
+					],
+					texts: [
+						"Boozembly 2015",
+						"--------------",
+						"30th Jul - 2nd Aug"
+					]
+				},
+				{ 
+					photos: [
+						"picb_landscape_27",	// Hao
+						"picb_landscape_40"		// Hassu hattu
+					],
+					texts: [
+						"Boozembly",
+						"features"
+					]
+				},
+				{ 
+					photos: [
+						"pic_portrait_9", 		// Zados
+						"picb_landscape_17"		// Adam ja jotain
+					],
+					texts: [
+						"Perfect",
+						"weather"
+					]
+				},
+				{ 
+					photos: [
+						"picb_portrait_13", 	// Evästys
+						"picb_landscape_15" 	// Grillausta
+					],
+					texts: [
+						"Mouthwatering",
+						"barbeque",
+						"experience"
+					]
+				},
+				{ 
+					photos: [
+						"pic_kakka_2",			// kalja-allas täynnä
+						"picb_landscape_50"		// kalja-allas lähikuva
+					],
+					texts: [
+						"Ice cold",
+						"beer pool"
+					]
+				},
+				{ 
+					photos: [
+						"pic_portrait_10", 		// kisu + dogo
+						"pic_landscape_9"		// Ade ja joku
+					],
+					texts: [
+						"Happy",
+						"reunions"
+					]
+				},
+				{ 
+					photos: [
+						"pic_kakka_1", 			// paitalootat
+						"picb_portrait_15" 		// uncle-x
+					],
+					texts: [
+						"Official",
+						"Boozembly",
+						"t-shirts"
+					]
+				},
+				{ 
+					photos: [
+						"pic_portrait_3",		// Hevospää
+						"picb_landscape_33"		// irwin
+					],
+					texts: [
+						"People",
+						"Horsing",
+						"around"
+					]
+				},
+				{ 
+					photos: [
+						"picb_landscape_26", 	// brite
+						"picb_landscape_1"		// kraku + vaimo
+					],
+					texts: [
+						"Demoscene",
+						"legends",
+						"in Bright Light"
+					]
+				},
+				{ 
+					photos: [
+						"picb_portrait_7",		// Jugi
+						"picb_landscape_37" 	// Virne + Apatia
+					],
+					texts: [
+						"Veteran",
+						"multimedia",
+						"innovators"
+					]
+				},
+				{ 
+					photos: [
+						"picb_landscape_45",	// Rotsi
+						"picb_portrait_2"		// random1
+					],
+					texts: [
+						"Boozembly 2015",
+						"is all this",
+						"and even more!"
+					]
+				},
+				{ 
+					photos: [
+						"picb_portrait_4", 		// lucas
+						"picb_portrait_16"		// dustie
+					],
+					texts: [
+						"Make room",
+						"in your",
+						"calendar",
+						"now"
+					]
+				},
+				{ 
+					photos: [
+						"pic_portrait_8",		// Truck
+						"picb_landscape_29"		// Biini valotikkupää
+					],
+					texts: [
+						"the longest night",
+						"of the year",
+						"is coming!"
+					]
+				},
+				{ 
+					photos: [
+						"picb_landscape_31",	// Dunc + reed
+						"picb_landscape_30"		// Murkku
+					],
+					texts: [
+						"30th of July",
+						"-",
+						"2nd of August"
+					]
+				},
+				{ 
+					photos: [
+						"picb_portrait_6", 		// Vattu
+						"picb_landscape_10"		// Jope + Riku
+					],
+					texts: [
+						"Boozembly 2015",
+					]
+				},
+				{ 
+					photos: [
+						"picb_landscape_48",
+						"picb_landscape_49"
+					],
+					texts: [
+						"The outdoor",
+						"adventure you",
+						"don't want to miss!",
+					]
+				},
+				{ 
+					photos: [
+						"picb_landscape_6", 	// Tazzen sisko
+						"picb_landscape_14"
+					],
+					texts: [
+						"",
+					]
+				},
+				{ 
+					photos: [
+						"pic_portrait_7", 		// Hevospää
+						"picb_landscape_18" 	// lennu keskari
+					],
+					texts: [
+						"Greetings",
+						"fly",
+						"to"
+					]
+				},
+				{ 
+					photos: [
+						"picb_portrait_10", 	// Tikkis
+						"picb_portrait_14"		// Suckho
+					],
+					texts: [
+						"Byterapers",
+						"Fairlight",
+						"Komplex",
+						"CNCD",
+						"TRSI"
+					]
+				},
+				{ 
+					photos: [
+						"pic_portrait_4",		// Urs thumbs up
+						"picb_landscape_8"		// Argon
+					],
+					texts: [
+						"Extend",
+						"Scoopex",
+						"Mercury",
+						"Pyrotech",
+						"Wide Load"
+					]
+				},
+				{ 
+					photos: [
+						"picb_landscape_41", 	// ana + reed
+						"picb_portrait_17"		// Karva + tupi
+					],
+					texts: [
+						"Darklite",
+						"Accession",
+						"Kewlers",
+						"Kooma",
+						"Flo"
+					]
+				},
+				{ 
+					photos: [
+						"picb_landscape_16", 	// xmunkki
+						"picb_landscape_19" 	// 216
+					],
+					texts: [
+						""
+					]
+				},
+				{ 
+					photos: [
+						"picb_portrait_12", 	// Aksu grillaa
+						"pic_portrait_6"		// Mukle
+					],
+					texts: [
+						"If you have",
+						"extra beer or",
+						"sausages to",
+						"donate"
+					]
+				},
+				{ 
+					photos: [
+						"picb_landscape_46",	// Lennu
+						"pic_landscape_7"		// Kakka
+					],
+					texts: [
+						"Please contact",
+						"your nearest",
+						"Boozembly",
+						"disorganizer"
+					]
+				},
+				{ 
+					photos: [
+						"picb_landscape_25",	// yleiskuva
+						"picb_landscape_20"		//
+					],
+					texts: [
+						""
+					]
+				},
+				{ 
+					photos: [
+						"pic_portrait_1", 		//
+						"picb_landscape_35"		// Piraattiteltta
+					],
+					texts: [
+						"Credits",
+						"for this",
+						"invitation"
+					]
+				},
+				{ 
+					photos: [
+						"pic_landscape_1",		// Kakka + niki laatikossa
+						"pic_portrait_2"		// Kakka
+						
+					],
+					texts: [
+						"Code:",
+						"Kakka"
+					]
+				},
+				{ 
+					photos: [
+						"pic_kikka_square_1",	// Kikka
+						"pic_kikka_square_2"	// Wal
+					],
+					texts: [
+						"Music:",
+						"Kikka",
+						"cover by",
+						"Wal"
+					]
+				},
+				{ 
+					photos: [
+						"picb_landscape_52",	// Kani + jope (bzm 2013)
+						"picb_landscape_34"		// Mazor + destop
+					],
+					texts: [
+						"Graphics:",
+						"H7",
+						"Mazor"
+					]
+				},
+				{ 
+					photos: [
+						"pic_portrait_5",		// Biini
+						"picb_landscape_51"		// Norppa
+					],
+					texts: [
+						"Photos:",
+						"Biini",
+						"Norppa"
+					]
+				},
+				{ 
+					photos: [
+						"picb_landscape_28", 	//
+						"picb_landscape_43" 	//
+					],
+					texts: [
+						""
+					]
+				},
+				{ 
+					photos: [
+						"pic_landscape_2", 		// Tazza + sisko
+						"pic_landscape_8" 		// Kisu + bracket
+					],
+					texts: [
+						"Thanks",
+						"for",
+						"watching!"
+					]
+				},
+				{ 
+					photos: [
+						"picb_landscape_38",	// speedu + vessu
+						"picb_portrait_8"		//
+					],
+					texts: [
+						"This invitation",
+						"will",
+						"now",
+						"repeat"
+					]
+				},
+				{ 
+					photos: [
+						"picb_landscape_39", 	// Psyko
+						"picb_landscape_4" 		// Slobber
+					],
+					texts: [
+						"Press",
+						"[esc]",
+						"to",
+						"exit"
+					]
+				},
+				{ 
+					photos: [
+						"pic_placeholder_1",	// tyhjä
+						"pic_placeholder_1"		// tyhjä
+					],
+					texts: [
+						""
+					]
+				}
+			];		
+		
 		
 		ro.functions = {
 			CMR: function(p0, p1, p2, p3, t) {
 				return 0.5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t*t + (-p0 + 3*p1 - 3*p2 + p3) * t*t*t);
-			},
-			FYSuffle: function(arr) {
-				var c = arr.length;
-				
-				while (c) {
-					var idx = Math.floor(Math.random() * c--) | 0;
-					var tmp = arr[idx];
-					arr[c] = arr[idx];
-					arr[idx] = tmp;
-				}
-			
-				return arr;
 			}
 		}
 		
@@ -142,7 +556,7 @@
 			var testgeometry = new THREE.BoxGeometry(100,100,100);
 			
 			var intersectiontest = function(testarray, mesh) {
-				return false; // ASDQWE
+//				return false; // ASDQWE
 				
 				var index;
 				var position;
@@ -202,20 +616,22 @@
 			var cameraviewports = [];
 			var bbcheckarr = [];
 
-			var photoboxgeom = new THREE.BoxGeometry(1500,1500,3500);
+			var photoboxgeom = new THREE.BoxGeometry(1200,1200,3000);
 			photoboxgeom.applyMatrix(new THREE.Matrix4().makeTranslation(0, 0, 950));
 			var photoboxmaterial = new THREE.MeshBasicMaterial({ color: 0xFF0000 });
 			photoboxmaterial.side = THREE.DoubleSide;
-
+			
 			for (var i=0; i<obj.objects['photomaterials'].length; i++) {
+				var iter = 0;
+			
 				do {
 					var material = obj.objects['photomaterials'][i];
 					var geometry = obj.objects['photogeometries']['' + material.pixelwidth + "x" + material.pixelheight] ;
 					var mesh = new THREE.Mesh(geometry, material);
 
-					var mesh_x_pos = Math.random() * 10000 - 5000;
-					var mesh_y_pos = Math.random() * 10000 - 5000;
-					var mesh_z_pos = Math.random() * 10000 - 5000;
+					var mesh_x_pos = (Math.random() - 0.5) * (10000 + (iter < 1000 ? iter : 1000));
+					var mesh_y_pos = (Math.random() - 0.5) * (10000 + (iter < 1000 ? iter : 1000));
+					var mesh_z_pos = (Math.random() - 0.5) * 10000;
 				
 					var mesh_rot_y = Math.random() * Math.PI * 4 - Math.PI * 2;
 					var mesh_rot_x = Math.random() * Math.PI * 4 - Math.PI * 2;
@@ -247,8 +663,12 @@
 					photoboxmesh.position.set(mesh_x_pos, mesh_y_pos, mesh_z_pos);
 					photoboxmesh.rotation.set(mesh_rot_y, mesh_rot_x, mesh_rot_z);
 					photoboxmesh.updateMatrixWorld();
+					
+					iter++;
 
 				} while (intersectiontest(bbcheckarr, mesh));
+				
+				log(iter);
 				
 				scene.add(mesh);
 				bbcheckarr.push(mesh);
@@ -259,31 +679,16 @@
 				obj.objects['photopositions'].push(photoobj);
 				obj.objects['photopositions'].push(photoobj2);
 			}
-
-			for (var i=0; i<100; i++) {
-				do {
-					var material = obj.objects['photomaterials'][i  % obj.objects['photomaterials'].length];
-					var geometry = obj.objects['photogeometries']['' + material.pixelwidth + "x" + material.pixelheight] ;
-				
-					var mesh = new THREE.Mesh(geometry, material);
-					var mesh_x_pos = Math.random() * 20000 - 10000;
-					var mesh_y_pos = Math.random() * 20000 - 10000;
-					var mesh_z_pos = Math.random() * 10000 - 5000;
-				
-					var mesh_rot_y = Math.random() * Math.PI * 4 - Math.PI * 2;
-					var mesh_rot_x = Math.random() * Math.PI * 4 - Math.PI * 2;
-					var mesh_rot_z = Math.random() * Math.PI * 4 - Math.PI * 2;
-
-					mesh.position.set(mesh_x_pos, mesh_y_pos, mesh_z_pos);
-					mesh.rotation.set(mesh_rot_y, mesh_rot_x, mesh_rot_z);
-					mesh.updateMatrixWorld();
-
-				} while (intersectiontest(bbcheckarr, mesh));
-				
-				scene.add(mesh);
-				bbcheckarr.push(mesh);
-			}
 			
+			obj.objects['photopositions'].push(obj.objects['photopositions'][0]);
+			obj.objects['photopositions'].push(obj.objects['photopositions'][1]);
+			obj.objects['photopositions'].push(obj.objects['photopositions'][2]);
+			obj.objects['photopositions'].push(obj.objects['photopositions'][3]);
+			obj.objects['photopositions'].push(obj.objects['photopositions'][4]);
+			obj.objects['photopositions'].push(obj.objects['photopositions'][5]);
+			obj.objects['photopositions'].push(obj.objects['photopositions'][6]);
+			obj.objects['photopositions'].push(obj.objects['photopositions'][7]);
+
 			var light1 = new THREE.SpotLight(0xFFCCCC, 1, 8000, Math.PI/3);
 			var light2 = new THREE.SpotLight(0xCCFFCC, 1, 8000, Math.PI/3);
 			var light3 = new THREE.SpotLight(0xCCCCFF, 1, 8000, Math.PI/3);
@@ -333,197 +738,12 @@
 		
 			var scene = new THREE.Scene();			
 
-			var textarr = [
-				[
-					"" // intentionally left blank
-				],
-				[
-					"Damones",
-					"with",
-					"Boozembly",
-					"disorganizing"
-				],
-				[
-					"Invites",
-					"you to the",
-					"21st annual",
-					"summer camp"
-				],
-				[
-					""
-				],
-				[
-					"Boozembly 2015",
-					"--------------",
-					"30th Jul - 2nd Aug"
-				],
-				[
-					"Boozembly",
-					"features"
-				],
-				[
-					"Perfect",
-					"weather"
-				],
-				[
-					"Mouthwatering",
-					"barbeque",
-					"experience"
-				],
-				[
-					"Ice cold",
-					"beer pool"
-				],
-				[
-					"Happy",
-					"reunions"
-				],
-				[
-					"Official",
-					"Boozembly",
-					"t-shirts"
-				],
-				[
-					"People",
-					"Horsing",
-					"around"
-				],
-				[
-					"Demoscene",
-					"Legends",
-					"in Bright Light"
-				],
-				[
-					"Multimedia",
-					"talents"
-				],
-				[
-					"Boozembly 2015",
-					"is all that",
-					"and even more!"
-				],
-				[
-					"Make room",
-					"in your",
-					"calendar",
-					"now"
-				],
-				[
-					"the longest night",
-					"of the year",
-					"is coming!"
-				],
-				[
-					"30th of July",
-					"-",
-					"2nd of August"
-				],
-				[
-					"Boozembly 2015",
-				],
-				[
-					"The outdoor",
-					"adventure you",
-					"don't want to miss!",
-				],
-				[
-					"",
-				],
-				[
-					"Greetings",
-					"fly",
-					"to"
-				],
-				[
-					"Byterapers",
-					"Fairlight",
-					"Komplex",
-					"CNCD",
-					"TRSI"
-				],
-				[
-					"Extend",
-					"Scoopex",
-					"Mercury",
-					"Pyrotech",
-					"Wide Load"
-				],
-				[
-					"Darklite",
-					"Accession",
-					"Kewlers",
-					"Kooma",
-					"Flo"
-				],
-				[
-					""
-				],
-				[
-					"If you have",
-					"extra beer or",
-					"sausages to",
-					"donate"
-				],
-				[
-					"Please contact",
-					"your nearest",
-					"Boozembly",
-					"disorganizer"
-				],
-				[
-					""
-				],
-				[
-					"Credits",
-					"for this",
-					"invitation"
-				],
-				[
-					"Code:",
-					"Kakka"
-				],
-				[
-					"Music:",
-					"Kikka cover",
-					"by",
-					"Wal"
-				],
-				[
-					"Graphics:",
-					"H7",
-					"Mazor"
-				],
-				[
-					"Photos:",
-					"Biini",
-					"Norppa"
-				],
-				[
-					""
-				],
-				[
-					"Thanks",
-					"for",
-					"watching!"
-				],
-				[
-					"This invitation",
-					"will",
-					"now",
-					"repeat"
-				],
-				[
-					"Press",
-					"[esc]",
-					"to",
-					"exit"
-				],
-				[
-					""
-				]
-			];
+			var textarr = [];
+
+			for (var i=0; i<obj['contentarr'].length; i++) {
+				textarr.push(obj['contentarr'][i]['texts']);
+			}
 			
-			obj.objects['textarr'] = textarr;
 			obj.objects['chargeoms'] = [];
 			obj.objects['textcolors'] = {
 				'0': 0xe0ab1d,
