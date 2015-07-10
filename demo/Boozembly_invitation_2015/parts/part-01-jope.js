@@ -22,8 +22,8 @@
 		ro.contentarr = [
 				{ 
 					photos: [
-						"pic_placeholder_1",	// tyhjä
-						"pic_placeholder_1"		// tyhjä
+						"image_pic_placeholder_1",	// tyhjä
+						"image_pic_placeholder_1"		// tyhjä
 					],
 					texts: [
 						"" // intentionally left blank
@@ -31,8 +31,8 @@
 				},
 				{ 
 					photos: [
-						"pic_placeholder_1",	// tyhjä
-						"picb_landscape_36"		// sasku pyllistää
+						"image_pic_placeholder_1",	// tyhjä
+						"image_picb_landscape_36"		// sasku pyllistää
 					],
 					texts: [
 						"Damones",
@@ -43,8 +43,8 @@
 				},
 				{ 
 					photos: [
-						"pic_landscape_5", 		// Lennu tuolissa
-						"picb_landscape_3"		// damones
+						"image_pic_landscape_5", 		// Lennu tuolissa
+						"image_picb_landscape_3"		// damones
 					],
 					texts: [
 						"Invites",
@@ -55,8 +55,8 @@
 				},
 				{ 
 					photos: [
-						"picb_landscape_7",		// Pablo ja muita
-						"picb_landscape_12"		// Adam ja muita
+						"image_picb_landscape_7",		// Pablo ja muita
+						"image_picb_landscape_12"		// Adam ja muita
 					],
 					texts: [
 						""
@@ -64,8 +64,8 @@
 				},
 				{ 
 					photos: [
-						"picb_landscape_13",	// Kurkku
-						"picb_landscape_22"		// Ade ja jotain
+						"image_picb_landscape_13",	// Kurkku
+						"image_picb_landscape_22"		// Ade ja jotain
 					],
 					texts: [
 						"Boozembly 2015",
@@ -75,8 +75,8 @@
 				},
 				{ 
 					photos: [
-						"picb_landscape_27",	// Hao
-						"picb_landscape_40"		// Hassu hattu
+						"image_picb_landscape_27",	// Hao
+						"image_picb_landscape_40"		// Hassu hattu
 					],
 					texts: [
 						"Boozembly",
@@ -85,8 +85,8 @@
 				},
 				{ 
 					photos: [
-						"pic_portrait_9", 		// Zados
-						"picb_landscape_17"		// Adam ja jotain
+						"image_pic_portrait_9", 		// Zados
+						"image_picb_landscape_17"		// Adam ja jotain
 					],
 					texts: [
 						"Perfect",
@@ -95,8 +95,8 @@
 				},
 				{ 
 					photos: [
-						"picb_portrait_13", 	// Evästys
-						"picb_landscape_15" 	// Grillausta
+						"image_picb_portrait_13", 	// Evästys
+						"image_picb_landscape_15" 	// Grillausta
 					],
 					texts: [
 						"Mouthwatering",
@@ -106,8 +106,8 @@
 				},
 				{ 
 					photos: [
-						"pic_kakka_2",			// kalja-allas täynnä
-						"picb_landscape_50"		// kalja-allas lähikuva
+						"image_pic_kakka_2",			// kalja-allas täynnä
+						"image_picb_landscape_50"		// kalja-allas lähikuva
 					],
 					texts: [
 						"Ice cold",
@@ -116,8 +116,8 @@
 				},
 				{ 
 					photos: [
-						"pic_portrait_10", 		// kisu + dogo
-						"pic_landscape_9"		// Ade ja joku
+						"image_pic_portrait_10", 		// kisu + dogo
+						"image_pic_landscape_9"		// Ade ja joku
 					],
 					texts: [
 						"Happy",
@@ -126,8 +126,8 @@
 				},
 				{ 
 					photos: [
-						"pic_kakka_1", 			// paitalootat
-						"picb_portrait_15" 		// uncle-x
+						"image_pic_kakka_1", 			// paitalootat
+						"image_picb_portrait_15" 		// uncle-x
 					],
 					texts: [
 						"Official",
@@ -137,8 +137,8 @@
 				},
 				{ 
 					photos: [
-						"pic_portrait_3",		// Hevospää
-						"picb_landscape_33"		// irwin
+						"image_pic_portrait_3",		// Hevospää
+						"image_picb_landscape_33"		// irwin
 					],
 					texts: [
 						"People",
@@ -148,8 +148,8 @@
 				},
 				{ 
 					photos: [
-						"picb_landscape_26", 	// brite
-						"picb_landscape_1"		// kraku + vaimo
+						"image_picb_landscape_26", 	// brite
+						"image_picb_landscape_1"		// kraku + vaimo
 					],
 					texts: [
 						"Demoscene",
@@ -159,8 +159,8 @@
 				},
 				{ 
 					photos: [
-						"picb_portrait_7",		// Jugi
-						"picb_landscape_37" 	// Virne + Apatia
+						"image_picb_portrait_7",		// Jugi
+						"image_picb_landscape_37" 	// Virne + Apatia
 					],
 					texts: [
 						"Veteran",
@@ -170,8 +170,8 @@
 				},
 				{ 
 					photos: [
-						"picb_landscape_45",	// Rotsi
-						"picb_portrait_2"		// random1
+						"image_picb_landscape_45",	// Rotsi
+						"image_picb_portrait_2"		// random1
 					],
 					texts: [
 						"Boozembly 2015",
@@ -181,8 +181,8 @@
 				},
 				{ 
 					photos: [
-						"picb_portrait_4", 		// lucas
-						"picb_portrait_16"		// dustie
+						"image_picb_portrait_4", 		// lucas
+						"image_picb_portrait_16"		// dustie
 					],
 					texts: [
 						"Make room",
@@ -193,8 +193,8 @@
 				},
 				{ 
 					photos: [
-						"pic_portrait_8",		// Truck
-						"picb_landscape_29"		// Biini valotikkupää
+						"image_pic_portrait_8",		// Truck
+						"image_picb_landscape_29"		// Biini valotikkupää
 					],
 					texts: [
 						"the longest night",
@@ -204,8 +204,8 @@
 				},
 				{ 
 					photos: [
-						"picb_landscape_31",	// Dunc + reed
-						"picb_landscape_30"		// Murkku
+						"image_picb_landscape_31",	// Dunc + reed
+						"image_picb_landscape_30"		// Murkku
 					],
 					texts: [
 						"30th of July",
@@ -215,8 +215,8 @@
 				},
 				{ 
 					photos: [
-						"picb_portrait_6", 		// Vattu
-						"picb_landscape_10"		// Jope + Riku
+						"image_picb_portrait_6", 		// Vattu
+						"image_picb_landscape_10"		// Jope + Riku
 					],
 					texts: [
 						"Boozembly 2015",
@@ -224,8 +224,8 @@
 				},
 				{ 
 					photos: [
-						"picb_landscape_48",
-						"picb_landscape_49"
+						"image_picb_landscape_48",
+						"image_picb_landscape_49"
 					],
 					texts: [
 						"The outdoor",
@@ -235,8 +235,8 @@
 				},
 				{ 
 					photos: [
-						"picb_landscape_6", 	// Tazzen sisko
-						"picb_landscape_14"
+						"image_picb_landscape_6", 	// Tazzen sisko
+						"image_picb_landscape_14"
 					],
 					texts: [
 						"",
@@ -244,8 +244,8 @@
 				},
 				{ 
 					photos: [
-						"pic_portrait_7", 		// Hevospää
-						"picb_landscape_18" 	// lennu keskari
+						"image_pic_portrait_7", 		// Hevospää
+						"image_picb_landscape_18" 	// lennu keskari
 					],
 					texts: [
 						"Greetings",
@@ -255,8 +255,8 @@
 				},
 				{ 
 					photos: [
-						"picb_portrait_10", 	// Tikkis
-						"picb_portrait_14"		// Suckho
+						"image_picb_portrait_10", 	// Tikkis
+						"image_picb_portrait_14"		// Suckho
 					],
 					texts: [
 						"Byterapers",
@@ -268,8 +268,8 @@
 				},
 				{ 
 					photos: [
-						"pic_portrait_4",		// Urs thumbs up
-						"picb_landscape_8"		// Argon
+						"image_pic_portrait_4",		// Urs thumbs up
+						"image_picb_landscape_8"		// Argon
 					],
 					texts: [
 						"Extend",
@@ -281,8 +281,8 @@
 				},
 				{ 
 					photos: [
-						"picb_landscape_41", 	// ana + reed
-						"picb_portrait_17"		// Karva + tupi
+						"image_picb_landscape_41", 	// ana + reed
+						"image_picb_portrait_17"		// Karva + tupi
 					],
 					texts: [
 						"Darklite",
@@ -294,8 +294,8 @@
 				},
 				{ 
 					photos: [
-						"picb_landscape_16", 	// xmunkki
-						"picb_landscape_19" 	// 216
+						"image_picb_landscape_16", 	// xmunkki
+						"image_picb_landscape_19" 	// 216
 					],
 					texts: [
 						""
@@ -303,8 +303,8 @@
 				},
 				{ 
 					photos: [
-						"picb_portrait_12", 	// Aksu grillaa
-						"pic_portrait_6"		// Mukle
+						"image_picb_portrait_12", 	// Aksu grillaa
+						"image_pic_portrait_6"		// Mukle
 					],
 					texts: [
 						"If you have",
@@ -315,8 +315,8 @@
 				},
 				{ 
 					photos: [
-						"picb_landscape_46",	// Lennu
-						"pic_landscape_7"		// Kakka
+						"image_picb_landscape_46",	// Lennu
+						"image_pic_landscape_7"		// Kakka
 					],
 					texts: [
 						"Please contact",
@@ -327,8 +327,8 @@
 				},
 				{ 
 					photos: [
-						"picb_landscape_25",	// yleiskuva
-						"picb_landscape_20"		//
+						"image_picb_landscape_25",	// yleiskuva
+						"image_picb_landscape_20"		//
 					],
 					texts: [
 						""
@@ -336,8 +336,8 @@
 				},
 				{ 
 					photos: [
-						"pic_portrait_1", 		//
-						"picb_landscape_35"		// Piraattiteltta
+						"image_pic_portrait_1", 		//
+						"image_picb_landscape_35"		// Piraattiteltta
 					],
 					texts: [
 						"Credits",
@@ -347,8 +347,8 @@
 				},
 				{ 
 					photos: [
-						"pic_landscape_1",		// Kakka + niki laatikossa
-						"pic_portrait_2"		// Kakka
+						"image_pic_landscape_1",		// Kakka + niki laatikossa
+						"image_pic_portrait_2"		// Kakka
 						
 					],
 					texts: [
@@ -358,8 +358,8 @@
 				},
 				{ 
 					photos: [
-						"pic_kikka_square_1",	// Kikka
-						"pic_kikka_square_2"	// Wal
+						"image_pic_kikka_square_1",	// Kikka
+						"image_pic_kikka_square_2"	// Wal
 					],
 					texts: [
 						"Music:",
@@ -370,8 +370,8 @@
 				},
 				{ 
 					photos: [
-						"picb_landscape_52",	// Kani + jope (bzm 2013)
-						"picb_landscape_34"		// Mazor + destop
+						"image_picb_landscape_52",	// Kani + jope (bzm 2013)
+						"image_picb_landscape_34"		// Mazor + destop
 					],
 					texts: [
 						"Graphics:",
@@ -381,8 +381,8 @@
 				},
 				{ 
 					photos: [
-						"pic_portrait_5",		// Biini
-						"picb_landscape_51"		// Norppa
+						"image_pic_portrait_5",		// Biini
+						"image_picb_landscape_51"		// Norppa
 					],
 					texts: [
 						"Photos:",
@@ -392,8 +392,8 @@
 				},
 				{ 
 					photos: [
-						"picb_landscape_28", 	//
-						"picb_landscape_43" 	//
+						"image_picb_landscape_28", 	//
+						"image_picb_landscape_43" 	//
 					],
 					texts: [
 						""
@@ -401,8 +401,8 @@
 				},
 				{ 
 					photos: [
-						"pic_landscape_2", 		// Tazza + sisko
-						"pic_landscape_8" 		// Kisu + bracket
+						"image_pic_landscape_2", 		// Tazza + sisko
+						"image_pic_landscape_8" 		// Kisu + bracket
 					],
 					texts: [
 						"Thanks",
@@ -412,8 +412,8 @@
 				},
 				{ 
 					photos: [
-						"picb_landscape_38",	// speedu + vessu
-						"picb_portrait_8"		//
+						"image_picb_landscape_38",	// speedu + vessu
+						"image_picb_portrait_8"		//
 					],
 					texts: [
 						"This invitation",
@@ -424,8 +424,8 @@
 				},
 				{ 
 					photos: [
-						"picb_landscape_39", 	// Psyko
-						"picb_landscape_4" 		// Slobber
+						"image_picb_landscape_39", 	// Psyko
+						"image_picb_landscape_4" 		// Slobber
 					],
 					texts: [
 						"Press",
@@ -436,8 +436,26 @@
 				},
 				{ 
 					photos: [
-						"pic_placeholder_1",	// tyhjä
-						"pic_placeholder_1"		// tyhjä
+						"image_pic_placeholder_1",	// tyhjä
+						"image_pic_placeholder_1"		// tyhjä
+					],
+					texts: [
+						""
+					]
+				},
+				{ 
+					photos: [
+						"image_pic_placeholder_1",	// tyhjä
+						"image_pic_placeholder_1"		// tyhjä
+					],
+					texts: [
+						""
+					]
+				},
+				{ 
+					photos: [
+						"image_pic_placeholder_1",	// tyhjä
+						"image_pic_placeholder_1"		// tyhjä
 					],
 					texts: [
 						""
@@ -510,44 +528,67 @@
 			obj.objects['photomaterials'] = [];
 			obj.objects['photogeometries'] = {};
 			
-			var photoconf = [
-				{name: '_pic_placeholder', amount: 2, wmul:1, hmul: 1, transparent: true},
-				{name: '_pic_kakka', amount: 4, wmul: 1280/1024, hmul: 720/512},
-				{name: '_pic_kikka_square', amount: 2, wmul: 1, hmul: 1},
-				{name: '_picb_landscape', amount: 49, wmul: 1080/1024, hmul: 720 / 512},
-				{name: '_picb_portrait', amount: 17, wmul: 720 / 512, hmul: 1080/1024},
-				{name: '_pic_landscape', amount: 9, wmul: 1, hmul: 1.33333},
-				{name: '_pic_portrait', amount: 10, wmul: 1.3333, hmul: 1}
+			var settingsarray = [
+				{ re: new RegExp("^image_pic_placeholder"), conf: { amount: 2, wmul:1, hmul: 1, transparent: true } },
+				{ re: new RegExp("^image_pic_kakka"), conf: { amount: 4, wmul: 1280/1024, hmul: 720/512, transparent: false } },
+				{ re: new RegExp("^image_pic_kikka_square"), conf: { amount: 2, wmul: 1, hmul: 1, transparent: false } },
+				{ re: new RegExp("^image_picb_landscape"), conf: { amount: 49, wmul: 1080/1024, hmul: 720 / 512, transparent: false } },
+				{ re: new RegExp("^image_picb_portrait"), conf: { amount: 17, wmul: 720 / 512, hmul: 1080/1024, transparent: false } },
+				{ re: new RegExp("^image_pic_landscape"), conf: { amount: 9, wmul: 1, hmul: 1.33333, transparent: false } },
+				{ re: new RegExp("^image_pic_portrait"), conf: { amount: 10, wmul: 1.3333, hmul: 1, transparent: false } },
 			];
 			
+			var photoarray = [];
+			
+			for (var i=0; i<obj.contentarr.length; i++) {
+				for (var j=0; j<2; j++) {
+					var photo = {};
+					photo['name'] = obj.contentarr[i]['photos'][j];
+					
+					for (var k=0; k<settingsarray.length; k++) {
+						if (settingsarray[k].re.test(photo['name'])) {
+							photo['wmul'] = settingsarray[k]['conf']['wmul'];
+							photo['hmul'] = settingsarray[k]['conf']['hmul'];
+							photo['transparent'] = settingsarray[k]['conf']['transparent'];
+						}
+					}
+					
+					photoarray.push(photo);
+				}
+			}
+			
+			log(photoarray);
+
 			var photobumptexture = THREE.ImageUtils.loadTexture(image_concretebump.src);
 			photobumptexture.wrapS = photobumptexture.wrapS = THREE.RepeatWrapping;
 			
-			for (var j=0; j<photoconf.length; j++) {
-				for (var i=1; i<=photoconf[j].amount; i++) {
-					var name = eval('image' + photoconf[j].name + '_' + i + '.src');
-					var width = eval('image' + photoconf[j].name + '_' + i + '.width');
-					var height = eval('image' + photoconf[j].name + '_' + i + '.height');
-					var material;
-					
-					if (photoconf[j].hasOwnProperty('transparent') && photoconf[j]['transparent'] == true) {
-						material = new THREE.MeshPhongMaterial( {map: THREE.ImageUtils.loadTexture(name), bumpMap: photobumptexture, transparent: true, color: 0xFFFFFF, specular: new THREE.Color(0.2, 0.2, 0.2) } );
-					} else {
-						var material = new THREE.MeshPhongMaterial( {map: THREE.ImageUtils.loadTexture(name), bumpMap: photobumptexture, transparent: false, color: 0xFFFFFF, specular: new THREE.Color(0.2, 0.2, 0.2) } );
-					}
-					
-					material.pixelwidth = width * photoconf[j].wmul;
-					material.pixelheight = height * photoconf[j].hmul;
-					material.side = THREE.DoubleSide;
-					material.name = name;
+			for (var i=0; i<photoarray.length; i++) {
+				var name = eval(photoarray[i].name + '.src');
+				var width = eval(photoarray[i].name + '.width');
+				var height = eval(photoarray[i].name + '.height');
+				var material;
 				
+				if (photoarray[i]['transparent'] == true) {
+					material = new THREE.MeshPhongMaterial( {map: THREE.ImageUtils.loadTexture(name), bumpMap: photobumptexture, transparent: true, color: 0xFFFFFF, specular: new THREE.Color(0.2, 0.2, 0.2) } );
+				} else {
+					var material = new THREE.MeshPhongMaterial( {map: THREE.ImageUtils.loadTexture(name), bumpMap: photobumptexture, transparent: false, color: 0xFFFFFF, specular: new THREE.Color(0.2, 0.2, 0.2) } );
+				}
+				
+				material.pixelwidth = width * photoarray[i].wmul;
+				material.pixelheight = height * photoarray[i].hmul;
+				material.side = THREE.DoubleSide;
+				material.name = name;
+				
+				if (i == 0) {
 					obj.objects['photomaterials'].push(material);
-					
-					if (!obj.objects['photogeometries'].hasOwnProperty('' + material.pixelwidth + "x" + material.pixelheight)) {
-						var geometry = new THREE.PlaneBufferGeometry(material.pixelwidth, material.pixelheight, 1, 1);
-						geometry.computeBoundingBox();
-						obj.objects['photogeometries']['' + material.pixelwidth + "x" + material.pixelheight] = geometry;
-					}
+				}
+
+				obj.objects['photomaterials'].push(material);
+				
+				if (!obj.objects['photogeometries'].hasOwnProperty('' + material.pixelwidth + "x" + material.pixelheight)) {
+					var geometry = new THREE.PlaneBufferGeometry(material.pixelwidth, material.pixelheight, 1, 1);
+					geometry.computeBoundingBox();
+					obj.objects['photogeometries']['' + material.pixelwidth + "x" + material.pixelheight] = geometry;
 				}
 			}
 			
@@ -686,8 +727,6 @@
 			obj.objects['photopositions'].push(obj.objects['photopositions'][3]);
 			obj.objects['photopositions'].push(obj.objects['photopositions'][4]);
 			obj.objects['photopositions'].push(obj.objects['photopositions'][5]);
-			obj.objects['photopositions'].push(obj.objects['photopositions'][6]);
-			obj.objects['photopositions'].push(obj.objects['photopositions'][7]);
 
 			var light1 = new THREE.SpotLight(0xFFCCCC, 1, 8000, Math.PI/3);
 			var light2 = new THREE.SpotLight(0xCCFFCC, 1, 8000, Math.PI/3);
