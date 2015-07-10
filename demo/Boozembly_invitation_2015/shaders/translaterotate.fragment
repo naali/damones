@@ -1,4 +1,5 @@
 uniform float opacity;
+uniform vec2 viewportsize;
 uniform float x;
 uniform float y;
 uniform float zoom;
@@ -9,7 +10,7 @@ varying vec2 vUv;
 
 void main(void) {
 	float center = 0.5;
-	vec2 tran_uv = vec2(vUv.x + x, vUv.y + y);
+	vec2 tran_uv = vUv * viewportsize + vec2(x,y);
 	vec2 scale_uv = tran_uv * zoom;
 	vec2 rot_uv = vec2(cos(angle)*(scale_uv.x-center)+sin(angle)*(scale_uv.y-center)+center, 
 		cos(angle)*(scale_uv.y-center)-sin(angle)*(scale_uv.x-center)+ center);

@@ -198,7 +198,7 @@ function DemoEngine(selector, width, height) {
 		var h = height || this.getHeight();
 		
 		this.rendertargets[name] = {};
-		this.rendertargets[name].target = new THREE.WebGLRenderTarget( Math.floor(width), Math.floor(height), { minFilter: THREE.LinearFilter, magFilter: THREE.NearestFilter, format: THREE.RGBAFormat, alpha: true, autoClear: false } );
+		this.rendertargets[name].target = new THREE.WebGLRenderTarget( Math.floor(width), Math.floor(height), { minFilter: THREE.LinearFilter, magFilter: THREE.NearestFilter, format: THREE.RGBAFormat, alpha: true, autoClear: true } );
 		this.rendertargets[name].width = Math.floor(width);
 		this.rendertargets[name].height = Math.floor(height);
 		

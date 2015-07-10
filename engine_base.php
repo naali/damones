@@ -255,6 +255,14 @@
 			var global_audioplayer = null;
 			var global_tick = 0;
 
+<?php if ($demo_loop) { ?>
+			var demo_loop = true;
+			var demo_loop_begin = <?php echo $demo_loop_begin ?>;
+			var demo_loop_end = <?php echo $demo_loop_end ?>;
+<?php } else { ?>
+			var demo_loop = false;
+<?php } ?>
+
 
 <?php if (!$framegrabber) { ?>
 			function update() {
@@ -334,6 +342,11 @@
 				
 				log("Creating Damones demo engine");
 				global_engine = new DemoEngine('#demo', w, h);
+
+				if (demo_loop) {
+					global_engine.setLooping(demo_loop_begin, demo_loop_end);
+				}
+				
 <?php } ?>
 
 				$('html').keyup(function(e) {
@@ -374,12 +387,14 @@
 			$(document).ready(function() {
 				$('#btn_fullscreen_no').off('click').on('click', function() {
 					$('#setup').remove();
+					$('#decrunch').show();
 
 					init();
 			
 <?php if (!$framegrabber) { ?>
 					log("prewarming");
 					global_engine.prewarm();
+					$('#decrunch').remove();
 					
 					log("playing");
 					global_engine.play();
@@ -393,6 +408,7 @@
 				
 				$('#btn_fullscreen_yes').off('click').on('click', function() {
 					$('#setup').remove();
+					$('#decrunch').show();
 
 					launchFullScreen(document.getElementById('html'));
 					
@@ -403,6 +419,7 @@
 <?php if (!$framegrabber) { ?>
 							log("prewarming");
 							global_engine.prewarm();
+							$('#decrunch').remove();
 
 							log("playing");
 							global_engine.play();
@@ -432,10 +449,15 @@
 			<div id="demo" class="demo"></div>
 		</div>
 		<div id="setup" class="setup" style="display: none;">
-			<label>Run fullscreen?</label>
-			<button id="btn_fullscreen_yes" class="yes">Yes</button>
-			<button id="btn_fullscreen_no" class="no">No</button>
-			<button id="btn_fullscreen_maybe" class="maybe">Maybe</button>
+			<div id="start" style="display: block;">
+				<label>Run fullscreen?</label>
+				<button id="btn_fullscreen_yes" class="yes">Yes</button>
+				<button id="btn_fullscreen_no" class="no">No</button>
+				<button id="btn_fullscreen_maybe" class="maybe">Maybe</button>
+			</div>
+			<div id="decrunch" style="display: none;">
+				<p>Decrunching...</p>
+			</div>
 		</div>
 	</body>
 </html>

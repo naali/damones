@@ -2,7 +2,7 @@
 	data: (function() {
 		var ro = {};
 		ro.partname = 'Boozembly 2015 - intro';
-		ro.partlength = 100; //Math.floor(1000 * 15.24);
+		ro.partlength = 15000;
 		ro.cameras = {
 			'logocam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 10000)
 		};
