@@ -26,12 +26,7 @@
 						"image_pic_placeholder_1" 	// tyhjä
 					],
 					texts: [
-						"°0asdasdasdasdasd",
-						"°1asdasdasdasdasd",
-						"°2asdasdasdasdasd",
-						"°3asdasdasdasdasd",
-						"°4asdasdasdasdasd",
-						"°5asdasdasdasdasd",
+						"",
 					]
 				},
 				{ 
@@ -357,7 +352,7 @@
 						
 					],
 					texts: [
-						"°7Code:",
+						"°3Code:",
 						"°0Kakka"
 					]
 				},
@@ -367,7 +362,7 @@
 						"image_pic_kikka_square_2"	// Wal
 					],
 					texts: [
-						"°7Music:",
+						"°3Music:",
 						"°0Kikka",
 						"°1cover by",
 						"°0Wal"
@@ -379,7 +374,7 @@
 						"image_picb_landscape_34"		// Mazor + destop
 					],
 					texts: [
-						"°7Graphics:",
+						"°3Graphics:",
 						"°0H7",
 						"°0Mazor"
 					]
@@ -390,7 +385,7 @@
 						"image_picb_landscape_51"		// Norppa
 					],
 					texts: [
-						"°7Photos:",
+						"°3Photos:",
 						"°0Biini",
 						"°0Norppa"
 					]
