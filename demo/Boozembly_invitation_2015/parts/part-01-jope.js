@@ -396,6 +396,7 @@
 						"image_picb_landscape_43" 	//
 					],
 					texts: [
+						"",
 						""
 					]
 				},
@@ -405,9 +406,9 @@
 						"image_pic_landscape_8" 		// Kisu + bracket
 					],
 					texts: [
-						"Thanks",
-						"for",
-						"watching!"
+						"See you all",
+						"at",
+						"the Boozembly!"
 					]
 				},
 				{ 
@@ -462,7 +463,6 @@
 					]
 				}
 			];		
-		
 		
 		ro.functions = {
 			CMR: function(p0, p1, p2, p3, t) {
@@ -580,7 +580,7 @@
 				material.name = name;
 				
 				if (i == 0) {
-					obj.objects['photomaterials'].push(material);
+					obj.objects['photomaterials'].push(material); // Annoying off-by-one...
 				}
 
 				obj.objects['photomaterials'].push(material);
@@ -670,8 +670,8 @@
 					var geometry = obj.objects['photogeometries']['' + material.pixelwidth + "x" + material.pixelheight] ;
 					var mesh = new THREE.Mesh(geometry, material);
 
-					var mesh_x_pos = (Math.random() - 0.5) * (10000 + (iter < 1000 ? iter : 1000));
-					var mesh_y_pos = (Math.random() - 0.5) * (10000 + (iter < 1000 ? iter : 1000));
+					var mesh_x_pos = (Math.random() - 0.5) * (10000 + (iter < 1000 ? iter : 200));
+					var mesh_y_pos = (Math.random() - 0.5) * (10000 + (iter < 1000 ? iter : 200));
 					var mesh_z_pos = (Math.random() - 0.5) * 10000;
 				
 					var mesh_rot_y = Math.random() * Math.PI * 4 - Math.PI * 2;
@@ -904,9 +904,9 @@
 				new THREE.WebGLRenderTarget( global_engine.getWidth(), global_engine.getHeight(),
 				{ minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, alpha: true, autoClear: false }
 			));
-
+			
 			var writerpass = new THREE.RenderPass(scene, obj.cameras['writercam']);
-
+			
 			writercomposer.addPass(writerpass);
 			var writershader = new THREE.ShaderPass( THREE.Perseily );
 			writershader.uniforms['tDiffuse'].value = writercomposer.renderTarget1;
@@ -1042,10 +1042,10 @@
 			this.composers['beercomposer'].render(dt);
 			this.composers['photocomposer'].render(dt);
 			this.effects['perseily'].uniforms.time.value =  t / 1000;
-			this.effects['perseily'].uniforms.intensity.value =  0.004;
-			this.effects['perseily'].uniforms.scale.value = 1.5;
+			this.effects['perseily'].uniforms.intensity.value =  0.006;
+			this.effects['perseily'].uniforms.scale.value = 1.95;
 			this.effects['perseily'].uniforms.speed.value = 0.5;
-			this.effects['perseily'].uniforms.x.value = Math.sin(t / 1000) / 10.0 + 0.1;
+			this.effects['perseily'].uniforms.x.value = Math.sin(t / 1000) / 10.0 + 0.05;
 			this.effects['perseily'].uniforms.y.value = Math.cos(t / 345) / 10.0;
 
 			this.composers['writercomposer'].render(dt);
