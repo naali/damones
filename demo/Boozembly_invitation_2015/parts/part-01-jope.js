@@ -23,22 +23,27 @@
 				{ 
 					photos: [
 						"image_pic_placeholder_1",	// tyhjä
-						"image_pic_placeholder_1"		// tyhjä
+						"image_pic_placeholder_1" 	// tyhjä
 					],
 					texts: [
-						"" // intentionally left blank
+						"°0asdasdasdasdasd",
+						"°1asdasdasdasdasd",
+						"°2asdasdasdasdasd",
+						"°3asdasdasdasdasd",
+						"°4asdasdasdasdasd",
+						"°5asdasdasdasdasd",
 					]
 				},
 				{ 
 					photos: [
 						"image_pic_placeholder_1",	// tyhjä
-						"image_picb_landscape_36"		// sasku pyllistää
+						"image_picb_landscape_36" 	// sasku pyllistää
 					],
 					texts: [
-						"Damones",
-						"with",
-						"Boozembly",
-						"disorganizing"
+						"°0Damones",
+						"°1with",
+						"°2Boozembly",
+						"°3disorganizing"
 					]
 				},
 				{ 
@@ -47,10 +52,10 @@
 						"image_picb_landscape_3"		// damones
 					],
 					texts: [
-						"Invites",
-						"you to the",
-						"21st annual",
-						"summer camp"
+						"°0Invites",
+						"°1you to the",
+						"°221st annual",
+						"°3summer camp"
 					]
 				},
 				{ 
@@ -68,9 +73,9 @@
 						"image_picb_landscape_22"		// Ade ja jotain
 					],
 					texts: [
-						"Boozembly 2015",
-						"--------------",
-						"30th Jul - 2nd Aug"
+						"°0Boozembly 2015",
+						"°0-°1-°2-°3-°4-°5-°6-°7-°0-°1-°2-°3-°4-°5-°6-",
+						"°030th Jul - 2nd Aug"
 					]
 				},
 				{ 
@@ -79,8 +84,8 @@
 						"image_picb_landscape_40"		// Hassu hattu
 					],
 					texts: [
-						"Boozembly",
-						"features"
+						"°0Boozembly",
+						"°1features"
 					]
 				},
 				{ 
@@ -89,8 +94,8 @@
 						"image_picb_landscape_17"		// Adam ja jotain
 					],
 					texts: [
-						"Perfect",
-						"weather"
+						"°1Perfect",
+						"°2weather"
 					]
 				},
 				{ 
@@ -99,9 +104,9 @@
 						"image_picb_landscape_15" 	// Grillausta
 					],
 					texts: [
-						"Mouthwatering",
-						"barbeque",
-						"experience"
+						"°2Mouthwatering",
+						"°3barbeque",
+						"°4experience"
 					]
 				},
 				{ 
@@ -110,8 +115,8 @@
 						"image_picb_landscape_50"		// kalja-allas lähikuva
 					],
 					texts: [
-						"Ice cold",
-						"beer pool"
+						"°3Ice cold",
+						"°4beer pool"
 					]
 				},
 				{ 
@@ -120,8 +125,8 @@
 						"image_pic_landscape_9"		// Ade ja joku
 					],
 					texts: [
-						"Happy",
-						"reunions"
+						"°4Happy",
+						"°5reunions"
 					]
 				},
 				{ 
@@ -130,9 +135,9 @@
 						"image_picb_portrait_15" 		// uncle-x
 					],
 					texts: [
-						"Official",
-						"Boozembly",
-						"t-shirts"
+						"°5Official",
+						"°6Boozembly",
+						"°7t-shirts"
 					]
 				},
 				{ 
@@ -141,9 +146,9 @@
 						"image_picb_landscape_33"		// irwin
 					],
 					texts: [
-						"People",
-						"Horsing",
-						"around"
+						"°6People",
+						"°7Horsing",
+						"°0around"
 					]
 				},
 				{ 
@@ -152,9 +157,9 @@
 						"image_picb_landscape_1"		// kraku + vaimo
 					],
 					texts: [
-						"Demoscene",
-						"legends",
-						"in Bright Light"
+						"°7Demoscene",
+						"°0legends",
+						"°1in Bright Light"
 					]
 				},
 				{ 
@@ -163,9 +168,9 @@
 						"image_picb_landscape_37" 	// Virne + Apatia
 					],
 					texts: [
-						"Veteran",
-						"multimedia",
-						"innovators"
+						"°0Veteran",
+						"°1multimedia",
+						"°2innovators"
 					]
 				},
 				{ 
@@ -174,9 +179,9 @@
 						"image_picb_portrait_2"		// random1
 					],
 					texts: [
-						"Boozembly 2015",
-						"is all this",
-						"and even more!"
+						"°1Boozembly 2015",
+						"°2is all this",
+						"°3and even more!"
 					]
 				},
 				{ 
@@ -185,10 +190,10 @@
 						"image_picb_portrait_16"		// dustie
 					],
 					texts: [
-						"Make room",
-						"in your",
-						"calendar",
-						"now"
+						"°2Make room",
+						"°3in your",
+						"°4calendar",
+						"°5now"
 					]
 				},
 				{ 
@@ -197,9 +202,9 @@
 						"image_picb_landscape_29"		// Biini valotikkupää
 					],
 					texts: [
-						"the longest night",
-						"of the year",
-						"is coming!"
+						"°3the longest night",
+						"°4of the year",
+						"°5is coming!"
 					]
 				},
 				{ 
@@ -208,9 +213,9 @@
 						"image_picb_landscape_30"		// Murkku
 					],
 					texts: [
-						"30th of July",
-						"-",
-						"2nd of August"
+						"°430th of July",
+						"°0-°1-°2-°3-°4-°5-°6-°7-°0-°1-°2-°3-°4-°5-°6-",
+						"°52nd of August"
 					]
 				},
 				{ 
@@ -219,7 +224,7 @@
 						"image_picb_landscape_10"		// Jope + Riku
 					],
 					texts: [
-						"Boozembly 2015",
+						"°6Boozembly 2015",
 					]
 				},
 				{ 
@@ -228,9 +233,9 @@
 						"image_picb_landscape_49"
 					],
 					texts: [
-						"The outdoor",
-						"adventure you",
-						"don't want to miss!",
+						"°7The outdoor",
+						"°0adventure you",
+						"°1won't forget!",
 					]
 				},
 				{ 
@@ -248,9 +253,9 @@
 						"image_picb_landscape_18" 	// lennu keskari
 					],
 					texts: [
-						"Greetings",
-						"fly",
-						"to"
+						"°0Greetings",
+						"°1fly",
+						"°2to"
 					]
 				},
 				{ 
@@ -259,11 +264,11 @@
 						"image_picb_portrait_14"		// Suckho
 					],
 					texts: [
-						"Byterapers",
-						"Fairlight",
-						"Komplex",
-						"CNCD",
-						"TRSI"
+						"°1Byterapers",
+						"°2Fairlight",
+						"°3Komplex",
+						"°4cncd",
+						"°5TRSI"
 					]
 				},
 				{ 
@@ -272,11 +277,11 @@
 						"image_picb_landscape_8"		// Argon
 					],
 					texts: [
-						"Extend",
-						"Scoopex",
-						"Mercury",
-						"Pyrotech",
-						"Wide Load"
+						"°2Extend",
+						"°3Scoopex",
+						"°4Mercury",
+						"°5Pyrotech",
+						"°6Wide Load"
 					]
 				},
 				{ 
@@ -285,11 +290,11 @@
 						"image_picb_portrait_17"		// Karva + tupi
 					],
 					texts: [
-						"Darklite",
-						"Accession",
-						"Kewlers",
-						"Kooma",
-						"Flo"
+						"°3Darklite",
+						"°4Accession",
+						"°5Kewlers",
+						"°6Kooma",
+						"°7Flo"
 					]
 				},
 				{ 
@@ -307,10 +312,10 @@
 						"image_pic_portrait_6"		// Mukle
 					],
 					texts: [
-						"If you have",
-						"extra beer or",
-						"sausages to",
-						"donate"
+						"°4If you have",
+						"°5extra beer or",
+						"°6sausages to",
+						"°7donate"
 					]
 				},
 				{ 
@@ -319,10 +324,10 @@
 						"image_pic_landscape_7"		// Kakka
 					],
 					texts: [
-						"Please contact",
-						"your nearest",
-						"Boozembly",
-						"disorganizer"
+						"°5Please contact",
+						"°6your nearest",
+						"°7Boozembly",
+						"°0disorganizer"
 					]
 				},
 				{ 
@@ -340,9 +345,9 @@
 						"image_picb_landscape_35"		// Piraattiteltta
 					],
 					texts: [
-						"Credits",
-						"for this",
-						"invitation"
+						"°6Credits",
+						"°7for this",
+						"°0invitation"
 					]
 				},
 				{ 
@@ -352,8 +357,8 @@
 						
 					],
 					texts: [
-						"Code:",
-						"Kakka"
+						"°7Code:",
+						"°0Kakka"
 					]
 				},
 				{ 
@@ -362,10 +367,10 @@
 						"image_pic_kikka_square_2"	// Wal
 					],
 					texts: [
-						"Music:",
-						"Kikka",
-						"cover by",
-						"Wal"
+						"°7Music:",
+						"°0Kikka",
+						"°1cover by",
+						"°0Wal"
 					]
 				},
 				{ 
@@ -374,9 +379,9 @@
 						"image_picb_landscape_34"		// Mazor + destop
 					],
 					texts: [
-						"Graphics:",
-						"H7",
-						"Mazor"
+						"°7Graphics:",
+						"°0H7",
+						"°0Mazor"
 					]
 				},
 				{ 
@@ -385,9 +390,9 @@
 						"image_picb_landscape_51"		// Norppa
 					],
 					texts: [
-						"Photos:",
-						"Biini",
-						"Norppa"
+						"°7Photos:",
+						"°0Biini",
+						"°0Norppa"
 					]
 				},
 				{ 
@@ -406,9 +411,9 @@
 						"image_pic_landscape_8" 		// Kisu + bracket
 					],
 					texts: [
-						"See you all",
-						"at",
-						"the Boozembly!"
+						"°0See you all",
+						"°1at",
+						"°2the Boozembly!"
 					]
 				},
 				{ 
@@ -417,10 +422,10 @@
 						"image_picb_portrait_8"		//
 					],
 					texts: [
-						"This invitation",
-						"will",
-						"now",
-						"repeat"
+						"°1This invitation",
+						"°2will",
+						"°3now",
+						"°4repeat"
 					]
 				},
 				{ 
@@ -429,10 +434,10 @@
 						"image_picb_landscape_4" 		// Slobber
 					],
 					texts: [
-						"Press",
-						"[esc]",
-						"to",
-						"exit"
+						"°3Press",
+						"°3[°2esc°3]",
+						"°3to",
+						"°3exit"
 					]
 				},
 				{ 
@@ -1045,7 +1050,7 @@
 			this.effects['perseily'].uniforms.intensity.value =  0.006;
 			this.effects['perseily'].uniforms.scale.value = 1.95;
 			this.effects['perseily'].uniforms.speed.value = 0.5;
-			this.effects['perseily'].uniforms.x.value = Math.sin(t / 1000) / 10.0 + 0.05;
+			this.effects['perseily'].uniforms.x.value = Math.sin(t / 1000) / 10.0 + 0.06;
 			this.effects['perseily'].uniforms.y.value = Math.cos(t / 345) / 10.0;
 
 			this.composers['writercomposer'].render(dt);
