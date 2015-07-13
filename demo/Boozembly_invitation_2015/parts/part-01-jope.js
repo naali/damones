@@ -792,7 +792,8 @@
 				'4': 0x1de0b4,
 				'5': 0x1de02f,
 				'6': 0xe0271d,
-				'7': 0xffffff,
+				'7': 0xee741a,
+				'8': 0xffffff
 			}
 			
 			for (var i=0; i<textarr.length; i++) {
@@ -975,14 +976,20 @@
 					}
 				}
 			}
-
-			var fftdata = global_engine.getByteFFTData(0);
-
+			
+			var fft;
+			
+			if (global_engine.fftsupport) {
+				var fftdata = global_engine.getByteFFTData(0);
+				fft = 0.1 + ((fftdata[0] / 256) * 0.2);
+			} else {
+				fft = 0.1 + ((128/ 256) * 0.2);
+			}
+			
 			phototimer = parttick / 2000;
 			var idx = Math.floor(phototimer);
 			var intrat = (phototimer) % 1;
 //			log("" + page + ", " + idx);
-			var fft = 0.1 + ((fftdata[0] / 256) * 0.2);
 			var specular_color = new THREE.Color(fft, fft, fft);
 			var default_specular = new THREE.Color(0.2, 0.2, 0.2);
 			
