@@ -16,11 +16,32 @@ function DemoEngine(selector, width, height) {
 	this.frequencyBinCount = 0;
 	this.selectorstr = selector;
 	this.fftsupport = true;
-	this.clock = new THREE.Clock(false);
 	this.debuggerpending = false;
 	this.loop = false;
 	this.loopBegin = 0;
 	this.loopEnd = 0;
+
+	function Clock() {
+		this._clock = new THREE.Clock(false);
+	}
+	
+	Clock.prototype.start = function() {
+		this._clock.start();
+	}
+	
+	Clock.prototype.stop = function() {
+		this._clock.stop();
+	}
+	
+	Clock.prototype.getDelta = function() {
+		if (framegrabber) {
+			return 1/60.0;
+		} else {
+			return this._clock.getDelta();
+		}
+	}
+	
+	this.clock = new Clock();
 
 	var tmpelement = $(selector);
 	if (tmpelement.length != 1) {
