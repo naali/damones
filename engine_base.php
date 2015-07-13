@@ -3,7 +3,6 @@
 	global $showcontrols;
 	
 	$framegrabber = false;
-//	$showControls = false;
 	$frame = 0;
 	$fps = 60;
 
@@ -46,8 +45,8 @@
 			<?php echo file_get_contents('../../lib/OBJLoader.js'); ?>
 			
 			var debug = <?php echo (($debug == true)?'true':'false')?>;
-<?php if ($framegrabber) { ?> 
 			var framegrabber = <?php echo ($framegrabber?'true':'false')?>;
+<?php if ($framegrabber) { ?> 
 			var frame = parseInt(<?php echo $frame ?>);
 			var frame_width = parseInt(<?php echo $frame_width ?>);
 			var frame_height = parseInt(<?php echo $frame_height ?>);
@@ -279,12 +278,13 @@
 				var canvas = $('#demo canvas')[0];
 				var framedata = canvas.toDataURL();
 				
+				var postdata = { action: 'saveframe', framenumber: framenumber, framedata: framedata };
 				$('#framecounter').text('Saving frame: ' + framenumber +' ts: ' + frame_to_ms);
 				
 				$.ajax({
 					url: '../../framesaver.php',
 					type: 'POST',
-					data: { action: 'saveframe', framenumber: framenumber, framedata: framedata },
+					data: postdata,
 					success: function(res) {
 						if (res && res.status && res.status==='ok') {
 							if (framenumber++ < lastframe) {
@@ -293,7 +293,12 @@
 								alert('dumping done!');
 							}
 						} else {
-							$('#framecounter').text('status: ' + res.status + ' error: ' + res.error);
+							$('#framecounter').text('status: ' + res.status + ' error: ' + res.error + " frame: " + framenumber);
+
+							if (res.status == 'fail' && res.error == 'MISSING_ACTION') {
+								log("Retrying frame: " + framenumber);
+								update(framenumber);
+							}
 						}
 					},
 					error: function(a,b,c) {
