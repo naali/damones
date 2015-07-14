@@ -2,6 +2,7 @@
 	data: (function() {
 		var ro = {};
 		ro.partname = 'Boozembly 2015';
+		ro.prewarm = true;
 		ro.partlength = 1000 * 312;
 		ro.cameras = {
 			'kaljacam':  new THREE.OrthographicCamera( global_engine.getWidth() / - 2, global_engine.getWidth() / 2, 
@@ -9,6 +10,7 @@
 			'photocam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 100000),
 			'writercam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 10000)
 		};
+		
 		
 		ro.scenes = {};
 		ro.lights = {};

@@ -168,18 +168,23 @@ function DemoEngine(selector, width, height) {
 
 		for (var i=0; i<this.partdata.length; i++) {
 			var partdata = this.partdata[i].data;
-			log("Prewarming scene: " + partdata.partname + " (" + (i+1) + "/" + this.partdata.length + ")");
 			
-			parttick = 0;
+			if (partdata.hasOwnProperty('prewarm') && partdata['prewarm'] == true) {
+				log("Prewarming scene: " + partdata.partname + " (" + (i+1) + "/" + this.partdata.length + ")");
 			
-			for (var j=0; j<10; j++) {
-				parttick += partdata.partlength / 10 * j;
-				try {				
-					partdata.player(this.partdata[i], parttick, globaltick + parttick);
-				} catch (e) {
-					log("Oopsie (" + e.message + ") while prewarming, maybe too long song?");
-					break;
-				}				
+				parttick = 0;
+			
+				for (var j=0; j<10; j++) {
+					parttick += partdata.partlength / 10 * j;
+					try {				
+						partdata.player(this.partdata[i], parttick, globaltick + parttick);
+					} catch (e) {
+						log("Oopsie (" + e.message + ") while prewarming, maybe too long song?");
+						break;
+					}				
+				}
+			} else {
+				log("Prewarm not supported for scene: " + partdata.partname + " (" + (i+1) + "/" + this.partdata.length + ")");
 			}
 			
 			globaltick += partdata.partlength;
