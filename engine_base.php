@@ -40,9 +40,19 @@
 		<meta property="og:title" content="<?php echo "$demo_name"?>" />
 		<meta property="og:title" content="<?php echo "$demo_description"?>" />
 		<script>
-			<?php echo file_get_contents('../../lib/jquery-1.8.2.min.js'); ?>
-			<?php echo file_get_contents('../../lib/three.min.js'); ?>
-			<?php echo file_get_contents('../../lib/OBJLoader.js'); ?>
+
+<?php
+	echo file_get_contents('../../lib/jquery-1.8.2.min.js');
+
+	if ($debug) {
+		echo file_get_contents('../../lib/three.js');
+	} else {
+		echo file_get_contents('../../lib/three.min.js');
+	}
+	
+	echo file_get_contents('../../lib/OBJLoader.js'); ?>
+?>
+
 			
 			var debug = <?php echo (($debug == true)?'true':'false')?>;
 			var framegrabber = <?php echo ($framegrabber?'true':'false')?>;
