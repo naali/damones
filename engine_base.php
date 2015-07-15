@@ -233,13 +233,9 @@
 			var global_tick = 0;
 			var framegrabber = <?php echo $framegrabber===true?'true':'false'?>;
 
-<?php if ($demo_loop) { ?>
-			var demo_loop = true;
-			var demo_loop_begin = <?php echo $demo_loop_begin ?>;
-			var demo_loop_end = <?php echo $demo_loop_end ?>;
-<?php } else { ?>
-			var demo_loop = false;
-<?php } ?>
+			var demo_loop = <?php echo $demo_loop===true?'true':'false'?>;
+			var demo_loop_begin = <?php echo $demo_loop===true?"$demo_loop_begin":0 ?>;
+			var demo_loop_end = <?php echo $demo_loop===true?"$demo_loop_end":0 ?>;
 
 
 <?php if (!$framegrabber) { ?>
@@ -288,35 +284,34 @@
 <?php } ?>
 			
 			function init() {
-<?php if ($framegrabber) { ?>
-				global_engine = new DemoEngine('#demo', frame_width, frame_height);
-<?php } else { ?>
-				var width = window.innerWidth;
-				var height = window.innerHeight;
-				
-				var w=0;
-				var h=0;
-				
-				if (width/height < 16/9) {
-					w = width;
-					h = Math.floor(width / (16/9));
+				if (framegrabber) {
+					global_engine = new DemoEngine('#demo', frame_width, frame_height);
 				} else {
-					w = Math.floor(height * (16/9));
-					h = height;
-				}
+					var width = window.innerWidth;
+					var height = window.innerHeight;
 				
-				if (h < height) {
-					$("#demo").css({ 'margin-top': Math.floor((height-h)/2) + 'px' });
-				}
+					var w=0;
+					var h=0;
 				
-				log("Creating Damones demo engine");
-				global_engine = new DemoEngine('#demo', w, h);
+					if (width/height < 16/9) {
+						w = width;
+						h = Math.floor(width / (16/9));
+					} else {
+						w = Math.floor(height * (16/9));
+						h = height;
+					}
+				
+					if (h < height) {
+						$("#demo").css({ 'margin-top': Math.floor((height-h)/2) + 'px' });
+					}
+				
+					log("Creating Damones demo engine");
+					global_engine = new DemoEngine('#demo', w, h);
 
-				if (demo_loop) {
-					global_engine.setLooping(demo_loop_begin, demo_loop_end);
+					if (demo_loop) {
+						global_engine.setLooping(demo_loop_begin, demo_loop_end);
+					}
 				}
-				
-<?php } ?>
 
 				$('html').keyup(function(e) {
 					if (e.keyCode == 27) {
@@ -359,20 +354,19 @@
 					$('#decrunch').show();
 
 					init();
-			
-<?php if (!$framegrabber) { ?>
-					log("prewarming");
-					global_engine.prewarm();
-					$('#decrunch').remove();
-					
-					log("playing");
-					global_engine.play();
-					global_engine.showControls(<?php echo (($showcontrols == true)?'true':'false')?>);
-<?php } else { ?>
-					$('#demo').append('<div id="framecounter" class="framecounter"></div>');
-<?php } ?>
 
-					update();
+					if (!framegrabber) {
+						log("prewarming");
+						global_engine.prewarm();
+						$('#decrunch').remove();
+					
+						log("playing");
+						global_engine.play();
+						global_engine.showControls(<?php echo (($showcontrols == true)?'true':'false')?>);
+					} else {
+						$('#demo').append('<div id="framecounter" class="framecounter"></div>');
+						update();
+					}
 				});
 				
 				$('#btn_fullscreen_yes').off('click').on('click', function() {
@@ -385,19 +379,18 @@
 						function(){
 							init();
 
-<?php if (!$framegrabber) { ?>
-							log("prewarming");
-							global_engine.prewarm();
-							$('#decrunch').remove();
+							if (!framegrabber) {
+								log("prewarming");
+								global_engine.prewarm();
+								$('#decrunch').remove();
 
-							log("playing");
-							global_engine.play();
-							global_engine.showControls(<?php echo (($showcontrols == true)?'true':'false')?>);
-<?php } else { ?>
-							$('#demo').append('<div id="framecounter" class="framecounter"></div>');
-<?php } ?>
-
-							update();
+								log("playing");
+								global_engine.play();
+								global_engine.showControls(<?php echo (($showcontrols == true)?'true':'false')?>);
+							} else {
+								$('#demo').append('<div id="framecounter" class="framecounter"></div>');
+								update();
+							}
 						}, 
 						1000
 					);
