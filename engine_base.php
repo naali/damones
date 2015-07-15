@@ -91,6 +91,8 @@
 		</script>
 
 <?php
+	
+
 	$stylefiles = glob('../../css/*.[cC][sS][sS]');
 
 	for ( $sfptr = 0; $sfptr < count($stylefiles); $sfptr++ ) {
@@ -105,7 +107,9 @@
 		echo "    </style>\n\n";
 	}
 	
+	$effectcomposer = glob('../../lib/THREE.EffectComposer/*.[jJ][sS]');
 	$jsfiles = glob('../../js/*.[jJ][sS]');
+	$jsfiles = array_merge($jsfiles, $effectcomposer);
 
 	for ($jsfptr=0; $jsfptr<count($jsfiles); $jsfptr++) {
 		echo "    <script>\n";
