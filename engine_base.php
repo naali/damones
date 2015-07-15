@@ -50,12 +50,11 @@
 		echo file_get_contents('../../lib/three.min.js');
 	}
 	
-	echo file_get_contents('../../lib/OBJLoader.js'); ?>
+	echo file_get_contents('../../lib/OBJLoader.js');
 ?>
 
 			
 			var debug = <?php echo (($debug == true)?'true':'false')?>;
-			var framegrabber = <?php echo ($framegrabber?'true':'false')?>;
 <?php if ($framegrabber) { ?> 
 			var frame = parseInt(<?php echo $frame ?>);
 			var frame_width = parseInt(<?php echo $frame_width ?>);
@@ -65,41 +64,6 @@
 <?php } ?>
 			var tmppartarray = [];
 		</script>
-		<script>
-			function dataUrlToObjectUrl(d, mimestr) {
-				var tmparr = window.atob(d);
-				var uint8arr = new Uint8Array(tmparr.length);
-				
-				for (var i=0; i<uint8arr.length; i++) {
-					uint8arr[i] = tmparr.charCodeAt(i);
-				}
-				
-				if (mimestr != 'raw') {
-					var tmpblob = new Blob([uint8arr], {type: mimestr});
-				
-					return window.URL.createObjectURL(tmpblob);
-				} else {
-					return uint8arr;
-				}
-			}
-			
-			function launchFullScreen(element) {
-				if(element.requestFullScreen) {
-					element.requestFullScreen();
-				} else if(element.mozRequestFullScreen) {
-					element.mozRequestFullScreen();
-				} else if(element.webkitRequestFullScreen) {
-					element.webkitRequestFullScreen();
-				}
-			}
-			
-			function log(obj) {
-				if (debug) {
-					console.log(obj);
-				}
-			}
-		</script>
-
 <?php
 	
 
@@ -267,6 +231,7 @@
 			var global_engine = null;
 			var global_audioplayer = null;
 			var global_tick = 0;
+			var framegrabber = <?php echo $framegrabber===true?'true':'false'?>;
 
 <?php if ($demo_loop) { ?>
 			var demo_loop = true;
@@ -321,21 +286,6 @@
 				})
 			}
 <?php } ?>
-			
-			function overshoot_smoothstep(min, max, t) {
-				var tmp = (t-min) / (max-min);
-				return tmp * tmp * tmp * (5.0 - 4.0 * tmp);
-			}
-			
-			function smoothstep(min, max, t) {
-				var tmp = (t-min) / (max-min);
-				return tmp * tmp * (3.0 - 2.0 * tmp);
-			}
-			
-			function smootherstep(min, max, t) {
-				var tmp = (t-min) / (max-min);
-				return tmp * tmp * tmp * (tmp * (tmp * 6.0 - 15.0) + 10.0);
-			}
 			
 			function init() {
 <?php if ($framegrabber) { ?>
