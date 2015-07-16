@@ -97,131 +97,12 @@
 		echo "    </script>\n\n";
 	}
 	
-	$fonts = glob('fonts/*.[jJ][sS]');
-
-	if (count($fonts) > 0) {
-		echo "    <script>\n";
-		for ($i=0; $i<count($fonts); $i++) {
-			echo "//  ".$fonts[$i]."\n";
-			ob_start();
-			include($fonts[$i]);
-			$fontcontent = ob_get_clean();
-			
-			echo $fontcontent;
-			echo "\n\n";
-		}
-		
-		echo "    </script>\n";
-	}
-	
-	$shaders = array();
-	$vertex = glob('shaders/*.vertex');
-	$fragment = glob('shaders/*.fragment');
-
-	$files = array_merge($vertex, $fragment);
-	
-	for ($i=0; $i<count($files); $i++) {
-		$filename = preg_replace("#.*/#", "", $files[$i]); // remove path
-		$extension = preg_replace("#.*\.#", "", $filename); // get extension
-		$filename = preg_replace("/\\.[^.\\s]{6,8}$/", "", $filename); // remove extension
-		
-		$data = file_get_contents($files[$i]);
-		
-		$mimetype = '';
-		
-		switch ($extension) {
-			case ('vertex'):
-				$mimetype = "x-shader/x-vertex";
-				break;
-			
-			case ('fragment'):
-				$mimetype = "x-shader/x-fragment";
-				break;
-				
-			default:
-				break;
-		
-		}
-		
-		echo "<script id=\"".$extension."_".$filename."\" type=\"$mimetype\">\n";
-		echo $data;
-		echo "\n</script>\n\n";
-	}
-	
-	$files = array();
-	
 	$sounds = glob('audio/*.{mp3,ogg}', GLOB_BRACE);
 	$images = glob('img/*.{png,jpg}', GLOB_BRACE);
 	$objects = glob('objects/*.{obj}', GLOB_BRACE);
 	$rawdata = glob('rawdata/*.{raw}', GLOB_BRACE);
 	
-	$files = array_merge($sounds, $images, $objects, $rawdata);
-
-	echo "    <script>\n";
-	echo "    var datatmp = '';\n";
-	echo "    var assetname = '';\n";
-	echo "    var data_array = [];\n";
-
-	for ($i=0; $i<count($files); $i++) {
-
-		$filename = preg_replace("#.*/#", "", $files[$i]); // remove path
-		$extension = preg_replace("#.*\.#", "", $filename); // get extension
-		$filename = preg_replace("/\\.[^.\\s]{3,4}$/", "", $filename); // remove extension
-		
-		$data = base64_encode(file_get_contents($files[$i]));
-		
-		echo "    data_array[$i] = '$data';";
-		echo "    url = '$files[$i]';\n";
-
-		switch ($extension) {
-			case ('obj'):
-				echo "    var objecturl_$filename = dataUrlToObjectUrl(data_array[$i], 'text/plain');\n";
-				echo "    var tmploader_$filename = new THREE.OBJLoader();\n";
-				echo "    var object_$filename;\n";
-				echo "    tmploader_$filename.load(objecturl_$filename, function(obj) { console.log('Loaded 3D .obj - $filename'); object_$filename = obj; });\n";
-				echo "    assetname = 'object_$filename';\n";
-				break;
-			case ('ogg'):
-				echo "    var ogg_audio_$filename = new Audio();\n";
-				echo "    ogg_audio_$filename.src = dataUrlToObjectUrl(data_array[$i], 'audio/ogg');\n";
-				echo "    assetname = 'ogg_audio_$filename';\n";
-				break;
-			case ('mp3'):
-				echo "    var mp3_audio_$filename = new Audio();\n";
-				echo "    mp3_audio_$filename.src = dataUrlToObjectUrl(data_array[$i], 'audio/mp3');\n";
-				echo "    assetname = 'mp3_audio_$filename';\n";
-				break;
-			case ('jpg'):
-				echo "    var image_$filename = new Image();\n";
-				echo "    image_$filename.src = dataUrlToObjectUrl(data_array[$i], 'image/jpg');\n";
-				echo "    assetname = 'image_$filename';\n";
-				break;
-			case ('png'):
-				echo "    var image_$filename = new Image();\n";
-				echo "    image_$filename.src = dataUrlToObjectUrl(data_array[$i], 'image/png');\n";
-				echo "    assetname = 'image_$filename';\n";
-				break;
-			case ('raw'):
-				echo "    var raw_$filename = dataUrlToObjectUrl(data_array[$i], 'raw');\n";
-				echo "    assetname = 'raw_$filename';\n";
-				break;
-			default:
-				break;
-		}
-		
-		echo "    log('Preloaded ".$files[$i]." as '+assetname);\n";
-	}
-	
-	echo "    log(navigator.userAgent.toLowerCase());\n";
-	echo "    if (!navigator.userAgent.match(/Trident.*[ :]*11\./)) {\n";
-	echo "        log('Not using IE');\n";
-	echo "        data_array[$i] = assetname = undefined;\n";
-	echo "    } else {\n";
-	echo "        log('Using IE, not releasing assets...');\n";
-	echo "    }\n";
-
-	echo "    </script>\n";
-	
+	$demoassets = array_merge($rawdata, $sounds, $images, $objects);
 ?>
 	</head>
 
@@ -236,7 +117,15 @@
 			var demo_loop = <?php echo $demo_loop===true?'true':'false'?>;
 			var demo_loop_begin = <?php echo $demo_loop===true?"$demo_loop_begin":0 ?>;
 			var demo_loop_end = <?php echo $demo_loop===true?"$demo_loop_end":0 ?>;
-
+			var demo_loading = 0;
+			var demo_loading_total = <?php echo count($demoassets)?>;
+			
+			function loadercallback(name) {
+				++demo_loading;
+				var done = Math.floor((demo_loading/demo_loading_total) * 100);
+				$('#loaderbar').css({width: done+'%'});
+				$('#' + name).remove();
+			}
 
 <?php if (!$framegrabber) { ?>
 			function update() {
@@ -328,8 +217,7 @@
 				global_engine.addRenderTarget('tertiary', global_engine.getWidth(), global_engine.getHeight());
 				
 				log("Adding audio");
-				if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
-				{
+				if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
 					window.setTimeout(global_engine.setAudio(ogg_audio_<?php echo "$demo_song"?>), 10000);
 				} else {
 					global_engine.setAudio(mp3_audio_<?php echo "$demo_song"?>);
@@ -338,14 +226,7 @@
 				global_engine.setAudioLooping(false);
 				
 				log("Adding demo parts:");
-<?php				
-	for ($i=0; $i<count($demo_part_order); $i++) {
-		$partfilename = getcwd().$partdir.$demo_part_order[$i];
-		$partdata = file_get_contents($partfilename);
-		echo "    log(\"$partfilename\")\n";
-		echo "    global_engine.addPart($partdata)\n";
-	}
-?>			
+				addParts();
 			}
 
 			$(document).ready(function() {
@@ -365,8 +246,9 @@
 						global_engine.showControls(<?php echo (($showcontrols == true)?'true':'false')?>);
 					} else {
 						$('#demo').append('<div id="framecounter" class="framecounter"></div>');
-						update();
 					}
+
+					update();
 				});
 				
 				$('#btn_fullscreen_yes').off('click').on('click', function() {
@@ -376,7 +258,7 @@
 					launchFullScreen(document.getElementById('html'));
 					
 					window.setTimeout(
-						function(){
+						function() {
 							init();
 
 							if (!framegrabber) {
@@ -389,8 +271,9 @@
 								global_engine.showControls(<?php echo (($showcontrols == true)?'true':'false')?>);
 							} else {
 								$('#demo').append('<div id="framecounter" class="framecounter"></div>');
-								update();
 							}
+
+							update();
 						}, 
 						1000
 					);
@@ -404,12 +287,22 @@
 					}
 				});
 				
+				$('#loading').hide();
 				$('#setup').show();
 			});
 		</script>
 		<div id="main" class="main">
 			<div id="demo" class="demo"></div>
 		</div>
+		
+		<div id="loading" class="setup" style="display: block;">
+			<p>Loading...</p>
+			<div id="loaderbarcontainer" class="loaderbarcontainer">
+				<div id="loaderbar" class="loaderbar"></div>
+				<div class="loaderbartext">Damones demoengine is drinking while loading...</div>
+			</div>
+		</div>
+		
 		<div id="setup" class="setup" style="display: none;">
 			<div id="start" style="display: block;">
 				<label>Run fullscreen?</label>
@@ -417,9 +310,150 @@
 				<button id="btn_fullscreen_no" class="no">No</button>
 				<button id="btn_fullscreen_maybe" class="maybe">Maybe</button>
 			</div>
-			<div id="decrunch" style="display: none;">
-				<p>Decrunching...</p>
-			</div>
+		</div>
+		
+		<div id="decrunch" style="display: none;">
+			<p>Decrunching...</p>
 		</div>
 	</body>
+
+<?php
+	$fonts = glob('fonts/*.[jJ][sS]');
+
+	if (count($fonts) > 0) {
+		echo "    <script>\n";
+		for ($i=0; $i<count($fonts); $i++) {
+			echo "//  ".$fonts[$i]."\n";
+			ob_start();
+			include($fonts[$i]);
+			$fontcontent = ob_get_clean();
+			
+			echo $fontcontent;
+			echo "\n\n";
+		}
+		
+		echo "    </script>\n";
+	}
+	
+	$shaders = array();
+	$vertex = glob('shaders/*.vertex');
+	$fragment = glob('shaders/*.fragment');
+
+	$files = array_merge($vertex, $fragment);
+	
+	for ($i=0; $i<count($files); $i++) {
+		$filename = preg_replace("#.*/#", "", $files[$i]); // remove path
+		$extension = preg_replace("#.*\.#", "", $filename); // get extension
+		$filename = preg_replace("/\\.[^.\\s]{6,8}$/", "", $filename); // remove extension
+		
+		$data = file_get_contents($files[$i]);
+		
+		$mimetype = '';
+		
+		switch ($extension) {
+			case ('vertex'):
+				$mimetype = "x-shader/x-vertex";
+				break;
+			
+			case ('fragment'):
+				$mimetype = "x-shader/x-fragment";
+				break;
+				
+			default:
+				break;
+		
+		}
+		
+		echo "<script id=\"".$extension."_".$filename."\" type=\"$mimetype\">\n";
+		echo $data;
+		echo "\n</script>\n\n";
+	}
+	
+	$files = array();
+	
+	$sounds = glob('audio/*.{mp3,ogg}', GLOB_BRACE);
+	$images = glob('img/*.{png,jpg}', GLOB_BRACE);
+	$objects = glob('objects/*.{obj}', GLOB_BRACE);
+	$rawdata = glob('rawdata/*.{raw}', GLOB_BRACE);
+	
+	$files = array_merge($sounds, $images, $objects, $rawdata);
+
+	echo "    <script>\n";
+	echo "    	datatmp = '';\n";
+	echo "    	assetname = '';\n";
+	echo "    	data_array = [];\n";
+	echo "    </script>\n";
+
+	for ($i=0; $i<count($files); $i++) {
+		$datasectionid = 'datasection_'.$i;
+		
+		echo "    <script id='".$datasectionid."'>\n";
+
+		$filename = preg_replace("#.*/#", "", $files[$i]); // remove path
+		$extension = preg_replace("#.*\.#", "", $filename); // get extension
+		$filename = preg_replace("/\\.[^.\\s]{3,4}$/", "", $filename); // remove extension
+		
+		$data = base64_encode(file_get_contents($files[$i]));
+		
+		echo "    data_array[$i] = '$data';";
+		echo "    url = '$files[$i]';\n";
+
+		switch ($extension) {
+			case ('obj'):
+				echo "    var objecturl_$filename = dataUrlToObjectUrl(data_array[$i], 'text/plain');\n";
+				echo "    var tmploader_$filename = new THREE.OBJLoader();\n";
+				echo "    var object_$filename;\n";
+				echo "    tmploader_$filename.load(objecturl_$filename, function(obj) { console.log('Loaded 3D .obj - $filename'); object_$filename = obj; });\n";
+				echo "    assetname = 'object_$filename';\n";
+				break;
+			case ('ogg'):
+				echo "    var ogg_audio_$filename = new Audio();\n";
+				echo "    ogg_audio_$filename.src = dataUrlToObjectUrl(data_array[$i], 'audio/ogg');\n";
+				echo "    assetname = 'ogg_audio_$filename';\n";
+				break;
+			case ('mp3'):
+				echo "    var mp3_audio_$filename = new Audio();\n";
+				echo "    mp3_audio_$filename.src = dataUrlToObjectUrl(data_array[$i], 'audio/mp3');\n";
+				echo "    assetname = 'mp3_audio_$filename';\n";
+				break;
+			case ('jpg'):
+				echo "    var image_$filename = new Image();\n";
+				echo "    image_$filename.src = dataUrlToObjectUrl(data_array[$i], 'image/jpg');\n";
+				echo "    assetname = 'image_$filename';\n";
+				break;
+			case ('png'):
+				echo "    var image_$filename = new Image();\n";
+				echo "    image_$filename.src = dataUrlToObjectUrl(data_array[$i], 'image/png');\n";
+				echo "    assetname = 'image_$filename';\n";
+				break;
+			case ('raw'):
+				echo "    var raw_$filename = dataUrlToObjectUrl(data_array[$i], 'raw');\n";
+				echo "    assetname = 'raw_$filename';\n";
+				break;
+			default:
+				break;
+		}
+		echo "    loadercallback('".$datasectionid."');\n";
+		echo "    log('Preloaded ".$files[$i]." as '+assetname);\n";
+
+		echo "    log(navigator.userAgent.toLowerCase());\n";
+		echo "    if (!navigator.userAgent.match(/Trident.*[ :]*11\./)) {\n";
+		echo "        data_array[$i] = assetname = undefined; // release assets from temporary array\n";
+		echo "    }\n";
+
+		echo "    </script>\n";
+	}
+
+	echo "    <script>\n";
+	
+	echo "    function addParts() {\n";
+		for ($i=0; $i<count($demo_part_order); $i++) {
+			$partfilename = getcwd().$partdir.$demo_part_order[$i];
+			$partdata = file_get_contents($partfilename);
+			echo "    log(\"$partfilename\");\n";
+			echo "    global_engine.addPart($partdata);\n";
+		}
+	echo "    }\n";
+	echo "    </script>\n";
+?>
 </html>
