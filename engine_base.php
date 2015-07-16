@@ -32,6 +32,10 @@
 	global $demo_song;
 	global $demo_description;
 	
+	global $setup_background;
+	global $setup_background_imagename;
+	global $setup_background_css;
+	
 ?><!DOCTYPE html>
 <html id="html">
 	<head>
@@ -97,6 +101,17 @@
 		echo "    </script>\n\n";
 	}
 	
+	if ($setup_background === true) {
+		echo "<script>\n";
+		$backgroundimagedata = base64_encode(file_get_contents($setup_background_imagename));
+		$filename = preg_replace("#.*/#", "", $setup_background_imagename);
+		$extension = preg_replace("#.*\.#", "", $filename);
+		$mimetype = $extension==='jpg'?'image/jpg':'image/png';
+		echo "background_image = new Image();\n";
+		echo "background_image.src = dataUrlToObjectUrl('$backgroundimagedata', '$mimetype');\n";
+		echo "</script>\n";
+	}
+	
 	$sounds = glob('audio/*.{mp3,ogg}', GLOB_BRACE);
 	$images = glob('img/*.{png,jpg}', GLOB_BRACE);
 	$objects = glob('objects/*.{obj}', GLOB_BRACE);
@@ -105,9 +120,16 @@
 	$demoassets = array_merge($rawdata, $sounds, $images, $objects);
 ?>
 	</head>
-
-	<body>
+	<body class="body">
 		<script>
+
+<?php if ($setup_background === true) {
+	if ($setup_background_css !== false && strlen($setup_background_css) > 0) {
+		echo "$('body').css({$setup_background_css});\n";
+	}
+	
+	echo "$('body').css({ 'background-image': 'url(' + background_image.src + ')' });\n";
+} ?>		
 			var debug = true;
 			var global_engine = null;
 			var global_audioplayer = null;
@@ -240,8 +262,11 @@
 						log("prewarming");
 						global_engine.prewarm();
 						$('#decrunch').remove();
-					
+<?php if ($setup_background === true) { ?>
+						$('body').removeAttr('style');
+<?php } ?>		
 						log("playing");
+						
 						global_engine.play();
 						global_engine.showControls(<?php echo (($showcontrols == true)?'true':'false')?>);
 					} else {
@@ -265,6 +290,9 @@
 								log("prewarming");
 								global_engine.prewarm();
 								$('#decrunch').remove();
+<?php if ($setup_background === true) { ?>
+						$('body').removeAttr('style');
+<?php } ?>		
 
 								log("playing");
 								global_engine.play();
