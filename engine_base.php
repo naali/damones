@@ -31,6 +31,7 @@
 	global $demo_name;
 	global $demo_song;
 	global $demo_description;
+	global $demo_aspectratio;
 	
 	global $setup_background;
 	global $setup_background_imagename;
@@ -59,6 +60,7 @@
 
 			
 			var debug = <?php echo (($debug == true)?'true':'false')?>;
+			var demo_aspectratio = <?php echo (isset($demo_aspectratio)?$demo_aspectratio:16/9) ?>;
 <?php if ($framegrabber) { ?> 
 			var frame = parseInt(<?php echo $frame ?>);
 			var frame_width = parseInt(<?php echo $frame_width ?>);
@@ -204,11 +206,11 @@
 					var w=0;
 					var h=0;
 				
-					if (width/height < 16/9) {
+					if (width/height < demo_aspectratio) {
 						w = width;
-						h = Math.floor(width / (16/9));
+						h = Math.floor(width / (demo_aspectratio));
 					} else {
-						w = Math.floor(height * (16/9));
+						w = Math.floor(height * (demo_aspectratio));
 						h = height;
 					}
 				

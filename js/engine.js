@@ -20,6 +20,60 @@ function DemoEngine(selector, width, height) {
 	this.loop = false;
 	this.loopBegin = 0;
 	this.loopEnd = 0;
+	
+	function onWindowResize(e) {
+		width = window.innerWidth;
+		height = window.innerHeight;
+		aspect = width/height;
+		
+		var w=0;
+		var h=0;
+	
+		if (width/height < demo_aspectratio) {
+			w = width;
+			h = Math.floor(width / (demo_aspectratio));
+		} else {
+			w = Math.floor(height * (demo_aspectratio));
+			h = height;
+		}
+				
+		var rendererkeys = Object.keys(global_engine.renderers);
+		
+		for (var i=0; i<rendererkeys.length; i++) {
+			var renderer = global_engine.renderers[rendererkeys[i]];
+			renderer.setSize(w, h);
+		}
+
+		for (var i=0; i<global_engine.partdata.length; i++) {
+			if (global_engine.partdata[i]['data'].hasOwnProperty('cameras')) {
+				var partcameras = global_engine.partdata[i]['data']['cameras'];
+				var camerakeys = Object.keys(partcameras);
+				
+				for (var j=0; j<camerakeys.length; j++) {
+					var camera = partcameras[camerakeys[j]];
+					camera.aspect = w/h;
+					camera.updateProjectionMatrix();
+				}
+			}
+/*			
+			if (global_engine.partdata[i]['data'].hasOwnProperty('rendertargets')) {
+				var rendertargets = global_engine.partdata[i]['data']['rendertargets'];
+				var rendertargetkeys = Object.keys(rendertargets);
+				
+				for (var j=0; j<rendertargetkeys.length; j++) {
+					var rendertarget = rendertargets[rendertargetkeys[j]];
+					rendertarget.setSize(w,h);
+				} 
+			}
+*/			
+		}
+		
+		if (h < height) {
+			$("#demo").css({ 'margin-top': Math.floor((height-h)/2) + 'px' });
+		}
+	}
+	
+	window.addEventListener( 'resize', onWindowResize, false );
 
 	function Clock() {
 		this._clock = new THREE.Clock(false);
@@ -253,6 +307,7 @@ function DemoEngine(selector, width, height) {
 
 		this.renderers[name].setClearColor(0x000000, 0.0);
 		this.renderers[name].autoClear = false;
+		this.renderers[name].setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1);
 		this.renderers[name].clear();
 	}
 	
