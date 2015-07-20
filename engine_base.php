@@ -466,7 +466,6 @@
 		echo "    loadercallback('".$datasectionid."');\n";
 		echo "    log('Preloaded ".$files[$i]." as '+assetname);\n";
 
-		echo "    log(navigator.userAgent.toLowerCase());\n";
 		echo "    if (!navigator.userAgent.match(/Trident.*[ :]*11\./)) {\n";
 		echo "        data_array[$i] = assetname = undefined; // release assets from temporary array\n";
 		echo "    }\n";
