@@ -511,10 +511,11 @@
 			scene.add(obj.cameras['kaljacam']);
 			obj.cameras['kaljacam'].position.z = 1000;
 			
-			var beercomposer = new THREE.EffectComposer(global_engine.renderers['main'],
-				new THREE.WebGLRenderTarget( global_engine.getWidth(), global_engine.getHeight(),
-				{ minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, alpha: true }
-			));
+			var rendertarget = new THREE.WebGLRenderTarget( global_engine.getWidth(), global_engine.getHeight(),
+				{ minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, alpha: true });
+			
+			var beercomposer = new THREE.EffectComposer(global_engine.renderers['main'], rendertarget);
+			obj.rendertargets['beertarget'] = rendertarget;
 
 			var beerpass = new THREE.RenderPass(scene, obj.cameras['kaljacam']);
 			beercomposer.addPass(beerpass);
@@ -757,11 +758,11 @@
 			obj.lights['photodirectional'] = directionallight;
 			
 			scene.add(obj.cameras['photocam']);
+			
+			var rendertarget = new THREE.WebGLRenderTarget( global_engine.getWidth(), global_engine.getHeight(),  
+				{ minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, alpha: true});
 
-			var photocomposer = new THREE.EffectComposer(global_engine.renderers['main'], 
-				new THREE.WebGLRenderTarget( global_engine.getWidth(), global_engine.getHeight(),  
-				{ minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, alpha: true}
-			));
+			var photocomposer = new THREE.EffectComposer(global_engine.renderers['main'], rendertarget );
 
 			var photopass = new THREE.RenderPass(scene, obj.cameras['photocam']);
 			photocomposer.addPass(photopass);
@@ -769,7 +770,8 @@
 			var glitchpass = new THREE.GlitchPass();
 			
 			photocomposer.addPass(glitchpass);
-
+			
+			obj.rendertargets['phototarget'] = rendertarget;
 			obj.composers['photocomposer'] = photocomposer;
 
 			return scene;
@@ -903,10 +905,10 @@
 			scene.add(obj.cameras['writercam']);
 			obj.cameras['writercam'].position.z = 1000;
 			
-			var writercomposer = new THREE.EffectComposer(global_engine.renderers['main'],
-				new THREE.WebGLRenderTarget( global_engine.getWidth(), global_engine.getHeight(),
-				{ minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, alpha: true, autoClear: false }
-			));
+			var rendertarget = new THREE.WebGLRenderTarget( global_engine.getWidth(), global_engine.getHeight(),
+				{ minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, alpha: true, autoClear: false });
+			
+			var writercomposer = new THREE.EffectComposer(global_engine.renderers['main'], rendertarget);
 			
 			var writerpass = new THREE.RenderPass(scene, obj.cameras['writercam']);
 			
@@ -918,6 +920,7 @@
 			writercomposer.addPass(writershader);
 			
 			obj.renderpasses['writerpass'] = writerpass;
+			obj.rendertargets['writertarget'] = rendertarget;
 			obj.composers['writercomposer'] = writercomposer;
 			
 			return scene;
@@ -945,7 +948,9 @@
 			combinerpass2.uniforms['tDiffuse2'].value = obj.composers['writercomposer'].renderTarget1;
 			combinerpass2.renderToScreen = true;
 			maincomposer.addPass(combinerpass2);
-
+			
+			
+			obj.rendertargets['maintarget'] = composerrt;
 			obj.composers['maincomposer'] = maincomposer;
 			
  			return scene;
