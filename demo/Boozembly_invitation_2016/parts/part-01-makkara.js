@@ -770,9 +770,11 @@
 			this.functions.updateScrollText(partdata, parttick, tick);
 			this.functions.updateWriter(partdata, parttick + 300, tick);
 
-			this.cameras['gridcam'].position.z = Math.sin(-parttick / 5000) * 400;
-			this.cameras['gridcam'].rotation.z = Math.sin(parttick/10000) / 2.5;
-			this.objects['grid'].rotation.y = Math.sin(parttick/2841);
+			this.cameras['gridcam'].position.z = Math.sin(-parttick / 1000) * 400;
+			this.cameras['gridcam'].rotation.z = Math.sin(parttick/5000) / 2.5;
+			
+			this.objects['grid'].rotation.y = Math.sin(parttick/4841);
+			
 			this.lights['gridspot1'].position.set(Math.sin(parttick / 789) * 1000, Math.cos(parttick / 321) * 1000, 1000);
 
 			this.objects['isomakkara'].position.y = 35;
@@ -783,7 +785,7 @@
 			this.objects['isomakkaramaterial'].needsUpdate = true;
 			this.objects['isomakkaramaterial'].bumpScale = (Math.sin(parttick / 1000) + Math.cos(parttick / 1000 / 4) * Math.sin(parttick / 1000) - Math.cos(parttick / 1000 / 2)) / 1.5;
 			
-			this.passes['gridbokeh'].uniforms['focus'].value = 1 - (((Math.sin(-parttick / 5000) + 1) / 4) + 0.25);
+			this.passes['gridbokeh'].uniforms['focus'].value = 1 - (((Math.sin(-parttick / 1000) + 1) / 6) + 1/6);
 
 			global_engine.renderers['main'].clear(true, true, true);
 

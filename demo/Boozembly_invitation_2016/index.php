@@ -13,6 +13,7 @@
 	$part_dir = '/parts/';
 
 	$demo_part_order = array(
+
 		$part_dir.'part-00-start.js',
 		$part_dir.'part-01-makkara.js',
 		$part_dir.'part-02-kuvat.js',

@@ -376,14 +376,18 @@
 			
 			for (var i=0; i<15; i++) {
 				var makkaraleft = new THREE.Mesh(makkarageometry, makkaramaterial);
-				makkaraleft.scale.set(8, 8, 8);
-				makkaraleft.position.set(-450, i * 700 , 200);
+				var makkaraSize = Math.random() * 3 + 5 ;
+				makkaraleft.scale.set(makkaraSize, makkaraSize, makkaraSize);
+				var makkaraZPos = Math.random() * 30 + 170;
+				makkaraleft.position.set(-450, i * 700 , makkaraZPos);
 				scene.add(makkaraleft);
 				leftsausages.push(makkaraleft);
 
 				var makkararight = new THREE.Mesh(makkarageometry, makkaramaterial);
-				makkararight.scale.set(8, 8, 8);
-				makkararight.position.set(450, i * 700 - 350, 200);
+				makkaraSize = Math.random() * 3 + 5;
+				makkararight.scale.set(makkaraSize, makkaraSize, makkaraSize);
+				makkaraZPos = Math.random() * 30 + 170;
+				makkararight.position.set(450, i * 700 - 350, makkaraZPos);
 				scene.add(makkararight);
 				rightsausages.push(makkararight);
 			}
@@ -579,10 +583,10 @@
 				var camera = pd.data.cameras['photocam'];
 				
 				var y_wobble = Math.sin(pt / 593);
-				var x_wobble = Math.sin(pt / 631);
+				var x_wobble = Math.sin(pt / 1631);
 				
-				camera.position.y = (y_wobble * 2 + pt / 1000) / 2 * 100 + 1000;
-				camera.position.x = x_wobble * 800;
+				camera.position.y = (y_wobble * 2 + pt / 1000) * 100 + 1000;
+				camera.position.x = x_wobble * 1300 + 400;
 				camera.position.z = (Math.sin(pt / 773) * 100 + 100 + 900);
 				camera.rotation.z = Math.sin(pt / 499) / 10;
 				
