@@ -523,6 +523,19 @@
 			scene.add(obj.cameras['writercam']);
 			obj.cameras['writercam'].position.z = 600;
 			
+			/* Fade to white -mesh */
+
+			var whitegeometry = new THREE.PlaneBufferGeometry(1920 * 2, 1080 * 2, 1, 1);
+			var whitematerial = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true });
+			var whitemesh = new THREE.Mesh(whitegeometry, whitematerial);
+			whitemesh.position.set(0, 0, 500);
+			whitemesh.material.opacity = 0.0;
+			scene.add(whitemesh);
+			obj.objects['whitemesh'] = whitemesh;
+			
+			/**/
+			
+			
 			var rendertarget = new THREE.WebGLRenderTarget( global_engine.getWidth(), global_engine.getHeight(),  
 				{ minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, alpha: true});
 			
@@ -612,11 +625,13 @@
 			
 			updateWriter: function(pd, pt, gt) {
 				var textobjects = pd.data.objects['writertextmeshes'];
+				var whitemesh = pd.data.objects['whitemesh'];
 				
 				var pagemaxtime = 6956;
 				var page = Math.floor((pt) / pagemaxtime);
 				var pagetime = (pt) - page * pagemaxtime;
 				var in_transitiontime = 500;
+				var flashtime = 500;
 				var out_transitiontime = 3000;
 				
 				page = page % textobjects.length;
@@ -632,12 +647,21 @@
 							if (pagetime < in_transitiontime) {
 								textmesh.material.opacity = pagetime / in_transitiontime;
 								textmesh.position.x = textmesh.target_x + (Math.cos(pagetime / in_transitiontime * Math.PI) + 1) / 2 * 400;
+								whitemesh.material.opacity = 0;
+							} else if (pagetime < in_transitiontime + flashtime) {
+								var fadeout = (1 - (pagetime - in_transitiontime) / flashtime) * 0.5;
+								whitemesh.material.color.setHex(0xFFFFFF);
+								whitemesh.material.opacity = fadeout;
+
 							} else if (pagetime > (pagemaxtime - out_transitiontime)) {
 								textmesh.material.opacity = (pagemaxtime - pagetime) / out_transitiontime;
 								textmesh.position.x = textmesh.target_x - (Math.cos((pagemaxtime - pagetime) / out_transitiontime * Math.PI) + 1) / 2 * 800;
+								whitemesh.material.opacity = 0;
+
 							} else {
 								textmesh.position.x = textmesh.target_x;
 								textmesh.material.opacity = 1;
+								whitemesh.material.opacity = 0;
 							}
 													
 						} else {

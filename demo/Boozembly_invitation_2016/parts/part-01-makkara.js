@@ -219,6 +219,18 @@
 			scene.add(obj.cameras['writercam']);
 			obj.cameras['writercam'].position.z = 600;
 			
+			/* Fade to black -mesh */
+
+			var blackgeometry = new THREE.PlaneBufferGeometry(1920 * 2, 1080 * 2, 1, 1);
+			var blackmaterial = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true });
+			var blackmesh = new THREE.Mesh(blackgeometry, blackmaterial);
+			blackmesh.position.set(0, 0, 100);
+			blackmesh.material.opacity = 0.0;
+			scene.add(blackmesh);
+			obj.objects['blackmesh'] = blackmesh;
+			
+			/**/
+			
 			var rendertarget = new THREE.WebGLRenderTarget( global_engine.getWidth(), global_engine.getHeight(),  
 				{ minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, alpha: true});
 			
@@ -497,6 +509,7 @@
 			},
 			updateWriter: function(pd, pt, gt) {
 				var textobjects = pd.data.objects['writertextmeshes'];
+				var blackmesh = pd.data.objects['blackmesh'];
 				var effect = pd.data.effects['perseily'].uniforms;
 				
 				var pagemaxtime = 6956;
@@ -537,6 +550,13 @@
 							textmesh.material.opacity = 0;
 						}
 					}
+				}
+				
+				if ((pt + 1000) > pd.data.partlength) {
+					var fadeout = 1 - Math.max((pd.data.partlength - pt) / 1000, 0);
+					blackmesh.material.opacity = fadeout;
+				} else {
+					blackmesh.material.opacity = 0;
 				}
 			}
 		}

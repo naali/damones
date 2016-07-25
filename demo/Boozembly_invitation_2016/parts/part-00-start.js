@@ -97,27 +97,22 @@
 			
 			obj.objects['makkarat'] = shuffle(obj.objects['makkarat']);
 			
-			var light = new THREE.SpotLight(0xFFFFFF);
+			var light = new THREE.SpotLight(0xFFFFFF, 0.1);
 			light.position.set(200, 200, 1500);
 			scene.add(light);
 			obj.lights['makkaraspot1'] = light;
 
-			light = new THREE.SpotLight(0xFFFFFF);
+			light = new THREE.SpotLight(0xFFFFFF, 0.1);
 			light.position.set(-200, -200, 1500);
 			scene.add(light);
 			obj.lights['makkaraspot2'] = light;
 
-			light = new THREE.SpotLight(0xFFFFFF);
+			light = new THREE.SpotLight(0xFFFFFF, 0.1);
 			light.intensity = 1.2;
 			light.position.set(10, 10, 1500);
 			scene.add(light);
 			obj.lights['makkaraspot3'] = light;
 
-			var directionallight = new THREE.DirectionalLight( 0xffffff, 0.5 );
-			directionallight.position.set( 0, 1, 0 );
-			scene.add( directionallight );
-			obj.lights['makkaradirectional'] = directionallight;
-			
 			scene.add(obj.cameras['makkaracam']);
 			obj.cameras['makkaracam'].position.z = 1000;
 
@@ -218,16 +213,7 @@
 			updateSausages: function(pd, pt, gt) {
 				var lights = pd.data.lights;
 				var makkarat = pd.data.objects['makkarat'];
-				
-				lights['makkaraspot1'].position.x = Math.sin(pt / 1000) * 200;
-				lights['makkaraspot1'].position.y = Math.sin(pt / 1000) * 300;
-			
-				lights['makkaraspot2'].position.x = Math.sin(pt / 1000) * 123;
-				lights['makkaraspot2'].position.y = Math.sin(pt / 1000) * 654;
-			
-				lights['makkaraspot3'].position.x = Math.sin(pt / 1000) * 453;
-				lights['makkaraspot3'].position.y = Math.sin(pt / 1000) * 234;
-			
+
 				var speed = 65;
 			
 				for (var i=0; i<makkarat.length; i++) {
@@ -286,7 +272,6 @@
 				}
 			}
 		}
-
 
 		ro.player = function(partdata, parttick, tick) {
 			this.functions.updateBoozembly(partdata, parttick, tick);
