@@ -94,26 +94,8 @@
 			},
 			{ 
 				text: [
-					"Testiteksti 12",
-					"tilulilulii"
-				]
-			},
-			{ 
-				text: [
-					"Testiteksti 13",
-					"tilulilulii"
-				]
-			},
-			{ 
-				text: [
-					"Testiteksti 14",
-					"tilulilulii"
-				]
-			},
-			{ 
-				text: [
-					"Testiteksti 15",
-					"tilulilulii"
+					" ",
+					" "
 				]
 			},
 			{ 
@@ -400,6 +382,19 @@
 			scene.add( directionallight );
 			obj.lights['makkaradirectional'] = directionallight;
 			
+			/* Fade to white -mesh */
+
+			var whitegeometry = new THREE.PlaneBufferGeometry(1920 * 2, 1080 * 2, 1, 1);
+			var whitematerial = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true });
+			var whitemesh = new THREE.Mesh(whitegeometry, whitematerial);
+			whitemesh.position.set(0, 0, 800);
+			whitemesh.material.opacity = 0.0;
+			scene.add(whitemesh);
+			obj.objects['whitemesh'] = whitemesh;
+			
+			/**/
+			
+			
 			scene.add(obj.cameras['makkaracam']);
 			obj.cameras['makkaracam'].position.z = 900;
 			var rendertarget = new THREE.WebGLRenderTarget( global_engine.getWidth(), global_engine.getHeight(),  
@@ -607,6 +602,7 @@
 			
 			updateSausages: function(pd, pt, gt) {
 				var camera = pd.data.cameras['makkaracam'];
+				var whitemesh = pd.data.objects['whitemesh'];
 
 				var y_wobble = Math.sin(pt / 593);
 				camera.position.y = (y_wobble * 2 + pt / 1000) / 2 * 100 + 1000;
@@ -617,6 +613,21 @@
 				for (var i=0; i<leftsausages.length; i++) {
 					leftsausages[i].rotation.set(0, Math.sin(pt / 659 + i * 50) * Math.PI * 2, Math.PI / 2);
 					rightsausages[i].rotation.set(0, -Math.sin(pt / 607 + i * 50) * Math.PI * 2, Math.PI / 2);
+				}
+				
+				if (pt < 4000) {
+					var fadeout = 1 - pt / 4000;
+					whitemesh.position.y = camera.position.y;
+					whitemesh.material.color.setHex(0xFFFFFF);
+					whitemesh.material.opacity = fadeout;
+				} else if (pt + 3000 > pd.data.partlength ) {
+					var fadeout = 1 - (pd.data.partlength - pt) / 3000;
+					whitemesh.material.opacity = fadeout;
+					whitemesh.material.color.setHex(0x000000);
+					whitemesh.position.y = camera.position.y;
+				} else {
+					whitemesh.position.y = camera.position.y;
+					whitemesh.material.opacity = 0;
 				}
 			},
 			
