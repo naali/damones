@@ -51,7 +51,6 @@
 
 	if ($debug) {
 		echo file_get_contents('../../lib/three.js');
-		echo file_get_contents('../../lib/dat.gui.js');
 	} else {
 		echo file_get_contents('../../lib/three.min.js');
 	}
