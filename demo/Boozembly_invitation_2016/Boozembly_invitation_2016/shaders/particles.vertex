@@ -1,0 +1,36 @@
+uniform float bufferindex;
+uniform float direction;
+attribute float size;
+attribute vec3 positionbuffer1;
+attribute vec3 positionbuffer2;
+attribute vec2 sausageposition;
+
+uniform float time;
+
+varying vec2 uvStart;
+
+#define M_PI 3.1415926535897932384626433832795
+
+void main() {
+
+	vec3 morphed;
+	
+	if (bufferindex == 0.0) {
+		morphed = mix(position, positionbuffer1, direction + (cos(time * M_PI * 2.0 + fract(sin(position.x))) + 1.0) / 300.0);
+	} else {
+		morphed = mix(position, positionbuffer2, direction + (cos(time * M_PI * 2.0 + fract(sin(position.x))) + 1.0) / 300.0);
+	}
+
+	morphed.x = morphed.x + sin(position.x + time * 7.0) * 1.50;
+	morphed.y = morphed.y + cos(position.y + time * 5.0) * 1.30;
+	morphed.z = morphed.z + cos(position.z + time * 3.0) * 1.20;
+
+	vec4 mvPosition = modelViewMatrix * vec4( morphed, 1.0 );
+
+	float dist = distance(cameraPosition, morphed);
+	float sausageptr = time;
+	uvStart.x = floor((sausageptr + position.x) * 10.0);
+	uvStart.y = floor((sin(position.y) + 1.0) * 8.0);
+	gl_PointSize = 5000.0 / dist;
+	gl_Position = projectionMatrix * mvPosition;
+}

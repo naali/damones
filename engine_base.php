@@ -51,11 +51,13 @@
 
 	if ($debug) {
 		echo file_get_contents('../../lib/three.js');
+		echo file_get_contents('../../lib/dat.gui.js');
 	} else {
 		echo file_get_contents('../../lib/three.min.js');
 	}
 	
 	echo file_get_contents('../../lib/OBJLoader.js');
+	echo file_get_contents('../../lib/GeometryUtils.js');
 ?>
 
 			
@@ -241,11 +243,12 @@
 				global_engine.addRenderTarget('tertiary', global_engine.getWidth(), global_engine.getHeight());
 				
 				log("Adding audio");
-				if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
-					window.setTimeout(global_engine.setAudio(ogg_audio_<?php echo "$demo_song"?>), 10000);
-				} else {
+// FF 47 seems to support .mp3, no need for .ogg anymore :)
+//				if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+//					window.setTimeout(global_engine.setAudio(ogg_audio_<?php echo "$demo_song"?>), 10000);
+//				} else {
 					global_engine.setAudio(mp3_audio_<?php echo "$demo_song"?>);
-				}
+//				}
 				
 				global_engine.setAudioLooping(false);
 				
@@ -362,6 +365,23 @@
 			echo "\n\n";
 		}
 		
+		echo "    </script>\n";
+	}
+	
+	$jsonfonts = glob('fonts/*.[jJ][sS][oO][nN]');
+
+	if (count($jsonfonts) > 0) {
+		echo "    <script>\n";
+		for ($i=0; $i<count($jsonfonts); $i++) {
+			echo "//  ".$jsonfonts[$i]."\n";
+			ob_start();
+			include($jsonfonts[$i]);
+			$fontcontent = ob_get_clean();
+			
+			echo "jsonfont_".substr(substr($jsonfonts[$i], 0, -5), 6)."=".$fontcontent;
+			echo "\n\n";
+		}
+
 		echo "    </script>\n";
 	}
 	
