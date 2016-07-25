@@ -23,8 +23,7 @@
 		ro.contentarr = [
 			{	
 				texts: [
-					"Boozembly 2016",
-					"Page 0"
+					" "
 				], 
 				align: "left"
 			},
@@ -433,7 +432,6 @@
 			obj.rendertargets['grid'] = rendertarget;
 
 			var background = THREE.ImageUtils.loadTexture( image_bzmArea.src );
-	//		background.flipY = false;
 			
 			var bgMaterial = new THREE.MeshBasicMaterial({
 				map: background,
@@ -554,8 +552,14 @@
 				
 				if ((pt + 1000) > pd.data.partlength) {
 					var fadeout = 1 - Math.max((pd.data.partlength - pt) / 1000, 0);
+					blackmesh.material.color.setHex(0x000000);
 					blackmesh.material.opacity = fadeout;
+				} else if (pt < 2500) {
+					var fadein =  1 - (pt / 2500);
+					blackmesh.material.color.setHex(0xffffff);
+					blackmesh.material.opacity = fadein;
 				} else {
+					blackmesh.material.color.setHex(0x000000);
 					blackmesh.material.opacity = 0;
 				}
 			}
@@ -589,9 +593,6 @@
 			this.composers['writer'].render(dt);
 			this.composers['isomakkara'].render(dt);
 			this.composers['composer'].render(dt);
-
-
-//			global_engine.renderers['main'].render(this.scenes['writer'], this.cameras['writercam']);
 		}
 	
 		return ro;

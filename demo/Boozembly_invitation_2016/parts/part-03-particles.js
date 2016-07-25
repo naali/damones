@@ -3,7 +3,7 @@
 		var ro = {};
 		ro.partname = 'Boozembly 2016 - Kuvat';
 		ro.prewarm = false;
-		ro.partlength =  15 * 6956;
+		ro.partlength =  14 * 6956;
 		ro.cameras = {
 			'particlecam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 10000),
 			'writercam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 8000)
@@ -92,7 +92,7 @@
 			},
 			{ 
 				text: [
-					"Joensuun Mainospalvelu"
+					" "
 				]
 			},
 			{ 
@@ -249,22 +249,14 @@
 					position: {x: 0, y: 0, z: 0}
 				},
 				{
-					geometry: [object_logo_joensuu.children[1].geometry],
+					name: "random",
+					position: {x: 0, y: 0, z: 0},
 					depth: 10,
-					scale: 500,
-					name: "Joensuu",
-					position: {x: 0.07, y: 0, z: 0}					
-				},
-				{
-					geometry: [heart_geometry],
-					depth: 10,
-					scale: 1,
-					name: "Heart",
-					position: {x: -150, y: 0, z: 50}
-				}				
+					scale: 700,
+				}
 			];
 			
-			for (var i=0; i<sponsors.length; i++) {
+			for (var i=0; i<sponsors.length - 1; i++) {
 				var rndpoints = [];
 				
 				if (sponsors[i]['geometry'].length == 1) {
@@ -298,6 +290,8 @@
 					}
 				}
 			}
+			
+			sponsors[sponsors.length - 1]["vertexbuffer"] = new Float32Array(particlecount * 3 + static_particlecount * 3);
 
 			var particle_geometry = new THREE.BufferGeometry();
 			particle_geometry.name = "Particle Geometry";
@@ -328,11 +322,17 @@
 			}
 			
 			for (i=0; i<static_particlecount; i++) {
-				for (j=0; j<sponsors.length; j++) {
-					sponsors[j]['vertexbuffer'][particlecount * 3 + i * 3] = rndpos[particlecount * 3 + i * 3];
-					sponsors[j]['vertexbuffer'][particlecount * 3 + i * 3 + 1] = rndpos[particlecount * 3 + i * 3 + 1];
-					sponsors[j]['vertexbuffer'][particlecount * 3 + i * 3 + 2] = rndpos[particlecount * 3 + i * 3 + 2];
+				for (j=0; j<sponsors.length - 1; j++) {
+					sponsors[j]['vertexbuffer'][particlecount * 3 + i * 3] = Math.random() * 1000 - 500;
+					sponsors[j]['vertexbuffer'][particlecount * 3 + i * 3 + 1] = Math.random() * 1000 - 500;
+					sponsors[j]['vertexbuffer'][particlecount * 3 + i * 3 + 2] = Math.random() * 1000 - 500;
 				}
+			}
+
+			for (var i=0; i<rndpos.particlecount + static_particlecount; i++) {
+				sponsors[sponsors.length - 1]['vertexbuffer'][particlecount * 3 + i * 3] = rndpos[particlecount * 3 + i * 3];
+				sponsors[sponsors.length - 1]['vertexbuffer'][particlecount * 3 + i * 3 + 1] = rndpos[particlecount * 3 + i * 3 + 1];
+				sponsors[sponsors.length - 1]['vertexbuffer'][particlecount * 3 + i * 3 + 2] = rndpos[particlecount * 3 + i * 3 + 2];
 			}
 			
 			particle_geometry.addAttribute('position', new THREE.BufferAttribute(rndpos, 3));
@@ -411,6 +411,7 @@
 			var material = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.5 });
 			var mesh = new THREE.Mesh(geometry, material);
 			mesh.position.set(0, -150 - 12.5 - 15, 0);
+			obj.objects['backgroundbar'] = mesh;
 			scene.add(mesh);
 			
 			var textarr = [];
@@ -610,7 +611,6 @@
 						
 						pd.data.objects['sponsor_forward'] = false;
 					}
-					
 				}
 				
 				if (pd.data.objects['sponsor_forward'] == true) {
@@ -626,12 +626,12 @@
 			updateWriter: function(pd, pt, gt) {
 				var textobjects = pd.data.objects['writertextmeshes'];
 				var whitemesh = pd.data.objects['whitemesh'];
+				var backgroundbar = pd.data.objects['backgroundbar'];
 				
 				var pagemaxtime = 6956;
 				var page = Math.floor((pt) / pagemaxtime);
 				var pagetime = (pt) - page * pagemaxtime;
 				var in_transitiontime = 500;
-				var flashtime = 500;
 				var out_transitiontime = 3000;
 				
 				page = page % textobjects.length;
@@ -647,21 +647,12 @@
 							if (pagetime < in_transitiontime) {
 								textmesh.material.opacity = pagetime / in_transitiontime;
 								textmesh.position.x = textmesh.target_x + (Math.cos(pagetime / in_transitiontime * Math.PI) + 1) / 2 * 400;
-								whitemesh.material.opacity = 0;
-							} else if (pagetime < in_transitiontime + flashtime) {
-								var fadeout = (1 - (pagetime - in_transitiontime) / flashtime) * 0.5;
-								whitemesh.material.color.setHex(0xFFFFFF);
-								whitemesh.material.opacity = fadeout;
-
 							} else if (pagetime > (pagemaxtime - out_transitiontime)) {
 								textmesh.material.opacity = (pagemaxtime - pagetime) / out_transitiontime;
 								textmesh.position.x = textmesh.target_x - (Math.cos((pagemaxtime - pagetime) / out_transitiontime * Math.PI) + 1) / 2 * 800;
-								whitemesh.material.opacity = 0;
-
 							} else {
 								textmesh.position.x = textmesh.target_x;
 								textmesh.material.opacity = 1;
-								whitemesh.material.opacity = 0;
 							}
 													
 						} else {
@@ -670,6 +661,22 @@
 						}
 					}
 				}
+				
+				if (pt < 1000) {
+					var fade = 1 - (pt / 1000);
+					whitemesh.material.opacity = fade;
+					whitemesh.material.color.setHex(0xffffff);
+				} else {
+					whitemesh.material.opacity = 0;
+					whitemesh.material.color.setHex(0xffffff);
+				}
+
+				if (pt + 500 > pd.data.partlength) {
+					var fade = 1 - (pd.data.partlength - pt) / 500;
+					whitemesh.material.opacity = fade;
+					whitemesh.material.color.setHex(0x000000);
+				}
+				
 			}
 		}
 

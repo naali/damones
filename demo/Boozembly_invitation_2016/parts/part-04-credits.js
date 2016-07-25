@@ -182,7 +182,7 @@
 			var font = new THREE.Font(jsonfont_piximisa);
 			
 			var fontparams = {
-				size: 80,
+				size: 50,
 				height: 0,
 				curveSegments: 8,
 				font: font,
@@ -208,7 +208,7 @@
 							var buffergeometry = new THREE.BufferGeometry().fromGeometry(geometry);
 							glyphgeometries[chr] = geometry;
 							if (chr == " ") {
-								glyphgeometries[chr].width = 30;
+								glyphgeometries[chr].width = 20;
 							} else {
 								glyphgeometries[chr].width = Math.abs(geometry.boundingBox.min.x - geometry.boundingBox.max.x - 5);
 							}
@@ -261,7 +261,7 @@
 						
 						mesh.position.x = xpos;
 						mesh.target_x = xpos;
-						mesh.position.y = - (j + 1) * 80 + (page.length * 80) / 2;
+						mesh.position.y = - (j + 1) * 50 + (page.length * 50) / 2;
 						mesh.position.z = 0;
 
 						xpos += glyphgeometries[chr].width;
@@ -340,7 +340,7 @@
 					var s = sausages[i];
 					var foo = Math.sin((pt + i) / 2003 * Math.PI * 2) * Math.max((s.position.distanceTo(camera.position) / 4) - 20, 0);
 					
-					s.position.set(s.orig_x + foo, s.orig_y, s.orig_z + pos_z);
+					s.position.set(s.orig_x + foo, s.orig_y, s.orig_z + pos_z - 500);
 				}
 			},
 			updateWriter: function(pd, pt, gt) {
