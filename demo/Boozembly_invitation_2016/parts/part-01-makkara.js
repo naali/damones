@@ -64,6 +64,7 @@
 				transparent: false
 			});
 			
+			
 			var geom = new THREE.BufferGeometry().fromGeometry(object_makkara2.children[1].geometry);
 			var mesh = new THREE.Mesh(geom, material);
 			mesh.position.set(0, 0, 0);
@@ -430,6 +431,19 @@
 			obj.passes['gridbokeh'] = pass;
 			obj.composers['grid'] = composer;
 			obj.rendertargets['grid'] = rendertarget;
+
+			var background = THREE.ImageUtils.loadTexture( image_bzmArea.src );
+	//		background.flipY = false;
+			
+			var bgMaterial = new THREE.MeshBasicMaterial({
+				map: background,
+				color: 0xFFFFFF
+			});
+			
+			var bgGeom = new THREE.BoxBufferGeometry(6000,6000,1, 1, 1);
+			var bgMesh = new THREE.Mesh(bgGeom, bgMaterial);
+			bgMesh.position.set(0, 0, -3000);
+			scene.add(bgMesh);
 			
 			return scene;
 			
