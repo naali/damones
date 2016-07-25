@@ -574,7 +574,7 @@
 				var next_sponsor_idx = (Math.floor((pt + logotime / 4) / logotime) + 1) % sponsors.length;
 				
 				particle_uniforms.time.value = pt / 1000;
-				var direction = Math.min((Math.sin((pt / logotime) % 1 * Math.PI * 2.0) + 1), 0.8 ) * 1.25;
+				var direction = Math.min((Math.sin((pt / logotime) % 1 * Math.PI * 2.3) + 1), 0.8 ) * 1.25;
 				particle_uniforms.direction.value = direction;
 				
 				var bufferindex = sponsor_idx % 2;
