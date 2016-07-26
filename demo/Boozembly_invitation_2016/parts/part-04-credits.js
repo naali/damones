@@ -21,6 +21,7 @@
 		ro.texts = [
 			{
 				text: [
+					" ",
 					" "
 				]
 			},
@@ -166,13 +167,6 @@
 		ro.scenes['writer'] = (function(obj) {
 			var scene = new THREE.Scene();
 
-/*
-			var geometry = new THREE.PlaneBufferGeometry(1000, 100, 1, 1);
-			var material = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.5 });
-			var mesh = new THREE.Mesh(geometry, material);
-			mesh.position.set(0, -150 - 12.5 - 15, 0);
-			scene.add(mesh);
-*/			
 			var textarr = [];
 			
 			for (var i=0; i<obj['texts'].length; i++) {
@@ -182,7 +176,7 @@
 			var font = new THREE.Font(jsonfont_piximisa);
 			
 			var fontparams = {
-				size: 50,
+				size: 60,
 				height: 0,
 				curveSegments: 8,
 				font: font,
@@ -236,12 +230,17 @@
 				var xpos = 0;
 				var ypos = 0;
 				
-				var container = new THREE.Object3D();
+				var top_container = new THREE.Object3D();
+				var bottom_container = new THREE.Object3D();
 				
 				for (var j=0; j<page.length; j++) {
 					var line = page[j];
 					
-					xpos = -lineLength(line, glyphgeometries) / 2;
+					if (j == 0) {
+						xpos = -420;
+					} else {
+						xpos = 420 - lineLength(line, glyphgeometries);
+					}
 				
 					for (var k=0; k<line.length; k++) {
 						var color = 0xFFFFFF;
@@ -261,19 +260,30 @@
 						
 						mesh.position.x = xpos;
 						mesh.target_x = xpos;
-						mesh.position.y = - (j + 1) * 50 + (page.length * 50) / 2;
+						
+						if (j == 0) { // first line upper left corner
+							mesh.position.y = 175;
+						} else { // other lines bottom right corner
+							mesh.position.y = - (j + 1) * 60 + (page.length * 60) - 225;
+						}
+						
 						mesh.position.z = 0;
 
 						xpos += glyphgeometries[chr].width;
 						mesh.material.visible = true;
 						mesh.material.opacity = 1;
-						
-						container.add(mesh);
+
+						if (j == 0) {
+							top_container.add(mesh);
+						} else {
+							bottom_container.add(mesh);
+						}
 					}
 				}
 				
-				scene.add(container);
-				obj['objects']['writertextmeshes'].push(container);
+				scene.add(top_container);
+				scene.add(bottom_container);
+				obj['objects']['writertextmeshes'].push({ top: top_container, bottom: bottom_container });
 			}
 
 			var light = new THREE.DirectionalLight(0xffffff, 1);
@@ -355,7 +365,8 @@
 				page = page % textobjects.length;
 
 				for (var i=0; i<textobjects.length; i++) {
-					var textobject = textobjects[i];
+					var textobject = textobjects[i].top;
+					
 					for (var j=0; j<textobject.children.length; j++) {
 						var textmesh = textobject.children[j];
 						
@@ -368,6 +379,31 @@
 							} else if (pagetime > (pagemaxtime - out_transitiontime)) {
 								textmesh.material.opacity = (pagemaxtime - pagetime) / out_transitiontime;
 								textmesh.position.x = textmesh.target_x - (Math.cos((pagemaxtime - pagetime) / out_transitiontime * Math.PI) + 1) / 2 * 800;
+							} else {
+								textmesh.position.x = textmesh.target_x;
+								textmesh.material.opacity = 1;
+							}
+													
+						} else {
+							textmesh.material.visible = false;
+							textmesh.material.opacity = 0;
+						}
+					}
+
+					textobject = textobjects[i].bottom;
+					
+					for (var j=0; j<textobject.children.length; j++) {
+						var textmesh = textobject.children[j];
+						
+						if (i == page) {
+							textmesh.material.visible = true;
+
+							if (pagetime < in_transitiontime) {
+								textmesh.material.opacity = pagetime / in_transitiontime;
+								textmesh.position.x = textmesh.target_x - (Math.cos(pagetime / in_transitiontime * Math.PI) + 1) / 2 * 400;
+							} else if (pagetime > (pagemaxtime - out_transitiontime)) {
+								textmesh.material.opacity = (pagemaxtime - pagetime) / out_transitiontime;
+								textmesh.position.x = textmesh.target_x + (Math.cos((pagemaxtime - pagetime) / out_transitiontime * Math.PI) + 1) / 2 * 800;
 							} else {
 								textmesh.position.x = textmesh.target_x;
 								textmesh.material.opacity = 1;
