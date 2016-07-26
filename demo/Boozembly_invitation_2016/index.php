@@ -7,8 +7,8 @@
 	$demo_loop_begin = 0;
 	$demo_loop_end = 5 * 60 * 1000 + 40000 + 924; // 
 	
-	$demo_name = "Boozembly 2016 invitation by Damones & Halcyon";
-	$demo_description = "Boozembly 2016 invitation by Damones & Halcyon, initially planned to be released at Solskogen 2016. 22nd Boozembly will be disorganized during 4th - 7th of August 2016 in Helsinki, Finland.";
+	$demo_name = "Boozembly 2016 invitation by Damones & friends";
+	$demo_description = "Boozembly 2016 invitation by Damones & friends, initially planned to be released at Solskogen 2016. 22nd Boozembly will be disorganized during 4th - 7th of August 2016 in Helsinki, Finland.";
 
 	$part_dir = '/parts/';
 
@@ -17,7 +17,8 @@
 		$part_dir.'part-01-makkara.js',
 		$part_dir.'part-02-kuvat.js',
 		$part_dir.'part-03-particles.js',
-		$part_dir.'part-04-credits.js'
+		$part_dir.'part-04-credits.js',
+		$part_dir.'part-05-final.js'
 	);
 
 	require_once("../../engine_base.php");

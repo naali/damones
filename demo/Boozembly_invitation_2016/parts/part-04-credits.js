@@ -306,10 +306,10 @@
 			/* Fade to white -mesh */
 
 			var whitegeometry = new THREE.PlaneBufferGeometry(1920 * 2, 1080 * 2, 1, 1);
-			var whitematerial = new THREE.MeshBasicMaterial({ color: 0xff, transparent: true });
+			var whitematerial = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true });
 			var whitemesh = new THREE.Mesh(whitegeometry, whitematerial);
 			whitemesh.position.set(0, 0, 500);
-			whitemesh.material.opacity = 0.5;
+			whitemesh.material.opacity = 0.0;
 			scene.add(whitemesh);
 			obj.objects['whitemesh'] = whitemesh;
 			

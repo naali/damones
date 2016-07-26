@@ -30,7 +30,7 @@
 			{	
 				texts: [
 					"Boozembly disorganizing",
-					"with Damones & Halcyon"
+					"with Damones & friends"
 				], 
 				align: "left"
 			},
