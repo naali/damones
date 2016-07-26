@@ -352,10 +352,10 @@
 			var particle_uniforms =  {
 					amplitude:	{ type: "f", value: 1.0 },
 					bufferindex: { type: "f", value: 1.0 },
-					color:		{ type: "c", value: new THREE.Color( 0xffffff ) },
 					texture:	{ type: "t", value: particle_texture },
 					time:		{ type: "f", value: 1.0 },
 					direction:	{ type: "f", value: 0.0 },
+					cameraPosition: { type: "v3", value: new THREE.Vector3(0, 0, 300)}
 			};
 
 			var shaderMaterial = new THREE.ShaderMaterial( {
@@ -590,7 +590,7 @@
 				particle_uniforms.time.value = pt / 1000;
 				var direction = Math.min((Math.sin((pt / logotime) % 1 * Math.PI * 2.3) + 1), 0.8 ) * 1.25;
 				particle_uniforms.direction.value = direction;
-				
+
 				var bufferindex = sponsor_idx % 2;
 				
 				if (sponsor_indices[bufferindex] != next_sponsor_idx) {

@@ -1,5 +1,6 @@
 uniform float bufferindex;
 uniform float direction;
+
 attribute float size;
 attribute vec3 positionbuffer1;
 attribute vec3 positionbuffer2;
