@@ -38,7 +38,7 @@
 				texts: [
 					"Invites you to",
 					"the 22nd annual",
-					"shadow party"
+					"summer party"
 				], 
 				align: "right"
 			},
@@ -70,8 +70,7 @@
 			},
 			{
 				texts: [
-					"Boozembly hills",
-					"are waiting for you"
+					" "
 				],
 				align: "right"
 			},
