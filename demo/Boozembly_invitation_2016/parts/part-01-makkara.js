@@ -614,13 +614,17 @@
 			this.cameras['gridcam'].rotation.z = Math.sin(parttick/5000) / 2.5;
 			
 			this.objects['grid'].rotation.y = Math.sin(parttick/4841);
+			this.objects['grid'].position.y = Math.sin(parttick/3456) * 5;
 			
 			this.lights['gridspot1'].position.set(Math.sin(parttick / 789) * 1000, Math.cos(parttick / 321) * 1000, 1000);
 
-			this.objects['isomakkara'].position.y = 35;
-			this.objects['isomakkara'].position.x = Math.sin(parttick/10000) * 50;
+			this.objects['isomakkara'].position.y = 30 + Math.sin(parttick/6000) * 5;
+			this.objects['isomakkara'].position.x = Math.sin(parttick/8000) * 50;
+//			this.objects['isomakkara'].rotation.x = -Math.PI / 2 + Math.sin(parttick/ 1000) * Math.PI * 2 / 16 + Math.PI / 16;
+//			this.objects['isomakkara'].rotation.z = Math.sin(parttick / 768 + Math.cos( parttick / 123));
+
 			this.objects['isomakkara'].rotation.x = -Math.PI / 2 + Math.sin(parttick/ 1000) * Math.PI * 2 / 16 + Math.PI / 16;
-			this.objects['isomakkara'].rotation.z = Math.sin(parttick / 768 + Math.cos( parttick / 123));
+			this.objects['isomakkara'].rotation.z = Math.sin(parttick / 768 + Math.cos( parttick / 1123)) / 1.3;
 			
 			this.objects['isomakkaramaterial'].needsUpdate = true;
 			this.objects['isomakkaramaterial'].bumpScale = (Math.sin(parttick / 1000) + Math.cos(parttick / 1000 / 4) * Math.sin(parttick / 1000) - Math.cos(parttick / 1000 / 2)) / 1.5;
