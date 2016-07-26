@@ -393,8 +393,8 @@
 			scene.add(obj.cameras['gridcam']);
 			obj.cameras['gridcam'].position.z = 1000;
 			
-			var scrolltext = "                                 --- Boozembly 2016 --- 4-7th of August 2016 --- You know where ---                                ";
-			scrolltext += "			                                                                                                                              ";
+			var scrolltext = "                                  --- Boozembly 2016 --- 4-7th of August 2016 --- You know where ---                                ";
+			scrolltext += "			                                                                                                                             ";
 			
 			var tmpscrolltext = scrolltext.split("").reverse().join("");
 			obj.objects['scrollmaterials'] = [];

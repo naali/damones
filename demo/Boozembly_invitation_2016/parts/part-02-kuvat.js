@@ -52,8 +52,8 @@
 			},
 			{ 
 				text: [
-					"Unified clothing",
-					"opportunity"
+					"Unique clothing",
+					"opportunities"
 				]
 			},
 			{ 
@@ -614,9 +614,13 @@
 					whitemesh.position.y = camera.position.y;
 					whitemesh.material.color.setHex(0xFFFFFF);
 					whitemesh.material.opacity = fadeout;
-				} else if (pt + 3000 > pd.data.partlength ) {
-					var fadeout = 1 - (pd.data.partlength - pt) / 3000;
+				} else if (pt + 3000 > (pd.data.partlength - 1000)) {
+					var fadeout = 1 - (pd.data.partlength - pt - 1000) / 3000;
 					whitemesh.material.opacity = fadeout;
+					whitemesh.material.color.setHex(0x000000);
+					whitemesh.position.y = camera.position.y;
+				} else if (pt + 1000 > pd.data.partlength) {
+					whitemesh.material.opacity = 0;
 					whitemesh.material.color.setHex(0x000000);
 					whitemesh.position.y = camera.position.y;
 				} else {
