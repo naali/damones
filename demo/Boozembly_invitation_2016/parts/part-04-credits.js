@@ -366,13 +366,14 @@
 				var spotlight = pd.data.lights['sausagespot'];
 				
 				camera.rotation.z = -pt / 300 + (Math.sin(pt / 1499) + 0.5);
-				var pos_z = pt / 30;
+				
+				var pos_z = (pt < 3000) ? pt / 20 + pt / 10: pt / 20 + 300;
 
 				for (var i=0; i<sausages.length; i++) {
 					var s = sausages[i];
 					var foo = Math.sin((pt + i) / 2003 * Math.PI * 2) * Math.max((s.position.distanceTo(camera.position) / 4) - 20, 0);
 					
-					s.position.set(s.orig_x + foo, s.orig_y, s.orig_z + pos_z - 500);
+					s.position.set(s.orig_x + foo, s.orig_y, s.orig_z + pos_z - 600);
 				}
 			},
 			updateWriter: function(pd, pt, gt) {
