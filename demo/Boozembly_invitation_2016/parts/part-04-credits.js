@@ -49,7 +49,7 @@
 			{
 				text: [
 					"Photos:",
-					"MrBeanGM",
+					"Biini",
 					"Norppa"
 				]
 			},

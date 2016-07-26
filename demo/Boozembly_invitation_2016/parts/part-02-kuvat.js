@@ -40,14 +40,14 @@
 			},
 			{ 
 				text: [
-					"Ice cold",
-					"beer pool"
+					"Around the clock",
+					"hot barbeque"
 				]
 			},
 			{ 
 				text: [
-					"Around the clock",
-					"hot barbeque"
+					"Ice cold",
+					"beer pool"
 				]
 			},
 			{ 
