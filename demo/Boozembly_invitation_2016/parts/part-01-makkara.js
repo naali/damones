@@ -63,21 +63,22 @@
 			},
 			{
 				texts: [
-					" ",
-					" "
+					"Boozembly 2016",
+					"The sausage fest"
 				],
 				align: "center"
 			},
 			{
 				texts: [
-					" "
+					"Boozembly hills",
+					"are waiting for you"
 				],
-				align: "center"
+				align: "right"
 			},
 			{
 				texts: [
-					"Location will be",
-					"the same as last year"
+					"Ultimate fun",
+					"in high-end outdoor premises"
 				],
 				align: "center"
 			},
@@ -610,7 +611,7 @@
 
 		ro.player = function(partdata, parttick, tick) {
 			this.functions.updateScrollText(partdata, parttick, tick);
-			this.functions.updateWriter(partdata, parttick + 300, tick);
+			this.functions.updateWriter(partdata, parttick + 100, tick);
 
 			this.cameras['gridcam'].position.z = Math.sin(-parttick / 1000) * 400;
 			this.cameras['gridcam'].rotation.z = Math.sin(parttick/5000) / 2.5;
