@@ -3,7 +3,7 @@
 		var ro = {};
 		ro.partname = 'Boozembly 2016 - final';
 		ro.prewarm = true;
-		ro.partlength =  100000;
+		ro.partlength =  27826;
 		ro.cameras = {
 			'pehucam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 10000)
 		};
@@ -96,14 +96,20 @@
 				if (pt < 8000) {
 					var fade = 1 - (pt / 8000)
 					whitemesh.material.opacity = fade;
+					whitemesh.material.color.setHex(0xffffff);
+					whitemesh.visible = true;
+				} else if (pt + 2000 > pd.data.partlength) {
+					var fade = 1 - (pd.data.partlength - pt) / 2000;
+					whitemesh.material.opacity = fade;
+					whitemesh.material.color.setHex(0x000000);
 					whitemesh.visible = true;
 				} else {
 					whitemesh.material.opacity = 0;
 					whitemesh.visible = false;
+					whitemesh.material.color.setHex(0xffffff);
 				}
 			}
 		}
-
 
 		ro.player = function(partdata, parttick, tick) {
 			this.functions.updatePehu(partdata, parttick, tick);

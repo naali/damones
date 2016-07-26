@@ -70,20 +70,20 @@
 			},
 			{ 
 				text: [
-					"Greetings fly to",
+					"Greetings fly to CNCD",
 					"Byterapers - Komplex"
 				]
 			},
 			{ 
 				text: [
-					"Fairlight - CNCD - Extend",
+					"Fairlight - TPOLM - Extend",
 					"TRSI - Scoopex - Mercury"
 				]
 			},
 			{ 
 				text: [
 					"Kooma - Pyrotech - Wide Load",
-					"The Boys - Accession - Kewlers"
+					"The Boys - Accession - Halcyon"
 				]
 			},
 			{ 

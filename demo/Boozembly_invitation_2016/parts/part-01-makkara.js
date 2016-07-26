@@ -63,6 +63,7 @@
 			},
 			{
 				texts: [
+					" ",
 					" "
 				],
 				align: "center"
@@ -75,7 +76,8 @@
 			},
 			{
 				texts: [
-					" "
+					"Location will be",
+					"the same as last year"
 				],
 				align: "center"
 			},
@@ -620,8 +622,6 @@
 
 			this.objects['isomakkara'].position.y = 30 + Math.sin(parttick/6000) * 5;
 			this.objects['isomakkara'].position.x = Math.sin(parttick/8000) * 50;
-//			this.objects['isomakkara'].rotation.x = -Math.PI / 2 + Math.sin(parttick/ 1000) * Math.PI * 2 / 16 + Math.PI / 16;
-//			this.objects['isomakkara'].rotation.z = Math.sin(parttick / 768 + Math.cos( parttick / 123));
 
 			this.objects['isomakkara'].rotation.x = -Math.PI / 2 + Math.sin(parttick/ 1000) * Math.PI * 2 / 16 + Math.PI / 16;
 			this.objects['isomakkara'].rotation.z = Math.sin(parttick / 768 + Math.cos( parttick / 1123)) / 1.3;
