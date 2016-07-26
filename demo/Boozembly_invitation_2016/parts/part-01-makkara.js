@@ -29,20 +29,60 @@
 			},
 			{	
 				texts: [
-					"Boozembly 2016",
-					"Testing 1234",
-					"Page 1"
+					"Boozembly disorganizing",
+					"with Damones & Halcyon"
+				], 
+				align: "left"
+			},
+			{	
+				texts: [
+					"Invites you to",
+					"the 22nd annual",
+					"shadow party"
 				], 
 				align: "right"
 			},
 			{	
 				texts: [
 					"Boozembly 2016",
-					"Testing 1234",
-					"Testing 1234",
-					"Testing 1234",
-					"Page 2"
+					"4-7th of August"
 				], 
+				align: "center"
+			},
+			{
+				texts: [
+					" "
+				],
+				align: "center"
+			},
+			{
+				texts: [
+					" "
+				],
+				align: "center"
+			},
+			{
+				texts: [
+					" "
+				],
+				align: "center"
+			},
+			{
+				texts: [
+					" "
+				],
+				align: "center"
+			},
+			{
+				texts: [
+					" "
+				],
+				align: "center"
+			},
+			{
+				texts: [
+					" "
+				],
 				align: "center"
 			}
 		];
@@ -170,10 +210,10 @@
 						case 'center':
 							xpos = -lineLength(line, glyphgeometries) / 2;
 							break;
-						case 'right':
+						case 'left':
 							xpos = -400;
 							break;
-						case 'left':
+						case 'right':
 						default:
 							xpos = 400 - lineLength(line, glyphgeometries);
 							break;
@@ -353,7 +393,8 @@
 			scene.add(obj.cameras['gridcam']);
 			obj.cameras['gridcam'].position.z = 1000;
 			
-			var scrolltext = "                    Boozembly 2016 --- 4th - 7th of August 2016 --- You know where --- Greetings to Byterapers - Fairlight - CNCD - Scoopex - Komplex - Pyrotech - TRSI - Extend - Mercury - Wide Load - Darklite - Accession - Kooma - Flo - Kewlers -             ";
+			var scrolltext = "                                 --- Boozembly 2016 --- 4-7th of August 2016 --- You know where ---                                ";
+			scrolltext += "			                                                                                                                              ";
 			
 			var tmpscrolltext = scrolltext.split("").reverse().join("");
 			obj.objects['scrollmaterials'] = [];

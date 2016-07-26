@@ -22,38 +22,38 @@
 		ro.texts = [
 			{ 
 				text: [
-					"Testiteksti 0",
-					"tilulilulii"
+					"Boozembly 2016",
+					"features include"
 				]
 			},
 			{ 
 				text: [
-					"Testiteksti 1",
-					"tilulilulii"
+					"Appropriate weather",
+					"for summer activities"
 				]
 			},
 			{ 
 				text: [
-					"Testiteksti 2",
-					"tilulilulii"
+					"Meet & greet old friends",
+					"and new acquaintances"
 				]
 			},
 			{ 
 				text: [
-					"Testiteksti 3",
-					"tilulilulii"
+					"Ice cold",
+					"beer pool"
 				]
 			},
 			{ 
 				text: [
-					"Testiteksti 4",
-					"tilulilulii"
+					"Around the clock",
+					"hot barbeque"
 				]
 			},
 			{ 
 				text: [
-					"Testiteksti 5",
-					"tilulilulii"
+					"Unified clothing",
+					"opportunity"
 				]
 			},
 			{ 
@@ -64,38 +64,32 @@
 			},
 			{ 
 				text: [
-					"Testiteksti 7",
-					"tilulilulii"
+					"If you want to help us,",
+					"contact the disorganizers"
 				]
 			},
 			{ 
 				text: [
-					"Testiteksti 8",
-					"tilulilulii"
+					"Greetings fly to",
+					"Byterapers - Komplex"
 				]
 			},
 			{ 
 				text: [
-					"Testiteksti 9",
-					"tilulilulii"
+					"Fairlight - CNCD - Extend",
+					"TRSI - Scoopex - Mercury"
 				]
 			},
 			{ 
 				text: [
-					"Testiteksti 10",
-					"tilulilulii"
+					"Kooma - Pyrotech - Wide Load",
+					"The Boys - Accession - Kewlers"
 				]
 			},
 			{ 
 				text: [
-					"Testiteksti 11",
-					"tilulilulii"
-				]
-			},
-			{ 
-				text: [
-					" ",
-					" "
+					"Kudos to our beloved",
+					"sponsors for last year"
 				]
 			},
 			{ 
@@ -103,7 +97,7 @@
 					" ",
 					" "
 				]
-			}
+			},
 		];
 
 		ro.scenes['photos'] = (function(obj) {
