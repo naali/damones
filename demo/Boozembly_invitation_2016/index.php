@@ -2,7 +2,7 @@
 	$debug = true;
 	$showcontrols = true;
 	$length_in_sec = 5 * 60 + 40;
-	$demo_song = "boozembly16_9_extended_8";
+	$demo_song = "boozembly16_9_extended_9";
 	$demo_loop = false;
 	$demo_loop_begin = 0;
 	$demo_loop_end = 5 * 60 * 1000 + 40000 + 924; // 
