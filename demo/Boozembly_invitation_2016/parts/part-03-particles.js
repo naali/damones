@@ -676,7 +676,6 @@
 					whitemesh.material.opacity = fade;
 					whitemesh.material.color.setHex(0x000000);
 				}
-				
 			}
 		}
 

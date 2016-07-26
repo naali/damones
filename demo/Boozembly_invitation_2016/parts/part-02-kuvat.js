@@ -28,7 +28,7 @@
 			},
 			{ 
 				text: [
-					"Appropriate weather",
+					"Superb weather",
 					"for summer activities"
 				]
 			},
@@ -58,8 +58,8 @@
 			},
 			{ 
 				text: [
-					"Testiteksti 6",
-					"tilulilulii"
+					"Boozembly 2016:",
+					"all this and much more!"
 				]
 			},
 			{ 

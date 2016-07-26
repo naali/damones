@@ -3,7 +3,7 @@
 		var ro = {};
 		ro.partname = 'Boozembly 2016 - credits';
 		ro.prewarm = true;
-		ro.partlength =  100000;
+		ro.partlength =  6956 * 6;
 		ro.cameras = {
 			'sausagecam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 8000),
 			'writercam': new THREE.PerspectiveCamera(45, global_engine.getAspectRatio(), 0.1, 8000)
@@ -303,6 +303,18 @@
 			scene.add(obj.cameras['writercam']);
 			obj.cameras['writercam'].position.z = 600;
 			
+			/* Fade to white -mesh */
+
+			var whitegeometry = new THREE.PlaneBufferGeometry(1920 * 2, 1080 * 2, 1, 1);
+			var whitematerial = new THREE.MeshBasicMaterial({ color: 0xff, transparent: true });
+			var whitemesh = new THREE.Mesh(whitegeometry, whitematerial);
+			whitemesh.position.set(0, 0, 500);
+			whitemesh.material.opacity = 0.5;
+			scene.add(whitemesh);
+			obj.objects['whitemesh'] = whitemesh;
+			
+			/**/
+			
 			var rendertarget = new THREE.WebGLRenderTarget( global_engine.getWidth(), global_engine.getHeight(),  
 				{ minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, alpha: true});
 			
@@ -365,6 +377,7 @@
 			},
 			updateWriter: function(pd, pt, gt) {
 				var textobjects = pd.data.objects['writertextmeshes'];
+				var whitemesh = pd.data.objects['whitemesh'];
 				
 				var pagemaxtime = 6956;
 				var page = Math.floor((pt) / pagemaxtime);
@@ -424,6 +437,14 @@
 							textmesh.material.opacity = 0;
 						}
 					}
+				}
+				
+				if (pt + 1000 > pd.data.partlength) {
+					var fade = 1 - (pd.data.partlength - pt) / 1000;
+					whitemesh.material.opacity = fade;
+					whitemesh.material.color.setHex(0xFFFFFF);
+				} else {
+					whitemesh.material.opacity = 0;
 				}
 			}
 		}
