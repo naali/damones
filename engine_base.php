@@ -258,6 +258,7 @@
 			$(document).ready(function() {
 				$('#btn_fullscreen_no').off('click').on('click', function() {
 					$('#setup').remove();
+					$('#overlay').remove();
 					$('#decrunch').show();
 
 					init();
@@ -282,6 +283,7 @@
 				
 				$('#btn_fullscreen_yes').off('click').on('click', function() {
 					$('#setup').remove();
+					$('#overlay').remove();
 					$('#decrunch').show();
 
 					launchFullScreen(document.getElementById('html'));
@@ -326,6 +328,25 @@
 		<div id="main" class="main">
 			<div id="demo" class="demo"></div>
 		</div>
+
+		<div id="overlay"></div>
+        <?php
+        	if (isset($demo_overlay)) {
+            	echo "
+                	<script>
+                    	$(document).ready(function() {
+                    		var overlayimgname = image_$demo_overlay.src;
+                        	$(\"#overlay\").css({
+                        	'background-image': 'url('+overlayimgname+')',
+                        	'background-size': 'cover',
+                        	'width': ''+window.innerWidth+'px',
+                        	'height': ''+window.innerHeight+'px'
+                        	});
+                    	});
+                    </script>
+                ";
+            }
+        ?>
 		
 		<div id="loading" class="setup" style="display: block;">
 			<p>Loading...</p>
