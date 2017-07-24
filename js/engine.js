@@ -297,7 +297,7 @@ function DemoEngine(selector, width, height) {
 	
 	this.addRenderer = function(name, antialias, shadowmap, width, height) {
 		this.renderers[name] = new THREE.WebGLRenderer( { antialias: antialias, alpha: true, autoClear: false } );
-		this.renderers[name].shadowMapEnabled = shadowmap;
+		this.renderers[name].shadowMap.enabled = shadowmap;
 		
 		if (width && height) {
 			this.renderers[name].setSize(width, height);
