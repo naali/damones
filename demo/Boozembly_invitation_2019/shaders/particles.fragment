@@ -1,0 +1,10 @@
+uniform sampler2D texture;
+
+varying vec2 uvStart;
+
+void main() {
+	vec4 outColor = texture2D(texture, (gl_PointCoord + vec2(uvStart.x, uvStart.y)) * 64.0/1024.0);
+	if ( outColor.a < 0.2 ) discard;
+	
+	gl_FragColor = outColor;
+}

@@ -1,0 +1,1 @@
+ffmpeg -f lavfi -i color=c=black:s=1920x1080 -r 60 -i 'frames/frame_%06d.png' -filter_complex [0:v][1:v]overlay=shortest=1,format=yuv420p[out]" -map "[out]" -r 60 -i boozembly16_9_extended_9-extra.wav -vcodec libx264 -profile:v main -preset medium -vsync 0 -b:v 18000k -s hd720 -acodec aac -strict experimental -ab 384k Boozembly_invitation_2016.mp4
