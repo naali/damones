@@ -148,7 +148,7 @@
 			var font = new THREE.Font(jsonfont_piximisa);
 			
 			var fontparams = {
-				size: 35,
+				size: 200,
 				height: 0,
 				curveSegments: 8,
 				font: font,

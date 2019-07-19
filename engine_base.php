@@ -40,7 +40,7 @@
 ?><!DOCTYPE html>
 <html id="html">
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title><?php echo "$demo_name"?></title>
 		<meta property="og:title" content="<?php echo "$demo_name"?>" />
 		<meta property="og:title" content="<?php echo "$demo_description"?>" />
@@ -242,13 +242,7 @@
 				global_engine.addRenderTarget('tertiary', global_engine.getWidth(), global_engine.getHeight());
 				
 				log("Adding audio");
-// FF 47 seems to support .mp3, no need for .ogg anymore :)
-//				if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
-//					window.setTimeout(global_engine.setAudio(ogg_audio_<?php echo "$demo_song"?>), 10000);
-//				} else {
-					global_engine.setAudio(mp3_audio_<?php echo "$demo_song"?>);
-//				}
-				
+				global_engine.setAudio(mp3_audio_<?php echo "$demo_song"?>);
 				global_engine.setAudioLooping(false);
 				
 				log("Adding demo parts:");

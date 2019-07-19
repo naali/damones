@@ -13,12 +13,14 @@
 	$part_dir = '/parts/';
 
 	$demo_part_order = array(
-		$part_dir.'part-00-start.js',
+		$part_dir.'part-00-start.js'
+/*                             ,
 		$part_dir.'part-01-makkara.js',
 		$part_dir.'part-02-kuvat.js',
 		$part_dir.'part-03-particles.js',
 		$part_dir.'part-04-credits.js',
 		$part_dir.'part-05-final.js'
+*/
 	);
 
 	require_once("../../engine_base.php");

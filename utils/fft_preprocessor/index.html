@@ -27,7 +27,8 @@
 					global.FFTdata.push(arr);
 					
 					log(global.frequencyByteData);
-				} else {
+				} else if (!global.pushed) {
+					global.pushed = true;
 					var postdata = {};
 					
 					postdata['FFT_bincount'] = global.frequencyBinCount;
@@ -65,6 +66,7 @@
 			}
 			
 			function startFFT() {
+				global.pushed = false;
 				global.tick = 0;
 				global.FFTdata = [];
 				global.audio.play();
